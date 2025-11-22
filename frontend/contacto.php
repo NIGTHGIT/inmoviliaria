@@ -1,0 +1,125 @@
+<?php $page = 'contacto'; ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Inmobiliaria</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <?php include 'components/header.php'; ?>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Contáctanos</h1>
+                <p>Estamos aquí para ayudarte</p>
+            </div>
+        </section>
+
+        <section class="contacto-section">
+            <div class="container">
+                <div class="contacto-content">
+                    <div class="contacto-info">
+                        <h2>Información de Contacto</h2>
+                        <p>No dudes en ponerte en contacto con nosotros. Nuestro equipo está listo para ayudarte.</p>
+                        
+                        <div class="info-item">
+                            <span class="icon">📍</span>
+                            <div>
+                                <h3>Dirección</h3>
+                                <p>Calle Principal 123, Ciudad</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="icon">📞</span>
+                            <div>
+                                <h3>Teléfono</h3>
+                                <p>+1 234 567 890</p>
+                                <p>+1 234 567 891</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="icon">📧</span>
+                            <div>
+                                <h3>Email</h3>
+                                <p>info@inmobiliaria.com</p>
+                                <p>ventas@inmobiliaria.com</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="icon">⏰</span>
+                            <div>
+                                <h3>Horario de Atención</h3>
+                                <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+                                <p>Sábados: 9:00 AM - 2:00 PM</p>
+                                <p>Domingos: Cerrado</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contacto-form-container">
+                        <h2>Envíanos un Mensaje</h2>
+                        <form id="contacto-form">
+                            <div class="form-group">
+                                <label for="nombre">Nombre Completo *</label>
+                                <input type="text" id="nombre" name="nombre" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" name="telefono">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="asunto">Asunto *</label>
+                                <select id="asunto" name="asunto" required>
+                                    <option value="">Selecciona un asunto</option>
+                                    <option value="compra">Quiero comprar</option>
+                                    <option value="venta">Quiero vender</option>
+                                    <option value="alquiler">Busco alquiler</option>
+                                    <option value="valoracion">Solicitar valoración</option>
+                                    <option value="informacion">Más información</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mensaje">Mensaje *</label>
+                                <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-primary">Enviar Mensaje</button>
+                        </form>
+                        <div id="form-mensaje" class="form-mensaje"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mapa-section">
+            <div class="container">
+                <h2>Nuestra Ubicación</h2>
+                <div class="mapa-placeholder">
+                    <p>📍 Mapa interactivo próximamente</p>
+                    <p>Calle Principal 123, Ciudad</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <?php include 'components/footer.php'; ?>
+
+    <script src="js/app.js"></script>
+    <script src="js/contacto.js"></script>
+</body>
+</html>
