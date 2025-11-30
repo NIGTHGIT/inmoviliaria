@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const { spawn } = require('child_process');
 const config = require('./backend/config/config');
 const propiedadesRoutes = require('./backend/routes/propiedades');
 const authRoutes = require('./backend/routes/auth');
@@ -25,45 +24,39 @@ app.use('/api/auth', authRoutes);
 app.use('/api/propiedades', propiedadesRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Middleware para ejecutar archivos PHP
-function servePHP(phpFile) {
-    return (req, res) => {
-        const filePath = path.join(__dirname, 'frontend', phpFile);
-        const php = spawn('php', [filePath]);
-        
-        let output = '';
-        let errorOutput = '';
-        
-        php.stdout.on('data', (data) => {
-            output += data.toString();
-        });
-        
-        php.stderr.on('data', (data) => {
-            errorOutput += data.toString();
-        });
-        
-        php.on('close', (code) => {
-            if (code !== 0) {
-                console.error('PHP Error:', errorOutput);
-                res.status(500).send('Error al procesar la página');
-            } else {
-                res.send(output);
-            }
-        });
-    };
-}
+// Rutas para servir las páginas HTML
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
 
-// Rutas para servir las páginas PHP
-app.get('/', servePHP('index.php'));
-app.get('/propiedades', servePHP('propiedades.php'));
-app.get('/servicios', servePHP('servicios.php'));
-app.get('/nosotros', servePHP('nosotros.php'));
-app.get('/contacto', servePHP('contacto.php'));
+app.get('/propiedades', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'propiedades.html'));
+});
+
+app.get('/servicios', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'servicios.html'));
+});
+
+app.get('/nosotros', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'nosotros.html'));
+});
+
+app.get('/contacto', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'contacto.html'));
+});
 
 // Rutas del panel de administración
-app.get('/login', servePHP('login.php'));
-app.get('/admin', servePHP('admin.php'));
-app.get('/admin/propiedades', servePHP('admin-propiedades.php'));
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'login.html'));
+});
+
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'admin.html'));
+});
+
+app.get('/admin/propiedades', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'admin-propiedades.html'));
+});
 
 // Manejo de rutas no encontradas
 app.use((req, res) => {
