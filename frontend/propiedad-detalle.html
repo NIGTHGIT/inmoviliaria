@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Propiedad - TU Casa RD</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header-tucasa">
+        <nav class="nav-tucasa">
+            <div class="nav-container-tucasa">
+                <div class="logo-tucasa">
+                    <h1>TU Casa RD</h1>
+                    <p>Somos la Inmobiliaria de República Dominicana</p>
+                </div>
+                <ul class="nav-menu-tucasa">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="propiedades.html">Propiedades</a></li>
+                    <li><a href="proyectos.html">Proyectos</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="nosotros.html">Nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+                </ul>
+                <div class="hamburger-tucasa">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="property-detail-tucasa">
+        <div class="container-tucasa">
+            <div class="breadcrumb-tucasa">
+                <a href="index.html">Inicio</a> / 
+                <a href="propiedades.html">Propiedades</a> / 
+                <span id="breadcrumb-title">Detalles</span>
+            </div>
+
+            <div class="property-detail-content">
+                <div class="property-gallery-tucasa">
+                    <div class="main-image-container">
+                        <img id="main-property-image" src="" alt="Imagen principal" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
+                    </div>
+                </div>
+
+                <div class="property-layout-tucasa">
+                    <div class="property-main-content">
+                        <div class="property-header-tucasa">
+                            <h1 id="property-detail-title">Cargando propiedad...</h1>
+                            <p class="property-location-detail" id="property-location-detail">
+                                <i class="fas fa-map-marker-alt"></i> Cargando ubicación...
+                            </p>
+                            <div class="property-price-main" id="property-price-main">
+                                Cargando precio...
+                            </div>
+                        </div>
+
+                        <div class="property-summary-tucasa">
+                            <h2>Resumen</h2>
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <span class="summary-label">Código</span>
+                                    <strong class="summary-value" id="property-code">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Tipo de Inmueble</span>
+                                    <strong class="summary-value" id="property-type">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Ciudad</span>
+                                    <strong class="summary-value" id="property-city">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Sector</span>
+                                    <strong class="summary-value" id="property-sector">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Habitaciones</span>
+                                    <strong class="summary-value" id="property-rooms">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Parqueos</span>
+                                    <strong class="summary-value" id="property-parking">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Construcción</span>
+                                    <strong class="summary-value" id="property-area">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Baños</span>
+                                    <strong class="summary-value" id="property-bathrooms">-</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="property-description-tucasa">
+                            <h2>Descripción</h2>
+                            <p id="property-description-text">Cargando descripción...</p>
+                        </div>
+
+                        <div class="property-features-detail">
+                            <h2>Características</h2>
+                            <div class="features-grid-detail" id="features-grid">
+                                <!-- Características se cargan con JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="property-sidebar-tucasa">
+                        <div class="agent-card-tucasa">
+                            <div class="agent-header">
+                                <div class="agent-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="agent-info">
+                                    <h3 id="agent-name">Cargando agente...</h3>
+                                    <p class="agent-title">Agente Inmobiliario</p>
+                                </div>
+                            </div>
+                            
+                            <div class="agent-contact">
+                                <div class="contact-item">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <div>
+                                        <span>Celular / WhatsApp:</span>
+                                        <strong id="agent-phone">Cargando...</strong>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <div>
+                                        <span>Correo Electrónico:</span>
+                                        <strong id="agent-email">Cargando...</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="agent-actions">
+                                <a href="#" id="call-btn" class="btn-call-tucasa">
+                                    <i class="fas fa-phone"></i> Llámame
+                                </a>
+                                <a href="#" id="whatsapp-btn" class="btn-whatsapp-tucasa" target="_blank">
+                                    <i class="fab fa-whatsapp"></i> Escríbeme por WhatsApp
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="interest-form-tucasa">
+                            <h3>¿Te interesa esta propiedad?</h3>
+                            <form id="interest-form">
+                                <div class="form-group-tucasa">
+                                    <input type="text" placeholder="Nombre completo" required>
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <input type="email" placeholder="Correo electrónico" required>
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <input type="tel" placeholder="Teléfono">
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <textarea placeholder="Mensaje (opcional)" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn-submit-interest">
+                                    <i class="fas fa-paper-plane"></i> Enviar Consulta
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-tucasa">
+        <div class="container-tucasa">
+            <div class="footer-content-tucasa">
+                <div class="footer-section-tucasa">
+                    <h3>TU Casa RD</h3>
+                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus sueños.</p>
+                    <div class="social-links-tucasa">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="propiedades.html">Propiedades</a></li>
+                        <li><a href="proyectos.html">Proyectos</a></li>
+                        <li><a href="favoritos.html">Favoritos</a></li>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
+                    <p><i class="fas fa-phone"></i> +1 (809) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@tucasard.com</p>
+                    <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom-tucasa">
+                <p>&copy; 2024 TU Casa RD. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Script para cargar los detalles de la propiedad
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener el ID de la propiedad de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const propertyId = urlParams.get('id');
+            
+            // Base de datos de propiedades
+            const properties = {
+                'prop_rd_1': {
+                    id: 'prop_rd_1',
+                    codigo: '10264',
+                    titulo: 'Apartamento en Venta – Residencial Vista Sol Etapa II',
+                    ubicacion: 'La Barranquita, Santiago',
+                    ciudad: 'Santiago',
+                    sector: 'La Barranquita',
+                    precio: 125000,
+                    tipo: 'Apartamento',
+                    habitaciones: 3,
+                    banios: 2,
+                    parqueos: 1,
+                    area: '100.55 m²',
+                    descripcion: 'Hermoso apartamento en venta ubicado en el residencial Vista Sol Etapa II. Esta propiedad cuenta con amplios espacios, excelente iluminación natural y acabados de primera calidad. Ideal para familias que buscan comodidad y seguridad en una de las zonas más prestigiosas de Santiago.',
+                    caracteristicas: [
+                        'Aire Acondicionado',
+                        'Balcón',
+                        'Cocina Integral',
+                        'Pisos de Porcelanato',
+                        'Clósets Empotrados',
+                        'Área de Lavandería',
+                        'Seguridad 24/7',
+                        'Parque Infantil',
+                        'Área Verde'
+                    ],
+                    imagenes: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800'],
+                    estado: 'en_venta',
+                    agente: {
+                        nombre: 'Laura García Valdez',
+                        telefono: '+18295521083',
+                        email: 'laura@tucasard.com'
+                    }
+                },
+                'prop_rd_2': {
+                    id: 'prop_rd_2',
+                    codigo: '10265',
+                    titulo: 'Casa Familiar en Urbanización Cerrada',
+                    ubicacion: 'Punta Cana, La Altagracia',
+                    ciudad: 'Punta Cana',
+                    sector: 'Bávaro',
+                    precio: 275000,
+                    tipo: 'Casa',
+                    habitaciones: 4,
+                    banios: 3,
+                    parqueos: 2,
+                    area: '180 m²',
+                    descripcion: 'Espléndida casa familiar en urbanización cerrada con seguridad privada. Cuenta con amplio jardín, terraza y área de parrilla. Perfecta para disfrutar del clima caribeño y la tranquilidad de la zona. Ubicada a solo minutos de las mejores playas de Punta Cana.',
+                    caracteristicas: [
+                        'Pileta',
+                        'Jardín',
+                        'Terraza',
+                        'Parrilla',
+                        'Cochera Techada',
+                        'Estudio',
+                        'Seguridad 24/7',
+                        'Cerca de Playas',
+                        'Amplios Espacios'
+                    ],
+                    imagenes: ['https://images.unsplash.com/photo-1513584684374-8bab748fbf90?w=800'],
+                    estado: 'en_venta',
+                    agente: {
+                        nombre: 'Carlos Rodríguez',
+                        telefono: '+18295521084',
+                        email: 'carlos@tucasard.com'
+                    }
+                },
+                'prop_rd_3': {
+                    id: 'prop_rd_3',
+                    codigo: '10266',
+                    titulo: 'Apartamento Amueblado en Alquiler',
+                    ubicacion: 'Santo Domingo Este',
+                    ciudad: 'Santo Domingo',
+                    sector: 'Ensanche Ozama',
+                    precio: 1300,
+                    tipo: 'Apartamento',
+                    habitaciones: 2,
+                    banios: 2,
+                    parqueos: 1,
+                    area: '85 m²',
+                    descripcion: 'Apartamento completamente amueblado en excelente ubicación. Ideal para profesionales o estudiantes. Cuenta con todos los servicios básicos incluidos y está cerca de centros comerciales, universidades y transporte público.',
+                    caracteristicas: [
+                        'Completamente Amueblado',
+                        'Aire Acondicionado',
+                        'Balcón',
+                        'Internet Incluido',
+                        'Agua Incluida',
+                        'Luz Incluida',
+                        'Seguridad 24/7',
+                        'Cerca de Centros Comerciales',
+                        'Área de Estudio'
+                    ],
+                    imagenes: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'],
+                    estado: 'en_alquiler',
+                    agente: {
+                        nombre: 'María Fernández',
+                        telefono: '+18295521085',
+                        email: 'maria@tucasard.com'
+                    }
+                }
+            };
+
+            // Obtener la propiedad o usar una por defecto
+            const property = properties[propertyId] || properties['prop_rd_1'];
+
+            // Actualizar la página con los datos de la propiedad
+            document.getElementById('breadcrumb-title').textContent = property.titulo;
+            document.getElementById('property-detail-title').textContent = property.titulo;
+            document.getElementById('property-location-detail').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${property.ubicacion}`;
+            document.getElementById('property-price-main').textContent = formatPrice(property.precio);
+            
+            // Actualizar resumen
+            document.getElementById('property-code').textContent = property.codigo;
+            document.getElementById('property-type').textContent = property.tipo;
+            document.getElementById('property-city').textContent = property.ciudad;
+            document.getElementById('property-sector').textContent = property.sector;
+            document.getElementById('property-rooms').textContent = property.habitaciones;
+            document.getElementById('property-parking').textContent = property.parqueos;
+            document.getElementById('property-area').textContent = property.area;
+            document.getElementById('property-bathrooms').textContent = property.banios;
+            
+            // Actualizar descripción
+            document.getElementById('property-description-text').textContent = property.descripcion;
+            
+            // Actualizar imagen
+            document.getElementById('main-property-image').src = property.imagenes[0];
+            
+            // Actualizar características
+            const featuresGrid = document.getElementById('features-grid');
+            featuresGrid.innerHTML = property.caracteristicas.map(feature => `
+                <div class="feature-item-detail">
+                    <i class="fas fa-check"></i>
+                    <span>${feature}</span>
+                </div>
+            `).join('');
+            
+            // Actualizar información del agente
+            document.getElementById('agent-name').textContent = property.agente.nombre;
+            document.getElementById('agent-phone').textContent = property.agente.telefono;
+            document.getElementById('agent-email').textContent = property.agente.email;
+            
+            // Actualizar enlaces de contacto
+            document.getElementById('call-btn').href = `tel:${property.agente.telefono}`;
+            const whatsappMessage = `Hola, estoy interesado en la propiedad: ${property.titulo} - Código: ${property.codigo}`;
+            document.getElementById('whatsapp-btn').href = `https://wa.me/${property.agente.telefono.replace('+', '')}?text=${encodeURIComponent(whatsappMessage)}`;
+
+            // Configurar formulario de interés
+            document.getElementById('interest-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('¡Gracias por tu interés! Nos pondremos en contacto contigo pronto.');
+                this.reset();
+            });
+
+            function formatPrice(price) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(price);
+            }
+        });
+    </script>
+    <script src="js/app.js"></script>
+</body>
+</html>

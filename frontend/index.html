@@ -1,118 +1,275 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Inmobiliaria</title>
+    <title>TU Casa RD - Inmobiliaria de República Dominicana</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <h1 class="logo">🏠 Inmobiliaria</h1>
-                <ul class="nav-links">
-                    <li><a href="/" class="active">Inicio</a></li>
-                    <li><a href="/propiedades">Propiedades</a></li>
-                    <li><a href="/servicios">Servicios</a></li>
-                    <li><a href="/nosotros">Nosotros</a></li>
-                    <li><a href="/contacto">Contacto</a></li>
-                </ul>
+    <header class="header-tucasa">
+        <nav class="nav-tucasa">
+            <div class="nav-container-tucasa">
+                <div class="logo-tucasa">
+                    <h1>TU Casa RD</h1>
+                    <p>Somos la Inmobiliaria de República Dominicana</p>
+                </div>
+                <ul class="nav-menu-tucasa">
+    <li><a href="index.html" class="active">Inicio</a></li>
+    <li><a href="propiedades.html">Propiedades</a></li>
+    <li><a href="proyectos.html">Proyectos</a></li>
+    <li><a href="favoritos.html">Favoritos</a></li>
+    <li><a href="nosotros.html">Nosotros</a></li>
+    <li><a href="contacto.html">Contacto</a></li>
+    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+</ul>
+                <div class="hamburger-tucasa">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h2>Encuentra tu hogar ideal</h2>
-                <p>Las mejores propiedades al mejor precio</p>
-                <a href="/propiedades" class="btn-primary">Ver Propiedades</a>
-            </div>
-        </section>
+    <!-- Hero Section estilo TU Casa RD -->
+    <section class="hero-tucasa">
+        <div class="hero-overlay-tucasa">
+            <div class="hero-content-tucasa">
+                <h1>Encuentra tu propiedad ideal</h1>
+                <p class="hero-subtitle-tucasa">En República Dominicana</p>
+                
+                <!-- Tabs de Compra/Alquiler -->
+                <div class="property-type-tabs">
+                    <button class="type-tab active" data-type="compra">
+                        <i class="fas fa-home"></i>
+                        COMPRA
+                    </button>
+                    <button class="type-tab" data-type="alquiler">
+                        <i class="fas fa-key"></i>
+                        ALQUILER
+                    </button>
+                </div>
 
-        <section class="destacados">
-            <div class="container">
+                <!-- Formulario de Búsqueda -->
+                <div class="search-form-tucasa">
+                    <div class="search-row">
+                        <div class="search-group">
+                            <label><i class="fas fa-map-marker-alt"></i> Sectores o ciudades donde deseas buscar</label>
+                            <input type="text" placeholder="Ej: Santo Domingo, Punta Cana...">
+                        </div>
+                        
+                        <div class="search-group">
+                            <label><i class="fas fa-building"></i> Tipo de inmueble</label>
+                            <select>
+                                <option value="">Todos los tipos</option>
+                                <option value="casa">Casa</option>
+                                <option value="apartamento">Apartamento</option>
+                                <option value="villa">Villa</option>
+                                <option value="terreno">Terreno</option>
+                                <option value="local">Local Comercial</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="search-row">
+                        <div class="search-group">
+                            <label><i class="fas fa-bed"></i> Habitaciones</label>
+                            <select>
+                                <option value="">Cualquier cantidad</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+                        
+                        <div class="search-group">
+                            <label><i class="fas fa-car"></i> Parqueos</label>
+                            <select>
+                                <option value="">Cualquier cantidad</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                            </select>
+                        </div>
+                        
+                        <div class="search-group">
+                            <label><i class="fas fa-dollar-sign"></i> Precio</label>
+                            <select>
+                                <option value="">Cualquier precio</option>
+                                <option value="50000">Hasta US$ 50,000</option>
+                                <option value="100000">Hasta US$ 100,000</option>
+                                <option value="200000">Hasta US$ 200,000</option>
+                                <option value="500000">Hasta US$ 500,000</option>
+                                <option value="1000000">Más de US$ 500,000</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="search-btn-tucasa">
+                        <i class="fas fa-search"></i> BUSCAR PROPIEDADES
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrusel de Propiedades Destacadas -->
+    <section class="featured-carousel-tucasa">
+        <div class="container-tucasa">
+            <div class="section-header-tucasa">
                 <h2>Propiedades Destacadas</h2>
-                <div id="propiedades-destacadas" class="propiedades-grid">
-                    <!-- Las propiedades se cargarán dinámicamente -->
+                <p>Las mejores oportunidades del mercado</p>
+            </div>
+            
+            <div class="carousel-container-tucasa">
+                <div class="carousel-track-tucasa" id="carousel-track">
+                    <!-- Las propiedades del carrusel se cargan con JavaScript -->
                 </div>
-                <div class="text-center">
-                    <a href="/propiedades" class="btn-secondary">Ver Todas las Propiedades</a>
+                
+                <button class="carousel-btn-tucasa carousel-prev-tucasa">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn-tucasa carousel-next-tucasa">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <div class="carousel-dots-tucasa" id="carousel-dots">
+                    <!-- Los dots se generan con JavaScript -->
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="caracteristicas">
-            <div class="container">
-                <h2>¿Por qué elegirnos?</h2>
-                <div class="caracteristicas-grid">
-                    <div class="caracteristica-card">
-                        <span class="icon">🏆</span>
-                        <h3>Experiencia</h3>
-                        <p>Más de 10 años en el mercado inmobiliario</p>
-                    </div>
-                    <div class="caracteristica-card">
-                        <span class="icon">💼</span>
-                        <h3>Profesionalismo</h3>
-                        <p>Equipo altamente capacitado</p>
-                    </div>
-                    <div class="caracteristica-card">
-                        <span class="icon">🤝</span>
-                        <h3>Confianza</h3>
-                        <p>Miles de clientes satisfechos</p>
-                    </div>
-                    <div class="caracteristica-card">
-                        <span class="icon">📍</span>
-                        <h3>Ubicaciones Premium</h3>
-                        <p>Las mejores zonas de la ciudad</p>
+    <!-- Propiedades en Grid -->
+    <section class="properties-grid-tucasa">
+        <div class="container-tucasa">
+            <div class="section-header-tucasa">
+                <h2>Nuestras Propiedades</h2>
+                <p>Descubre nuestro catálogo completo</p>
+            </div>
+            
+            <div class="properties-grid-modern-tucasa" id="properties-grid">
+                <!-- Las propiedades se cargan con JavaScript -->
+            </div>
+            
+            <div class="load-more-container-tucasa">
+                <button class="btn-outline-tucasa" id="load-more">
+                    <i class="fas fa-plus"></i> Ver Más Propiedades
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section class="contact-section-tucasa">
+        <div class="container-tucasa">
+            <div class="contact-content-tucasa">
+                <div class="contact-info-tucasa">
+                    <h2>CONTACTANOS</h2>
+                    <p>¿Tienes preguntas o necesitas asesoría? Estamos aquí para ayudarte.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Teléfono</h4>
+                                <p>+1 (809) 123-4567</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <i class="fas fa-whatsapp"></i>
+                            <div>
+                                <h4>WhatsApp</h4>
+                                <p>+1 (809) 987-6543</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>info@tucasard.com</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
+                <div class="contact-form-tucasa">
+                    <h3>Envíanos un Mensaje</h3>
+                    <form>
+                        <div class="form-group-tucasa">
+                            <input type="text" placeholder="Nombre completo" required>
+                        </div>
+                        
+                        <div class="form-group-tucasa">
+                            <input type="email" placeholder="Email" required>
+                        </div>
+                        
+                        <div class="form-group-tucasa">
+                            <input type="tel" placeholder="Teléfono">
+                        </div>
+                        
+                        <div class="form-group-tucasa">
+                            <textarea placeholder="Mensaje" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit-tucasa">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
             </div>
-        </section>
-
-        <section class="cta">
-            <div class="container">
-                <h2>¿Listo para encontrar tu propiedad ideal?</h2>
-                <p>Contáctanos y te ayudaremos en todo el proceso</p>
-                <a href="/contacto" class="btn-primary">Contactar Ahora</a>
-            </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Inmobiliaria</h3>
-                    <p>Tu mejor opción para comprar, vender o alquilar propiedades</p>
+    <footer class="footer-tucasa">
+        <div class="container-tucasa">
+            <div class="footer-content-tucasa">
+                <div class="footer-section-tucasa">
+                    <h3>TU Casa RD</h3>
+                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus sueños.</p>
+                    <div class="social-links-tucasa">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
                 </div>
-                <div class="footer-section">
-                    <h3>Enlaces</h3>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Enlaces Rápidos</h4>
                     <ul>
-                        <li><a href="/">Inicio</a></li>
-                        <li><a href="/propiedades">Propiedades</a></li>
-                        <li><a href="/servicios">Servicios</a></li>
-                        <li><a href="/nosotros">Nosotros</a></li>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="propiedades.html">Propiedades</a></li>
+                        <li><a href="proyectos.html">Proyectos</a></li>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h3>Contacto</h3>
-                    <p>📞 +1 234 567 890</p>
-                    <p>📧 info@inmobiliaria.com</p>
-                    <p>📍 Calle Principal 123</p>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
+                    <p><i class="fas fa-phone"></i> +1 (809) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@tucasard.com</p>
+                    <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Inmobiliaria. Todos los derechos reservados.</p>
+            
+            <div class="footer-bottom-tucasa">
+                <p>&copy; 2024 TU Casa RD. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
     <script src="js/app.js"></script>
-    <script src="js/inicio.js"></script>
+    <script src="js/propiedades.js"></script>
+    <script src="js/carousel.js"></script>
 </body>
 </html>

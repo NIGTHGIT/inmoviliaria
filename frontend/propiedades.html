@@ -3,95 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Propiedades - Inmobiliaria</title>
+    <title>Propiedades - TU Casa RD</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <h1 class="logo">🏠 Inmobiliaria</h1>
-                <ul class="nav-links">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/propiedades" class="active">Propiedades</a></li>
-                    <li><a href="/servicios">Servicios</a></li>
-                    <li><a href="/nosotros">Nosotros</a></li>
-                    <li><a href="/contacto">Contacto</a></li>
-                </ul>
+    <header class="header-tucasa">
+        <nav class="nav-tucasa">
+            <div class="nav-container-tucasa">
+                <div class="logo-tucasa">
+                    <h1>TU Casa RD</h1>
+                    <p>Somos la Inmobiliaria de República Dominicana</p>
+                </div>
+                <ul class="nav-menu-tucasa">
+    <li><a href="index.html" class="active">Inicio</a></li>
+    <li><a href="propiedades.html">Propiedades</a></li>
+    <li><a href="proyectos.html">Proyectos</a></li>
+    <li><a href="favoritos.html">Favoritos</a></li>
+    <li><a href="nosotros.html">Nosotros</a></li>
+    <li><a href="contacto.html">Contacto</a></li>
+    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+</ul>
+                <div class="hamburger-tucasa">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </nav>
     </header>
 
-    <main>
-        <section class="page-header">
-            <div class="container">
-                <h1>Nuestras Propiedades</h1>
-                <p>Encuentra la propiedad perfecta para ti</p>
-            </div>
-        </section>
+    <!-- Hero de Propiedades -->
+    <section class="page-hero-tucasa">
+        <div class="container-tucasa">
+            <h1>Nuestras Propiedades</h1>
+            <p>Encuentra la propiedad perfecta para ti</p>
+        </div>
+    </section>
 
-        <section class="propiedades-section">
-            <div class="container">
-                <div class="filtros">
-                    <h3>Filtrar por:</h3>
-                    <div class="filtros-grid">
-                        <select id="tipo-propiedad">
-                            <option value="">Tipo de Propiedad</option>
+    <!-- Filtros -->
+    <section class="filters-section-tucasa">
+        <div class="container-tucasa">
+            <div class="filters-container-tucasa">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Ubicación</label>
+                        <input type="text" placeholder="Ciudad o sector" id="filter-location">
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-building"></i> Tipo</label>
+                        <select id="filter-type">
+                            <option value="">Todos los tipos</option>
                             <option value="casa">Casa</option>
                             <option value="apartamento">Apartamento</option>
                             <option value="villa">Villa</option>
-                            <option value="local">Local Comercial</option>
+                            <option value="terreno">Terreno</option>
                         </select>
-                        <select id="operacion">
-                            <option value="">Operación</option>
-                            <option value="venta">Venta</option>
-                            <option value="alquiler">Alquiler</option>
-                        </select>
-                        <input type="number" id="precio-min" placeholder="Precio Mínimo">
-                        <input type="number" id="precio-max" placeholder="Precio Máximo">
-                        <button class="btn-primary" onclick="aplicarFiltros()">Buscar</button>
                     </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-bed"></i> Habitaciones</label>
+                        <select id="filter-rooms">
+                            <option value="">Cualquier cantidad</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-dollar-sign"></i> Precio Máx.</label>
+                        <select id="filter-price">
+                            <option value="">Cualquier precio</option>
+                            <option value="50000">US$ 50,000</option>
+                            <option value="100000">US$ 100,000</option>
+                            <option value="200000">US$ 200,000</option>
+                            <option value="500000">US$ 500,000</option>
+                        </select>
+                    </div>
+                    <button class="btn-filter-tucasa" onclick="propertiesManager.applyFilters()">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
                 </div>
-
-                <div id="propiedades-list" class="propiedades-grid">
-                    <!-- Las propiedades se cargarán dinámicamente -->
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Inmobiliaria</h3>
-                    <p>Tu mejor opción para comprar, vender o alquilar propiedades</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Enlaces</h3>
-                    <ul>
-                        <li><a href="/">Inicio</a></li>
-                        <li><a href="/propiedades">Propiedades</a></li>
-                        <li><a href="/servicios">Servicios</a></li>
-                        <li><a href="/nosotros">Nosotros</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Contacto</h3>
-                    <p>📞 +1 234 567 890</p>
-                    <p>📧 info@inmobiliaria.com</p>
-                    <p>📍 Calle Principal 123</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Inmobiliaria. Todos los derechos reservados.</p>
             </div>
         </div>
+    </section>
+
+    <!-- Grid de Propiedades -->
+    <section class="properties-grid-page-tucasa">
+        <div class="container-tucasa">
+            <div class="properties-header-tucasa">
+                <h2 id="properties-count">Cargando propiedades...</h2>
+                <div class="view-options">
+                    <button class="view-option active" data-view="grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-option" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="properties-grid-modern-tucasa" id="properties-grid">
+                <!-- Propiedades se cargan con JavaScript -->
+            </div>
+
+            <div class="load-more-container-tucasa">
+                <button class="btn-outline-tucasa" id="load-more-properties">
+                    <i class="fas fa-plus"></i> Cargar Más Propiedades
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-tucasa">
+        <!-- Mismo footer que index.html -->
     </footer>
 
     <script src="js/app.js"></script>
-    <script src="js/propiedades.js"></script>
+    <script src="js/pagina-propiedades.js"></script>
 </body>
 </html>

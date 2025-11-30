@@ -1,3 +1,88 @@
+/* Variables para tema solo en contenido */
+:root {
+    --primary-blue: #1e3a8a;
+    --secondary-blue: #3b82f6;
+    --accent-orange: #f97316;
+    --dark-blue: #1e40af;
+    --light-blue: #dbeafe;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --bg-white: #ffffff;
+    --bg-light: #f8fafc;
+    --border-color: #e5e7eb;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+}
+
+/* Tema oscuro solo para contenido */
+.theme-dark {
+    --text-dark: #f3f4f6;
+    --text-light: #d1d5db;
+    --bg-white: #1f2937;
+    --bg-light: #111827;
+    --border-color: #374151;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Asegurar que header y footer no cambien */
+.header-tucasa,
+.footer-tucasa {
+    /* Forzar colores originales */
+    --text-dark: #1f2937 !important;
+    --text-light: #6b7280 !important;
+    --bg-white: #ffffff !important;
+    --bg-light: #f8fafc !important;
+    --border-color: #e5e7eb !important;
+}
+
+/* Aplicar tema solo a las secciones de contenido */
+.hero-tucasa,
+.featured-carousel-tucasa,
+.properties-grid-tucasa,
+.contact-section-tucasa,
+.property-details-tucasa,
+.favorites-section-tucasa,
+.projects-grid-tucasa,
+.about-content-tucasa,
+.team-section-tucasa,
+.contact-page-content,
+.map-section-tucasa {
+    transition: var(--transition);
+}
+
+/* Property cards con tema CORREGIDO */
+.property-card-tucasa {
+    transition: var(--transition);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+/* Específicamente para las etiquetas/labels dentro de las cards */
+.property-card-tucasa .property-label,
+.property-card-tucasa .property-title,
+.property-card-tucasa .property-location,
+.property-card-tucasa .property-price,
+.property-card-tucasa .property-features {
+    color: var(--text-dark);
+}
+
+/* En tema oscuro, las cards tendrán fondo oscuro y texto claro */
+.theme-dark .property-card-tucasa {
+    background-color: var(--bg-white); /* Esto será #1f2937 en tema oscuro */
+    border-color: var(--border-color);
+}
+
+.theme-dark .property-card-tucasa .property-label,
+.theme-dark .property-card-tucasa .property-title,
+.theme-dark .property-card-tucasa .property-location,
+.theme-dark .property-card-tucasa .property-price,
+.theme-dark .property-card-tucasa .property-features {
+    color: var(--text-dark); /* Esto será #f3f4f6 en tema oscuro */
+}
+/* Reset y Base */
 * {
     margin: 0;
     padding: 0;
@@ -5,629 +90,1308 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: #333;
+    color: var(--text-dark);
+    background-color: var(--bg-white);
+    transition: var(--transition);
 }
 
-.container {
+.container-tucasa {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* Header y Navegación */
-header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 1rem 0;
-    position: sticky;
+/* Header */
+.header-tucasa {
+    background: var(--bg-white);
+    box-shadow: var(--shadow);
+    position: fixed;
+    width: 100%;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.navbar {
+.nav-container-tucasa {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 1rem 2rem;
 }
 
-.logo {
+.logo-tucasa h1 {
+    color: var(--primary-blue);
     font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
 }
 
-.nav-links {
+.logo-tucasa p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nav-menu-tucasa {
     display: flex;
     list-style: none;
     gap: 2rem;
 }
 
-.nav-links a {
-    color: white;
+.nav-menu-tucasa a {
     text-decoration: none;
-    transition: color 0.3s;
+    color: var(--text-dark);
+    font-weight: 600;
+    transition: var(--transition);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
 }
 
-.nav-links a:hover {
-    color: #3498db;
+.nav-menu-tucasa a:hover,
+.nav-menu-tucasa a.active {
+    color: var(--accent-orange);
+    background: var(--light-blue);
+}
+
+.theme-btn-tucasa {
+    background: none;
+    border: none;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.theme-btn-tucasa:hover {
+    background: var(--light-blue);
+    color: var(--accent-orange);
+}
+
+.hamburger-tucasa {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger-tucasa span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-dark);
+    margin: 3px 0;
+    transition: var(--transition);
 }
 
 /* Hero Section */
-.hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.hero-tucasa {
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
     color: white;
-    padding: 100px 0;
+    padding: 180px 0 80px;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-overlay-tucasa {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content-tucasa {
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    padding: 0 2rem;
+}
+
+.hero-content-tucasa h1 {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.hero-subtitle-tucasa {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+}
+
+/* Tabs de Compra/Alquiler */
+.property-type-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.type-tab {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.type-tab.active,
+.type-tab:hover {
+    background: var(--accent-orange);
+    border-color: var(--accent-orange);
+    transform: translateY(-2px);
+}
+
+/* Formulario de Búsqueda */
+.search-form-tucasa {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.search-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.search-group {
+    text-align: left;
+}
+
+.search-group label {
+    display: block;
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.search-group label i {
+    margin-right: 0.5rem;
+    color: var(--accent-orange);
+}
+
+.search-group input,
+.search-group select {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.search-group input:focus,
+.search-group select:focus {
+    border-color: var(--accent-orange);
+    outline: none;
+}
+
+.search-btn-tucasa {
+    background: var(--accent-orange);
+    color: white;
+    border: none;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.search-btn-tucasa:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+}
+
+/* Carrusel */
+.featured-carousel-tucasa {
+    padding: 80px 0;
+    background: var(--bg-light);
+}
+
+.section-header-tucasa {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header-tucasa h2 {
+    font-size: 2.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}
+
+.section-header-tucasa p {
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+.carousel-container-tucasa {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.carousel-track-tucasa {
+    display: flex;
+    transition: transform 0.5s ease;
+    gap: 2rem;
+}
+
+.carousel-slide-tucasa {
+    min-width: calc(33.333% - 1.33rem);
+    flex-shrink: 0;
+}
+
+.carousel-btn-tucasa {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-white);
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition);
+    z-index: 10;
+    color: var(--primary-blue);
+}
+
+.carousel-btn-tucasa:hover {
+    background: var(--accent-orange);
+    color: white;
+}
+
+.carousel-prev-tucasa {
+    left: 20px;
+}
+
+.carousel-next-tucasa {
+    right: 20px;
+}
+
+.carousel-dots-tucasa {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.carousel-dot-tucasa {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border-color);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.carousel-dot-tucasa.active {
+    background: var(--accent-orange);
+    transform: scale(1.2);
+}
+
+/* Property Cards */
+.properties-grid-tucasa {
+    padding: 80px 0;
+}
+
+.properties-grid-modern-tucasa {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.property-card-tucasa {
+    background: var(--bg-white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    position: relative;
+}
+
+.property-card-tucasa:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.property-image-tucasa {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.property-image-tucasa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.property-card-tucasa:hover .property-image-tucasa img {
+    transform: scale(1.1);
+}
+
+.property-badge-tucasa {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--accent-orange);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.property-price-tucasa {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: var(--primary-blue);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.favorite-btn-tucasa {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+.favorite-btn-tucasa:hover,
+.favorite-btn-tucasa.active {
+    background: var(--accent-orange);
+    color: white;
+}
+
+.property-info-tucasa {
+    padding: 1.5rem;
+}
+
+.property-title-tucasa {
+    font-size: 1.3rem;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.property-location-tucasa {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.property-features-tucasa {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.property-features-tucasa span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.property-actions-tucasa {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-primary-tucasa {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    flex: 1;
+}
+
+.btn-primary-tucasa:hover {
+    background: var(--dark-blue);
+    transform: translateY(-2px);
+}
+
+.btn-outline-tucasa {
+    background: transparent;
+    border: 2px solid var(--primary-blue);
+    color: var(--primary-blue);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
     text-align: center;
 }
 
-.hero h2 {
+.btn-outline-tucasa:hover {
+    background: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.load-more-container-tucasa {
+    text-align: center;
+}
+
+/* Contact Section */
+.contact-section-tucasa {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+    color: white;
+}
+
+.contact-content-tucasa {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.contact-info-tucasa h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.contact-info-tucasa > p {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+}
+
+.contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.contact-method {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.contact-method i {
+    font-size: 2rem;
+    color: var(--accent-orange);
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-method h4 {
+    margin-bottom: 0.5rem;
+}
+
+.contact-method p {
+    opacity: 0.9;
+}
+
+.contact-form-tucasa {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+}
+
+.contact-form-tucasa h3 {
+    color: var(--primary-blue);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.form-group-tucasa {
+    margin-bottom: 1.5rem;
+}
+
+.form-group-tucasa input,
+.form-group-tucasa textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.form-group-tucasa input:focus,
+.form-group-tucasa textarea:focus {
+    border-color: var(--accent-orange);
+    outline: none;
+}
+
+.btn-submit-tucasa {
+    background: var(--accent-orange);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.btn-submit-tucasa:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.footer-tucasa {
+    background: var(--text-dark);
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
+.footer-content-tucasa {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section-tucasa h3,
+.footer-section-tucasa h4 {
+    margin-bottom: 1.5rem;
+}
+
+.footer-section-tucasa p {
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.footer-section-tucasa ul {
+    list-style: none;
+}
+
+.footer-section-tucasa ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section-tucasa ul li a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-section-tucasa ul li a:hover {
+    color: var(--accent-orange);
+}
+
+.social-links-tucasa {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-links-tucasa a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.social-links-tucasa a:hover {
+    background: var(--accent-orange);
+    transform: translateY(-2px);
+}
+
+.footer-bottom-tucasa {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Page Hero Styles */
+.page-hero-tucasa {
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+    color: white;
+    padding: 150px 0 80px;
+    text-align: center;
+    margin-top: 80px;
+}
+
+.page-hero-tucasa h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
 }
 
-.hero p {
-    font-size: 1.5rem;
+.page-hero-tucasa p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+
+/* Filters Section */
+.filters-section-tucasa {
+    padding: 3rem 0;
+    background: var(--bg-light);
+}
+
+.filters-container-tucasa {
+    background: var(--bg-white);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: end;
+}
+
+.filter-group label {
+    display: block;
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.filter-group input,
+.filter-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    border-color: var(--accent-orange);
+    outline: none;
+}
+
+.btn-filter-tucasa {
+    background: var(--accent-orange);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    height: fit-content;
+}
+
+.btn-filter-tucasa:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+}
+
+/* Properties Grid Page */
+.properties-grid-page-tucasa {
+    padding: 3rem 0;
+    background: var(--bg-white);
+}
+
+.properties-header-tucasa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
 }
 
-.btn-primary {
-    background-color: #3498db;
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
+.properties-header-tucasa h2 {
+    color: var(--primary-blue);
+    font-size: 1.8rem;
+}
+
+.view-options {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.view-option {
+    background: var(--bg-light);
+    border: 2px solid var(--border-color);
+    padding: 0.7rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: var(--transition);
+    color: var(--text-dark);
 }
 
-.btn-primary:hover {
-    background-color: #2980b9;
+.view-option.active,
+.view-option:hover {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
 }
 
-/* Propiedades Section */
-.propiedades {
-    padding: 80px 0;
-    background-color: #f8f9fa;
-}
-
-.propiedades h2 {
+/* PROYECTOS.HTML */
+.projects-hero-tucasa {
+    background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+    color: white;
+    padding: 150px 0 80px;
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: #2c3e50;
+    margin-top: 80px;
 }
 
-.propiedades-grid {
+.projects-grid-tucasa {
+    padding: 4rem 0;
+    background: var(--bg-light);
+}
+
+.project-card-large {
+    background: var(--bg-white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 3rem;
+}
+
+.project-header-large {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+}
+
+.project-header-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-badge-large {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    background: var(--accent-orange);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.project-content-large {
+    padding: 2.5rem;
+}
+
+.project-content-large h2 {
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.project-location-large {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.project-prices-large {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--light-blue);
+    border-radius: 10px;
+}
+
+.price-range-large {
+    text-align: center;
+}
+
+.price-range-large span {
+    display: block;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.price-range-large strong {
+    color: var(--secondary-blue);
+    font-size: 1.5rem;
+}
+
+.project-description-large {
+    color: var(--text-dark);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.project-features-large {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.project-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.project-feature-item i {
+    color: var(--accent-orange);
+    font-size: 1.5rem;
+}
+
+.project-feature-info h4 {
+    color: var(--primary-blue);
+    margin-bottom: 0.3rem;
+}
+
+.project-feature-info p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* NOSOTROS.HTML */
+.about-hero-tucasa {
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+    color: white;
+    padding: 150px 0 80px;
+    text-align: center;
+    margin-top: 80px;
+}
+
+.about-content-tucasa {
+    padding: 4rem 0;
+    background: var(--bg-white);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 4rem;
+}
+
+.about-text h2 {
+    color: var(--primary-blue);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-text p {
+    color: var(--text-dark);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--light-blue);
+    border-radius: 10px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    display: block;
+}
+
+.stat-label {
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: var(--shadow-lg);
+}
+
+.team-section-tucasa {
+    padding: 4rem 0;
+    background: var(--bg-light);
+}
+
+.team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
 
-.propiedad-card {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-}
-
-.propiedad-card:hover {
-    transform: translateY(-5px);
-}
-
-.propiedad-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.propiedad-info {
-    padding: 1.5rem;
-}
-
-.propiedad-info h3 {
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-}
-
-.propiedad-info p {
-    color: #7f8c8d;
-    margin-bottom: 1rem;
-}
-
-.precio {
-    font-size: 1.5rem;
-    color: #3498db;
-    font-weight: bold;
-}
-
-/* Servicios Section */
-.servicios {
-    padding: 80px 0;
-}
-
-.servicios h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: #2c3e50;
-}
-
-.servicios-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-.servicio-card {
-    background: white;
+.team-card {
+    background: var(--bg-white);
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 15px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow);
 }
 
-.servicio-card h3 {
-    margin-bottom: 1rem;
-    color: #2c3e50;
-    font-size: 1.5rem;
-}
-
-/* Contacto Section */
-.contacto {
-    padding: 80px 0;
-    background-color: #f8f9fa;
-}
-
-.contacto h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: #2c3e50;
-}
-
-#contacto-form {
-    max-width: 600px;
-    margin: 0 auto;
+.team-avatar {
+    width: 120px;
+    height: 120px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-#contacto-form input,
-#contacto-form textarea {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-#contacto-form textarea {
-    min-height: 150px;
-    resize: vertical;
-}
-
-/* Navegación Activa */
-.nav-links a.active {
-    color: #3498db;
-    font-weight: bold;
-}
-
-/* Botón Secundario */
-.btn-secondary {
-    background-color: #2c3e50;
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn-secondary:hover {
-    background-color: #1a252f;
-}
-
-.text-center {
-    text-align: center;
-    margin-top: 2rem;
-}
-
-/* Página Header */
-.page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 80px 0;
-    text-align: center;
-}
-
-.page-header h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-/* Secciones Generales */
-.destacados,
-.caracteristicas,
-.propiedades-section,
-.servicios-detalle,
-.nosotros-intro,
-.valores,
-.equipo,
-.contacto-section {
-    padding: 80px 0;
-}
-
-.destacados,
-.valores {
-    background-color: #f8f9fa;
-}
-
-/* Características */
-.caracteristicas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.caracteristica-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.caracteristica-card .icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 1rem;
-}
-
-/* CTA Section */
-.cta {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 80px 0;
-    text-align: center;
-}
-
-.cta h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.cta p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-}
-
-/* Filtros */
-.filtros {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-bottom: 3rem;
-}
-
-.filtros-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.filtros select,
-.filtros input {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-/* Servicios Detalle */
-.servicio-detalle-card {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 3rem;
-    margin-bottom: 4rem;
     align-items: center;
-}
-
-.servicio-detalle-card.reverse {
-    grid-template-columns: 2fr 1fr;
-}
-
-.servicio-imagen {
-    text-align: center;
-}
-
-.icon-large {
-    font-size: 8rem;
-    display: block;
-}
-
-.servicio-contenido h2 {
-    margin-bottom: 1rem;
-    color: #2c3e50;
-}
-
-.servicio-contenido ul {
-    list-style: none;
-    margin-top: 1rem;
-}
-
-.servicio-contenido ul li {
-    padding: 0.5rem 0;
-    padding-left: 1.5rem;
-    position: relative;
-}
-
-.servicio-contenido ul li:before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: #3498db;
-    font-weight: bold;
-}
-
-/* Nosotros */
-.nosotros-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: center;
-}
-
-.stats-box {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 3rem;
-    border-radius: 10px;
+    justify-content: center;
     color: white;
-}
-
-.stat {
-    text-align: center;
-    margin: 2rem 0;
-}
-
-.stat h3 {
     font-size: 3rem;
+}
+
+.team-card h3 {
+    color: var(--primary-blue);
     margin-bottom: 0.5rem;
 }
 
-/* Valores */
-.valores-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.valor-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.valor-card .icon {
-    font-size: 3rem;
-    display: block;
+.team-role {
+    color: var(--accent-orange);
+    font-weight: 600;
     margin-bottom: 1rem;
 }
 
-/* Equipo */
-.equipo-intro {
+.team-contact {
+    margin-top: 1.5rem;
+}
+
+.team-contact a {
+    color: var(--text-light);
+    text-decoration: none;
+    margin: 0 0.5rem;
+}
+
+.team-contact a:hover {
+    color: var(--accent-orange);
+}
+
+/* CONTACTO.HTML */
+.contact-hero-tucasa {
+    background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+    color: white;
+    padding: 150px 0 80px;
     text-align: center;
-    margin-bottom: 3rem;
-    color: #7f8c8d;
+    margin-top: 80px;
 }
 
-.equipo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+.contact-page-content {
+    padding: 4rem 0;
+    background: var(--bg-white);
 }
 
-.equipo-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.equipo-foto {
-    font-size: 5rem;
-    margin-bottom: 1rem;
-}
-
-.cargo {
-    color: #3498db;
-    font-weight: bold;
-    margin: 0.5rem 0;
-}
-
-/* Contacto */
-.contacto-content {
+.contact-grid-full {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
 }
 
-.contacto-info h2 {
-    margin-bottom: 1.5rem;
-    color: #2c3e50;
+.contact-info-full {
+    background: var(--light-blue);
+    padding: 3rem;
+    border-radius: 15px;
 }
 
-.info-item {
+.contact-info-full h2 {
+    color: var(--primary-blue);
+    margin-bottom: 2rem;
+}
+
+.contact-methods-full {
     display: flex;
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-.info-item .icon {
-    font-size: 2rem;
-}
-
-.info-item h3 {
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-}
-
-.contacto-form-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.contacto-form-container h2 {
-    margin-bottom: 1.5rem;
-    color: #2c3e50;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.form-mensaje {
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: 5px;
-    display: none;
-}
-
-.form-mensaje.exito {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    display: block;
-}
-
-.form-mensaje.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    display: block;
-}
-
-/* Mapa */
-.mapa-section {
-    padding: 80px 0;
-    background-color: #f8f9fa;
-}
-
-.mapa-section h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.mapa-placeholder {
-    background: white;
-    padding: 4rem;
-    border-radius: 10px;
-    text-align: center;
-    border: 2px dashed #ddd;
-}
-
-.mapa-placeholder p {
-    font-size: 1.5rem;
-    margin: 1rem 0;
-}
-
-/* Footer */
-footer {
-    background-color: #2c3e50;
-    color: white;
-    padding: 3rem 0 1rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    flex-direction: column;
     gap: 2rem;
-    margin-bottom: 2rem;
 }
 
-.footer-section h3 {
+.contact-method-full {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.contact-method-full i {
+    font-size: 2rem;
+    color: var(--accent-orange);
+}
+
+.contact-method-info h3 {
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
+.contact-method-info p {
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.office-hours {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.office-hours h3 {
+    color: var(--primary-blue);
     margin-bottom: 1rem;
 }
 
-.footer-section ul {
-    list-style: none;
+.contact-form-full {
+    background: var(--bg-white);
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
 }
 
-.footer-section ul li {
-    margin: 0.5rem 0;
+.contact-form-full h2 {
+    color: var(--primary-blue);
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
-.footer-section a {
-    color: #bdc3c7;
-    text-decoration: none;
-    transition: color 0.3s;
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
 }
 
-.footer-section a:hover {
-    color: #3498db;
+.map-section-tucasa {
+    padding: 4rem 0;
+    background: var(--bg-light);
 }
 
-.footer-bottom {
+.map-container {
+    height: 400px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.map-placeholder-large {
+    height: 100%;
+    background: var(--bg-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--text-light);
+}
+
+.map-placeholder-large i {
+    font-size: 4rem;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}
+
+/* Favorites Section */
+.favorites-section-tucasa {
+    padding: 3rem 0;
+    background: var(--bg-white);
+}
+
+.empty-state-tucasa {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-light);
+}
+
+.empty-state-tucasa i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: var(--accent-orange);
+}
+
+.empty-state-tucasa h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-blue);
+}
+
+.favorites-grid-tucasa {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.favorites-actions-tucasa {
     text-align: center;
     padding-top: 2rem;
-    border-top: 1px solid #34495e;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Favorites Badge */
+.favorites-badge {
+    background: var(--accent-orange);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .nav-links {
+    .hamburger-tucasa {
+        display: flex;
+    }
+
+    .nav-menu-tucasa {
+        position: fixed;
+        left: -100%;
+        top: 80px;
+        flex-direction: column;
+        background: var(--bg-white);
+        width: 100%;
+        text-align: center;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+        padding: 2rem 0;
+    }
+
+    .nav-menu-tucasa.active {
+        left: 0;
+    }
+
+    .hero-content-tucasa h1 {
+        font-size: 2.5rem;
+    }
+
+    .search-row,
+    .filter-row {
+        grid-template-columns: 1fr;
+    }
+
+    .property-type-tabs {
+        flex-direction: column;
+    }
+
+    .carousel-slide-tucasa {
+        min-width: 100%;
+    }
+
+    .properties-grid-modern-tucasa {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-content-tucasa,
+    .about-grid,
+    .contact-grid-full {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .properties-header-tucasa {
+        flex-direction: column;
         gap: 1rem;
-        font-size: 0.9rem;
+        text-align: center;
     }
 
-    .hero h2,
-    .page-header h1 {
-        font-size: 2rem;
-    }
-
-    .hero p {
-        font-size: 1.2rem;
-    }
-
-    .servicio-detalle-card,
-    .servicio-detalle-card.reverse,
-    .nosotros-content,
-    .contacto-content {
+    .about-stats {
         grid-template-columns: 1fr;
     }
 
-    .filtros-grid {
+    .project-prices-large,
+    .project-features-large {
         grid-template-columns: 1fr;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 968px) {
+    .property-layout-tucasa {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-row {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

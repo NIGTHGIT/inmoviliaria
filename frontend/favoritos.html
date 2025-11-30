@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos - TU Casa RD</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header-tucasa">
+        <nav class="nav-tucasa">
+            <div class="nav-container-tucasa">
+                <div class="logo-tucasa">
+                    <h1>TU Casa RD</h1>
+                    <p>Somos la Inmobiliaria de República Dominicana</p>
+                </div>
+                <ul class="nav-menu-tucasa">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="propiedades.html">Propiedades</a></li>
+                    <li><a href="proyectos.html">Proyectos</a></li>
+                    <li><a href="favoritos.html" class="active">Favoritos</a></li>
+                    <li><a href="nosotros.html">Nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+                </ul>
+                <div class="hamburger-tucasa">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-hero-tucasa">
+        <div class="container-tucasa">
+            <h1>Tus Propiedades Favoritas</h1>
+            <p>Guarda las propiedades que más te gustan</p>
+        </div>
+    </section>
+
+    <section class="favorites-section-tucasa">
+        <div class="container-tucasa">
+            <div id="favorites-empty" class="empty-state-tucasa" style="display: none;">
+                <i class="far fa-heart"></i>
+                <h3>No tienes propiedades favoritas</h3>
+                <p>Agrega propiedades a tus favoritos haciendo clic en el corazón ♥</p>
+                <a href="propiedades.html" class="btn-primary-tucasa">Explorar Propiedades</a>
+            </div>
+
+            <div class="favorites-grid-tucasa" id="favorites-grid">
+                <!-- Las propiedades favoritas se cargan con JavaScript -->
+            </div>
+
+            <div class="favorites-actions-tucasa" id="favorites-actions" style="display: none;">
+                <button onclick="clearAllFavorites()" class="btn-outline-tucasa">
+                    <i class="fas fa-trash"></i> Limpiar Todos los Favoritos
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-tucasa">
+        <div class="container-tucasa">
+            <div class="footer-content-tucasa">
+                <div class="footer-section-tucasa">
+                    <h3>TU Casa RD</h3>
+                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus sueños.</p>
+                    <div class="social-links-tucasa">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="propiedades.html">Propiedades</a></li>
+                        <li><a href="proyectos.html">Proyectos</a></li>
+                        <li><a href="favoritos.html">Favoritos</a></li>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
+                    <p><i class="fas fa-phone"></i> +1 (809) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@tucasard.com</p>
+                    <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom-tucasa">
+                <p>&copy; 2024 TU Casa RD. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/favoritos.js"></script>
+</body>
+</html>
