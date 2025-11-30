@@ -1,28 +1,26 @@
 const express = require('express');
 const router = express.Router();
+const propiedadesController = require('../controllers/propiedadesController');
+const authController = require('../controllers/authController');
 
-// Obtener todas las propiedades
-router.get('/', (req, res) => {
-    res.json({
-        message: 'Lista de propiedades',
-        propiedades: []
-    });
-});
+// Rutas públicas (sin autenticación)
+// Obtener todas las propiedades con filtros
+router.get('/', propiedadesController.getPropiedades);
 
 // Obtener una propiedad por ID
-router.get('/:id', (req, res) => {
-    res.json({
-        message: `Propiedad con ID ${req.params.id}`,
-        propiedad: {}
-    });
-});
+router.get('/:id', propiedadesController.getPropiedadById);
 
+// Obtener estadísticas (pública)
+router.get('/stats/all', propiedadesController.getEstadisticas);
+
+// Rutas protegidas (requieren autenticación)
 // Crear una nueva propiedad
-router.post('/', (req, res) => {
-    res.json({
-        message: 'Propiedad creada',
-        propiedad: req.body
-    });
-});
+router.post('/', authController.requireAuth, propiedadesController.createPropiedad);
+
+// Actualizar una propiedad
+router.put('/:id', authController.requireAuth, propiedadesController.updatePropiedad);
+
+// Eliminar una propiedad
+router.delete('/:id', authController.requireAuth, propiedadesController.deletePropiedad);
 
 module.exports = router;
