@@ -108,26 +108,42 @@
                 </div>
                 
                 <div class="stat-card">
-                    <div class="stat-icon">✅</div>
+                    <div class="stat-icon">🏷️</div>
                     <div class="stat-info">
-                        <h3 id="disponibles">0</h3>
-                        <p>Disponibles</p>
+                        <h3 id="enVenta">0</h3>
+                        <p>En Venta</p>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon">🔑</div>
                     <div class="stat-info">
-                        <h3 id="alquiladas">0</h3>
-                        <p>Alquiladas</p>
+                        <h3 id="enAlquiler">0</h3>
+                        <p>En Alquiler</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <h3 id="vendidas">0</h3>
+                        <p>Vendidas</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📌</div>
+                    <div class="stat-info">
+                        <h3 id="reservadas">0</h3>
+                        <p>Reservadas</p>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon">💰</div>
                     <div class="stat-info">
-                        <h3 id="vendidas">0</h3>
-                        <p>Vendidas</p>
+                        <h3 id="precioPromedio">$0</h3>
+                        <p>Precio Promedio</p>
                     </div>
                 </div>
             </div>
@@ -161,12 +177,7 @@
                             <span>Ver Sitio Web</span>
                         </a>
                         
-                        <button onclick="loadDashboardStats()" class="action-btn">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <span>Actualizar Datos</span>
-                        </button>
+
                     </div>
                 </div>
             </div>
@@ -192,32 +203,6 @@
             if (dateEl) {
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 dateEl.textContent = new Date().toLocaleDateString('es-ES', options);
-            }
-        }
-
-        // Cargar estadísticas del dashboard
-        async function loadDashboardStats() {
-            try {
-                const response = await fetch('/api/propiedades');
-                const data = await response.json();
-
-                if (data.success) {
-                    const propiedades = data.propiedades;
-                    
-                    // Total
-                    document.getElementById('totalPropiedades').textContent = propiedades.length;
-                    
-                    // Por estado
-                    const disponibles = propiedades.filter(p => p.estado === 'disponible').length;
-                    const alquiladas = propiedades.filter(p => p.estado === 'alquilada').length;
-                    const vendidas = propiedades.filter(p => p.estado === 'vendida').length;
-                    
-                    document.getElementById('disponibles').textContent = disponibles;
-                    document.getElementById('alquiladas').textContent = alquiladas;
-                    document.getElementById('vendidas').textContent = vendidas;
-                }
-            } catch (error) {
-                console.error('Error cargando estadísticas:', error);
             }
         }
     </script>

@@ -9,7 +9,7 @@
 <body>
     <div class="admin-container">
         <!-- Sidebar -->
-        <aside class="admin-sidebar">
+        <aside class="admin-sidebar" id="adminSidebar">
             <div class="logo">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -91,12 +91,6 @@
                             </svg>
                             Nueva Propiedad
                         </button>
-                        <button onclick="loadPropiedades()" class="btn-secondary btn-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Actualizar
-                        </button>
                     </div>
                 </div>
             </header>
@@ -132,7 +126,6 @@
                             <input type="text" id="filterUbicacion" placeholder="Buscar por ubicación">
                         </div>
                         <div class="form-group">
-                            <button onclick="loadPropiedades()" class="btn-primary">Buscar</button>
                             <button onclick="clearFilters()" class="btn-secondary">Limpiar</button>
                         </div>
                     </div>
@@ -411,5 +404,58 @@
 
     <script src="../js/auth.js"></script>
     <script src="../js/admin.js"></script>
+    <script>
+        // Inicializar menú móvil manualmente
+        function setupMobileMenu() {
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            const overlay = document.getElementById('mobileOverlay');
+            const sidebar = document.getElementById('adminSidebar');
+            
+            console.log('Setup Mobile Menu:', { menuBtn, overlay, sidebar });
+            
+            if (!menuBtn || !overlay || !sidebar) {
+                console.error('Elementos no encontrados');
+                return;
+            }
+            
+            // Toggle menú
+            menuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Click en botón hamburguesa');
+                console.log('Ancho de ventana:', window.innerWidth);
+                menuBtn.classList.toggle('active');
+                sidebar.classList.toggle('mobile-active');
+                overlay.classList.toggle('active');
+                console.log('Clases del sidebar:', sidebar.className);
+                console.log('Clases del overlay:', overlay.className);
+            });
+            
+            // Cerrar al hacer clic en overlay
+            overlay.addEventListener('click', function() {
+                menuBtn.classList.remove('active');
+                sidebar.classList.remove('mobile-active');
+                overlay.classList.remove('active');
+            });
+            
+            // Cerrar al hacer clic en un link
+            const navLinks = sidebar.querySelectorAll('.nav-item');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        menuBtn.classList.remove('active');
+                        sidebar.classList.remove('mobile-active');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
+        // Cargar propiedades automáticamente al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadPropiedades();
+            setupMobileMenu();
+        });
+    </script>
 </body>
 </html>

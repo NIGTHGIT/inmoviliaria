@@ -218,6 +218,12 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Estado móvil activo - forzar para que funcione */
+.admin-sidebar.mobile-active {
+    left: 0 !important;
+    display: flex !important;
+}
+
 /* Logo del sidebar */
 .logo {
     display: flex;
@@ -452,44 +458,77 @@
 .mobile-menu-btn {
     display: none;
     flex-direction: column;
-    gap: 4px;
-    width: 40px;
-    height: 40px;
-    padding: 8px;
-    background: var(--admin-card);
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    background: var(--admin-primary);
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 16px;
+    left: 16px;
     z-index: 101;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+    background: var(--admin-primary-dark);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+    transform: scale(1.05);
+}
+
+.mobile-menu-btn:active {
+    transform: scale(0.95);
 }
 
 .mobile-menu-btn span {
-    width: 100%;
-    height: 2px;
-    background: var(--admin-text);
-    border-radius: 2px;
-    transition: all 0.3s;
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: white;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active {
+    background: var(--admin-primary-dark);
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
 }
 
 .mobile-overlay {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     z-index: 99;
     opacity: 0;
-    transition: opacity 0.3s;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(2px);
 }
 
 .mobile-overlay.active {
-    display: block;
     opacity: 1;
+    visibility: visible;
 }
 
 /* Content area */
@@ -1833,14 +1872,16 @@
 /* Tablets pequeñas y móviles grandes */
 @media (max-width: 768px) {
     .admin-sidebar {
-        position: fixed;
-        left: -100%;
+        position: fixed !important;
+        left: -100% !important;
         width: 280px;
+        z-index: 100;
         transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
     }
     
     .admin-sidebar.mobile-active {
-        left: 0;
+        left: 0 !important;
     }
     
     .admin-main {
@@ -1851,14 +1892,6 @@
     
     .mobile-menu-btn {
         display: flex;
-    }
-    
-    .table-container {
-        display: none;
-    }
-    
-    .table-mobile-view {
-        display: block;
     }
     
     .header-content {
@@ -1946,45 +1979,130 @@
         grid-template-columns: 1fr;
     }
     
+    /* Filtros responsivos */
+    .filters-card {
+        padding: 16px;
+    }
+    
+    .filters-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .filters-row .form-group:last-child {
+        flex-direction: column;
+    }
+    
+    .filters-row .form-group:last-child button {
+        width: 100%;
+    }
+    
     .filters-grid {
         grid-template-columns: 1fr;
         gap: 12px;
     }
     
+    /* Header responsivo */
     .admin-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
     
+    .header-content {
+        width: 100%;
+    }
+    
+    .header-actions {
+        width: 100%;
+    }
+    
+    .header-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+    
     .admin-header h1 {
         font-size: 1.5rem;
     }
     
-    .admin-table {
+    /* Tabla responsiva */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .data-table {
+        min-width: 600px;
         font-size: 0.85rem;
     }
     
-    .admin-table th,
-    .admin-table td {
+    .data-table th,
+    .data-table td {
         padding: 12px 8px;
+        white-space: nowrap;
+    }
+    
+    .data-table th:first-child,
+    .data-table td:first-child {
+        position: sticky;
+        left: 0;
+        background: var(--admin-card);
+        z-index: 1;
+    }
+    
+    /* Ocultar columnas menos importantes en móvil */
+    .data-table th:nth-child(5),
+    .data-table td:nth-child(5) {
+        display: none;
     }
     
     .form-row {
         grid-template-columns: 1fr;
     }
     
+    /* Modal responsivo */
     .modal-content {
         margin: 10px;
         max-height: 95vh;
+        width: calc(100% - 20px);
+    }
+    
+    .modal-large {
+        max-width: 95vw;
     }
     
     .modal-header {
         padding: 16px;
     }
     
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+    
     .modal-form {
         padding: 16px;
+    }
+    
+    .view-content {
+        padding: 16px;
+    }
+    
+    .view-info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    
+    .view-info-item {
+        padding: 12px;
+    }
+    
+    .view-section {
+        padding: 16px;
+    }
+    
+    .view-section h3 {
+        font-size: 1.1rem;
     }
     
     /* Carousel responsivo móviles */
@@ -2031,6 +2149,7 @@
         border-width: 2px;
     }
     
+    /* Grid de información a una columna en móviles */
     .view-info-grid {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -2048,12 +2167,20 @@
 /* Móviles pequeños */
 @media (max-width: 480px) {
     .admin-sidebar {
-        width: 60px;
+        position: fixed;
+        left: -100%;
+        width: 280px;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .admin-sidebar.mobile-active {
+        left: 0;
     }
     
     .admin-main {
-        margin-left: 60px;
+        margin-left: 0;
         padding: 12px;
+        padding-top: 80px;
     }
     
     .sidebar-header {
@@ -2089,29 +2216,80 @@
         width: 100%;
     }
     
+    .btn-icon svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Filtros en móviles pequeños */
+    .filters-card {
+        padding: 12px;
+    }
+    
+    .filters-card h3 {
+        font-size: 1rem;
+    }
+    
+    .filters-row {
+        gap: 10px;
+    }
+    
+    .filters-row .form-group label {
+        font-size: 0.85rem;
+    }
+    
+    .filters-row .form-group input,
+    .filters-row .form-group select {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+    
     .filters-section {
         padding: 12px;
     }
     
-    .table-section {
+    /* Tabla optimizada para móviles pequeños */
+    .table-container {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -12px;
+        padding: 0 12px;
     }
     
-    .admin-table {
+    .data-table {
         font-size: 0.75rem;
-        min-width: 600px;
+        min-width: 500px;
     }
     
-    .admin-table th,
-    .admin-table td {
+    .data-table th,
+    .data-table td {
         padding: 8px 6px;
+        font-size: 0.75rem;
+    }
+    
+    .data-table th:first-child,
+    .data-table td:first-child {
+        min-width: 40px;
+    }
+    
+    /* Ocultar más columnas en pantallas muy pequeñas */
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) {
+        display: none;
     }
     
     .btn-icon {
-        padding: 6px 10px;
-        font-size: 0.9rem;
+        padding: 6px 8px;
+        font-size: 0.85rem;
     }
     
+    .actions {
+        display: flex;
+        gap: 4px;
+        flex-wrap: nowrap;
+    }
+    
+    /* Modal fullscreen en móviles pequeños */
     .modal-content {
         width: 100%;
         margin: 0;
@@ -2119,12 +2297,50 @@
         max-height: 100vh;
     }
     
-    .modal-header h2 {
-        font-size: 1.2rem;
+    .modal-large {
+        max-width: 100vw;
+        width: 100%;
     }
     
-    .modal-close {
+    .modal-header {
+        padding: 12px;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.1rem;
+    }
+    
+    .close-btn {
         font-size: 1.5rem;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .modal-form {
+        padding: 12px;
+    }
+    
+    .view-content {
+        padding: 12px;
+    }
+    
+    /* Grid de info a 1 columna en móviles pequeños */
+    .view-info-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+    
+    .view-info-item {
+        padding: 10px;
+    }
+    
+    .view-section {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .view-section h3 {
+        font-size: 1rem;
     }
     
     .form-group label {
