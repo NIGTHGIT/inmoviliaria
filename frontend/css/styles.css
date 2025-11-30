@@ -184,42 +184,69 @@ body {
     transition: var(--transition);
 }
 
-/* Hero Section */
 .hero-tucasa {
-    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
-    color: white;
-    padding: 180px 0 80px;
     position: relative;
-    min-height: 100vh;
+    background-image: url('https://d2p0bx8wfdkjkb.cloudfront.net/static/media/Tu%20Casa%20RD/2024/11/NKPu8fmCSB-BANNER_SANTO_DOMINGO_2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Efecto parallax opcional */
+    min-height: 140vh; /* Ocupa toda la altura de la pantalla */
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .hero-overlay-tucasa {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Overlay para mejor legibilidad */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .hero-content-tucasa {
+    position: relative;
+    z-index: 2;
     text-align: center;
+    color: white;
     max-width: 900px;
     width: 100%;
-    padding: 0 2rem;
+    padding: 40px 20px;
 }
 
 .hero-content-tucasa h1 {
-    font-size: 3.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hero-subtitle-tucasa {
     font-size: 1.5rem;
-    margin-bottom: 3rem;
-    opacity: 0.9;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-tucasa {
+        min-height: 80vh;
+        background-attachment: scroll; /* Quitar efecto parallax en móviles */
+    }
+    
+    .hero-content-tucasa h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle-tucasa {
+        font-size: 1.2rem;
+    }
 }
 
 /* Tabs de Compra/Alquiler */
@@ -592,77 +619,173 @@ body {
     text-align: center;
 }
 
-/* Contact Section */
 .contact-section-tucasa {
-    padding: 80px 0;
-    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
-    color: white;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 600px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.contact-overlay-tucasa {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Overlay más oscuro para mejor contraste */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-tucasa {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .contact-content-tucasa {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 50px;
     align-items: start;
+}
+
+.contact-info-tucasa {
+    color: white;
 }
 
 .contact-info-tucasa h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    color: white;
 }
 
-.contact-info-tucasa > p {
-    font-size: 1.2rem;
-    margin-bottom: 3rem;
-    opacity: 0.9;
+.contact-info-tucasa p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: #e5e7eb;
 }
 
 .contact-methods {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 25px;
 }
 
 .contact-method {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 15px;
+    color: white;
 }
 
 .contact-method i {
-    font-size: 2rem;
-    color: var(--accent-orange);
-    width: 60px;
-    height: 60px;
+    font-size: 1.5rem;
+    color: #3b82f6;
     background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
     border-radius: 50%;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .contact-method h4 {
-    margin-bottom: 0.5rem;
+    margin: 0 0 5px 0;
+    color: white;
+    font-size: 1.1rem;
 }
 
 .contact-method p {
-    opacity: 0.9;
+    margin: 0;
+    color: #e5e7eb;
+    font-size: 1rem;
 }
 
 .contact-form-tucasa {
     background: rgba(255, 255, 255, 0.95);
-    padding: 2.5rem;
-    border-radius: 20px;
-    box-shadow: var(--shadow-lg);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .contact-form-tucasa h3 {
-    color: var(--primary-blue);
-    margin-bottom: 2rem;
-    text-align: center;
-    font-size: 1.8rem;
+    color: #1f2937;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
 }
 
+.form-group-tucasa {
+    margin-bottom: 20px;
+}
+
+.form-group-tucasa input,
+.form-group-tucasa textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group-tucasa input:focus,
+.form-group-tucasa textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn-submit-tucasa {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-submit-tucasa:hover {
+    background: #2563eb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contact-content-tucasa {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .contact-section-tucasa {
+        background-attachment: scroll;
+        min-height: auto;
+        padding: 60px 0;
+    }
+    
+    .contact-form-tucasa {
+        padding: 30px 25px;
+    }
+    
+    .contact-info-tucasa h2 {
+        font-size: 2rem;
+    }
+}
 .form-group-tucasa {
     margin-bottom: 1.5rem;
 }
@@ -1384,6 +1507,7 @@ body {
     .form-row {
         grid-template-columns: 1fr;
     }
+    
 }
 
 @media (max-width: 968px) {
