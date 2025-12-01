@@ -1,5 +1,5 @@
-// Configuración de la API
-const API_URL = 'http://localhost:3000/api';
+// Configuración de la API asi no importe donde se llame
+const API_URL = (window.api && window.api.base) ? window.api.base : `${window.location.origin}/api`;
 
 /**
  * Obtener el sessionId del localStorage

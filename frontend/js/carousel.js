@@ -14,61 +14,26 @@ class CarouselManagerTucasa {
     }
 
     async loadSlides() {
-        // Datos de ejemplo para República Dominicana
-        this.slides = [
-            {
-                id: 'prop_rd_1',
-                titulo: 'Villa de Lujo en Punta Cana',
-                precio: 450000,
-                ubicacion: 'Punta Cana, La Altagracia',
-                imagenes: ['https://images.unsplash.com/photo-1613977257363-707ba9348227?w=600'],
-                tipo: 'villa',
-                estado: 'en_venta',
-                habitaciones: 5,
-                banios: 4,
-                metrosCuadrados: 320,
-                caracteristicas: ['Pileta', 'Playa Privada', 'Vista al Mar']
-            },
-            {
-                id: 'prop_rd_2',
-                titulo: 'Apartamento en Santo Domingo Este',
-                precio: 185000,
-                ubicacion: 'Santo Domingo Este',
-                imagenes: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600'],
-                tipo: 'apartamento',
-                estado: 'en_venta',
-                habitaciones: 3,
-                banios: 2,
-                metrosCuadrados: 110,
-                caracteristicas: ['Amenities', 'Seguridad 24/7', 'Parqueo']
-            },
-            {
-                id: 'prop_rd_3',
-                titulo: 'Casa Familiar en Santiago',
-                precio: 220000,
-                ubicacion: 'Santiago de los Caballeros',
-                imagenes: ['https://images.unsplash.com/photo-1513584684374-8bab748fbf90?w=600'],
-                tipo: 'casa',
-                estado: 'en_venta',
-                habitaciones: 4,
-                banios: 3,
-                metrosCuadrados: 180,
-                caracteristicas: ['Jardín', 'Cochera', 'Terraza']
-            },
-            {
-                id: 'prop_rd_4',
-                titulo: 'Local Comercial en Boca Chica',
-                precio: 150000,
-                ubicacion: 'Boca Chica, Santo Domingo',
-                imagenes: ['https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600'],
-                tipo: 'local',
-                estado: 'en_venta',
-                habitaciones: 1,
-                banios: 1,
-                metrosCuadrados: 85,
-                caracteristicas: ['Alta Circulación', 'Vidriera', 'A/C']
-            }
-        ];
+        try {
+            const res = await window.api.get('/propiedades');
+            const list = Array.isArray(res?.data) ? res.data : [];
+            this.slides = list.map(p => ({
+                id: p.id,
+                titulo: p.titulo,
+                precio: p.precio,
+                ubicacion: p.ubicacion,
+                imagenes: Array.isArray(p.imagenes) && p.imagenes.length ? p.imagenes : ['https://via.placeholder.com/600x400?text=Propiedad'],
+                tipo: p.tipo,
+                estado: p.estado,
+                habitaciones: p.habitaciones || 0,
+                banos: p.banos || 0,
+                metrosCuadrados: p.metrosCuadrados || 0,
+                caracteristicas: p.caracteristicas || []
+            }));
+        } catch (e) {
+            console.error('Error cargando propiedades del API:', e);
+            this.slides = [];
+        }
     }
 
     renderCarousel() {
@@ -93,7 +58,7 @@ class CarouselManagerTucasa {
                         </p>
                         <div class="property-features-tucasa">
                             <span><i class="fas fa-bed"></i> ${slide.habitaciones} hab.</span>
-                            <span><i class="fas fa-bath"></i> ${slide.banios} baños</span>
+                            <span><i class="fas fa-bath"></i> ${slide.banos} baños</span>
                             <span><i class="fas fa-ruler-combined"></i> ${slide.metrosCuadrados} m²</span>
                         </div>
                         <div class="property-actions-tucasa">
@@ -218,13 +183,14 @@ class CarouselManagerTucasa {
     }
 
     getStatusText(estado) {
+        const norm = (estado || '').toLowerCase().replace(/\s+/g, '_');
         const statusMap = {
             'en_venta': 'VENTA',
             'en_alquiler': 'ALQUILER', 
             'vendido': 'VENDIDO',
             'reservado': 'RESERVADO'
         };
-        return statusMap[estado] || estado;
+        return statusMap[norm] || estado || '';
     }
 }
 
@@ -259,7 +225,7 @@ CarouselManagerTucasa.prototype.renderPropertiesGrid = function() {
                 </p>
                 <div class="property-features-tucasa">
                     <span><i class="fas fa-bed"></i> ${property.habitaciones} hab.</span>
-                    <span><i class="fas fa-bath"></i> ${property.banios} baños</span>
+                    <span><i class="fas fa-bath"></i> ${property.banos} baños</span>
                     <span><i class="fas fa-ruler-combined"></i> ${property.metrosCuadrados} m²</span>
                 </div>
                 <div class="property-actions-tucasa">
