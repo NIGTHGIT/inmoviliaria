@@ -1377,20 +1377,21 @@ body {
 }
 
 .contact-page-content {
-    padding: 4rem 0;
+    padding: 3rem 0;
     background: var(--bg-white);
 }
 
 .contact-grid-full {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 2rem;
+    align-items: stretch;
 }
 
 .contact-info-full {
     background: var(--light-blue);
-    padding: 3rem;
-    border-radius: 15px;
+    padding: 1.5rem;
+    border-radius: 12px;
 }
 
 .contact-info-full h2 {
@@ -1401,7 +1402,7 @@ body {
 .contact-methods-full {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .contact-method-full {
@@ -1411,7 +1412,7 @@ body {
 }
 
 .contact-method-full i {
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: var(--accent-orange);
 }
 
@@ -1426,9 +1427,9 @@ body {
 }
 
 .office-hours {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 2px solid var(--border-color);
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
 }
 
 .office-hours h3 {
@@ -1438,9 +1439,27 @@ body {
 
 .contact-form-full {
     background: var(--bg-white);
-    padding: 3rem;
-    border-radius: 15px;
+    padding: 1.5rem;
+    border-radius: 12px;
     box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+#contact-form-general {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+#contact-form-general textarea {
+    min-height: 240px;
+    flex: 1;
+}
+
+#btn-mensaje {
+    margin-top: auto;
 }
 
 .contact-form-full h2 {
@@ -1452,7 +1471,7 @@ body {
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .map-section-tucasa {
