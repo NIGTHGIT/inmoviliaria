@@ -34,13 +34,13 @@ class ThemeManager {
         const mainContent = document.querySelector('main');
         const sections = document.querySelectorAll('section');
         const propertyCards = document.querySelectorAll('.property-card-tucasa');
-        
+
         // Remover tema anterior
         document.body.classList.remove('theme-light', 'theme-dark');
         if (mainContent) mainContent.classList.remove('theme-light', 'theme-dark');
         sections.forEach(section => section.classList.remove('theme-light', 'theme-dark'));
         propertyCards.forEach(card => card.classList.remove('theme-light', 'theme-dark'));
-        
+
         // Aplicar nuevo tema solo al contenido
         document.body.classList.add(`theme-${this.theme}`);
         if (mainContent) mainContent.classList.add(`theme-${this.theme}`);
@@ -111,7 +111,7 @@ class App {
         this.setupHomeSearch();
         this.setupAutocomplete('home-search-location');
         this.setupAutocomplete('filter-location');
-        
+
         console.log('🚀 TU Casa RD - Aplicación inicializada');
     }
 
@@ -201,3 +201,63 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app = new App();
 });
 
+
+// API de EMAIL
+
+emailjs.init("qHyX0bsqfanDPm8vy"); // Public Key
+document.getElementById('contact-form-cita').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    emailjs.sendForm("service_f8crp6f", "template_zvwaapq", this)
+        .then(() => {
+            alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+            this.reset();
+        })
+        .catch((err) => {
+            console.error(err);
+            alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+        });
+});
+
+document.getElementById('contact-form-general').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    emailjs.sendForm("service_f8crp6f", "template_ar49unm", this)
+        .then(() => {
+            alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+            this.reset();
+        })
+        .catch((err) => {
+            console.error(err);
+            alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+        });
+    })
+
+    document.getElementById('contact-form-tucasa').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        emailjs.sendForm("service_f8crp6f", "template_ar49unm", this)
+            .then(() => {
+                alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+                this.reset();
+            })
+            .catch((err) => {
+                console.error(err);
+                alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+            });
+    });
+
+
+
+    // Bloquear fechas anteriores a hoy
+    const hoy = new Date().toISOString().split("T")[0];
+    document.getElementById("date-input").setAttribute("min", hoy);
+
+    // Limitar la hora permitida (9:00 AM – 4:00 PM)
+    const timeInput = document.getElementById("time-input");
+
+    timeInput.addEventListener("change", () => {
+        let time = timeInput.value;
+        if (time < "09:00") timeInput.value = "09:00";
+        if (time > "16:00") timeInput.value = "16:00";
+    })
