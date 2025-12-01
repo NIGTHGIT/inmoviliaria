@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
     <!-- Header -->
     <header class="header-tucasa">
@@ -17,14 +19,20 @@
                     <p>Somos la Inmobiliaria de República Dominicana</p>
                 </div>
                 <ul class="nav-menu-tucasa">
-    <li><a href="index.html" class="active">Inicio</a></li>
-    <li><a href="propiedades.html">Propiedades</a></li>
-    <li><a href="proyectos.html">Proyectos</a></li>
-    <li><a href="favoritos.html">Favoritos</a></li>
-    <li><a href="nosotros.html">Nosotros</a></li>
-    <li><a href="contacto.html">Contacto</a></li>
-    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
-</ul>
+                    <li><a href="index.html" class="active">Inicio</a></li>
+                    <li><a href="propiedades.html">Propiedades</a></li>
+                    <li><a href="proyectos.html">Proyectos</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="nosotros.html">Nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li>
+                        <a href="https://wa.me/18497077848?text=Hola%2C%20quiero%20información%20sobre%20una%20propiedad"
+                            target="_blank">
+                            WhatsApp
+                        </a>
+                    </li>
+                    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+                </ul>
                 <div class="hamburger-tucasa">
                     <span></span>
                     <span></span>
@@ -35,34 +43,34 @@
     </header>
 
     <section class="hero-tucasa">
-    <div class="hero-overlay-tucasa">
-        <div class="hero-content-tucasa">
-            <h1>Encuentra tu propiedad ideal</h1>
-            <p class="hero-subtitle-tucasa">En República Dominicana</p>
+        <div class="hero-overlay-tucasa">
+            <div class="hero-content-tucasa">
+                <h1>Encuentra tu propiedad ideal</h1>
+                <p class="hero-subtitle-tucasa">En República Dominicana</p>
 
-            <!-- Tabs de Compra/Alquiler -->
-            <div class="property-type-tabs">
-                <button class="type-tab active" data-type="compra">
-                    <i class="fas fa-home"></i>
-                    COMPRA
-                </button>
-                <button class="type-tab" data-type="alquiler">
-                    <i class="fas fa-key"></i>
-                    ALQUILER
-                </button>
-            </div>
+                <!-- Tabs de Compra/Alquiler -->
+                <div class="property-type-tabs">
+                    <button class="type-tab active" data-type="compra">
+                        <i class="fas fa-home"></i>
+                        COMPRA
+                    </button>
+                    <button class="type-tab" data-type="alquiler">
+                        <i class="fas fa-key"></i>
+                        ALQUILER
+                    </button>
+                </div>
 
             <!-- Formulario de Búsqueda -->
             <div class="search-form-tucasa">
                 <div class="search-row">
                     <div class="search-group">
                         <label><i class="fas fa-map-marker-alt"></i> Sectores o ciudades donde deseas buscar</label>
-                        <input id="home-search-location" type="text" placeholder="Ej: Santo Domingo, Punta Cana...">
+                        <input type="text" placeholder="Ej: Santo Domingo, Punta Cana...">
                     </div>
                     
                     <div class="search-group">
                         <label><i class="fas fa-building"></i> Tipo de inmueble</label>
-                        <select id="home-search-type">
+                        <select>
                             <option value="">Todos los tipos</option>
                             <option value="casa">Casa</option>
                             <option value="apartamento">Apartamento</option>
@@ -76,28 +84,29 @@
                 <div class="search-row">
                     <div class="search-group">
                         <label><i class="fas fa-bed"></i> Habitaciones</label>
-                        <select id="home-search-rooms">
+                        <select>
                             <option value="">Cualquier cantidad</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4+">+4</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                            <option value="5">5+</option>
                         </select>
                     </div>
                     
                     <div class="search-group">
                         <label><i class="fas fa-car"></i> Parqueos</label>
-                        <select id="home-search-parking">
+                        <select>
                             <option value="">Cualquier cantidad</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
                         </select>
                     </div>
                     
                     <div class="search-group">
                         <label><i class="fas fa-dollar-sign"></i> Precio</label>
-                        <select id="home-search-price">
+                        <select>
                             <option value="">Cualquier precio</option>
                             <option value="50000">Hasta US$ 50,000</option>
                             <option value="100000">Hasta US$ 100,000</option>
@@ -108,7 +117,7 @@
                     </div>
                 </div>
                 
-                <button id="home-search-button" class="search-btn-tucasa">
+                <button class="search-btn-tucasa">
                     <i class="fas fa-search"></i> BUSCAR PROPIEDADES
                 </button>
             </div>
@@ -123,19 +132,19 @@
                 <h2>Propiedades Destacadas</h2>
                 <p>Las mejores oportunidades del mercado</p>
             </div>
-            
+
             <div class="carousel-container-tucasa">
                 <div class="carousel-track-tucasa" id="carousel-track">
                     <!-- Las propiedades del carrusel se cargan con JavaScript -->
                 </div>
-                
+
                 <button class="carousel-btn-tucasa carousel-prev-tucasa">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 <button class="carousel-btn-tucasa carousel-next-tucasa">
                     <i class="fas fa-chevron-right"></i>
                 </button>
-                
+
                 <div class="carousel-dots-tucasa" id="carousel-dots">
                     <!-- Los dots se generan con JavaScript -->
                 </div>
@@ -150,11 +159,11 @@
                 <h2>Nuestras Propiedades</h2>
                 <p>Descubre nuestro catálogo completo</p>
             </div>
-            
+
             <div class="properties-grid-modern-tucasa" id="properties-grid">
                 <!-- Las propiedades se cargan con JavaScript -->
             </div>
-            
+
             <div class="load-more-container-tucasa">
                 <button class="btn-outline-tucasa" id="load-more">
                     <i class="fas fa-plus"></i> Ver Más Propiedades
@@ -164,69 +173,75 @@
     </section>
 
     <!-- Sección de Contacto -->
-<section class="contact-section-tucasa" style="background-image: url('https://www.visitcentroamerica.com/wp-content/uploads/2025/04/Santo-Domingo-Colonial-City-Dominican-Republic-Centroamerica-01.webp');">
-    <div class="contact-overlay-tucasa">
-        <div class="container-tucasa">
-            <div class="contact-content-tucasa">
-                <div class="contact-info-tucasa">
-                    <h2>CONTACTANOS</h2>
-                    <p>¿Tienes preguntas o necesitas asesoría? Estamos aquí para ayudarte.</p>
-                    
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <i class="fas fa-phone"></i>
-                            <div>
-                                <h4>Teléfono</h4>
-                                <p>+1 (809) 123-4567</p>
+    <section class="contact-section-tucasa"
+        style="background-image: url('https://www.visitcentroamerica.com/wp-content/uploads/2025/04/Santo-Domingo-Colonial-City-Dominican-Republic-Centroamerica-01.webp');">
+        <div class="contact-overlay-tucasa">
+            <div class="container-tucasa">
+                <div class="contact-content-tucasa">
+                    <div class="contact-info-tucasa">
+                        <h2>CONTACTANOS</h2>
+                        <p>¿Tienes preguntas o necesitas asesoría? Estamos aquí para ayudarte.</p>
+
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <h4>Teléfono</h4>
+                                    <p>+1 (809) 123-4567</p>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="contact-method">
-                            <i class="fas fa-whatsapp"></i>
-                            <div>
-                                <h4>WhatsApp</h4>
-                                <p>+1 (809) 987-6543</p>
+
+                            <div class="contact-method">
+                                <i class="fas fa-whatsapp"></i>
+                                <div>
+                                    <h4>WhatsApp</h4>
+                                    <p>+1 (809) 987-6543</p>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="contact-method">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <h4>Email</h4>
-                                <p>info@tucasard.com</p>
+
+                            <div class="contact-method">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>Email</h4>
+                                    <p>info@tucasard.com</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="contact-form-tucasa">
-                    <h3>Envíanos un Mensaje</h3>
-                    <form>
-                        <div class="form-group-tucasa">
-                            <input type="text" placeholder="Nombre completo" required>
-                        </div>
-                        
-                        <div class="form-group-tucasa">
-                            <input type="email" placeholder="Email" required>
-                        </div>
-                        
-                        <div class="form-group-tucasa">
-                            <input type="tel" placeholder="Teléfono">
-                        </div>
-                        
-                        <div class="form-group-tucasa">
-                            <textarea placeholder="Mensaje" rows="4" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn-submit-tucasa">
-                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
-                        </button>
-                    </form>
+
+                    <div class="contact-form-tucasa">
+                        <h3>Envíanos un Mensaje</h3>
+                        <form>
+                            <div class="form-group-tucasa">
+                                <input type="text" placeholder="Nombre completo" required>
+                            </div>
+
+                            <div class="form-group-tucasa">
+                                <input type="email" placeholder="Email" required>
+                            </div>
+
+                            <div class="form-group-tucasa">
+                                <input type="tel" placeholder="Teléfono">
+                            </div>
+
+                            <div class="form-group-tucasa">
+                                <textarea placeholder="Mensaje" rows="4" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-submit-tucasa">
+                                <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20una%20propiedad"
+        class="whatsapp-floating" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <!-- Footer -->
     <footer class="footer-tucasa">
@@ -234,14 +249,15 @@
             <div class="footer-content-tucasa">
                 <div class="footer-section-tucasa">
                     <h3>TU Casa RD</h3>
-                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus sueños.</p>
+                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus
+                        sueños.</p>
                     <div class="social-links-tucasa">
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="footer-section-tucasa">
                     <h4>Enlaces Rápidos</h4>
                     <ul>
@@ -252,7 +268,7 @@
                         <li><a href="contacto.html">Contacto</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section-tucasa">
                     <h4>Contacto</h4>
                     <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
@@ -261,7 +277,7 @@
                     <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
                 </div>
             </div>
-            
+
             <div class="footer-bottom-tucasa">
                 <p>&copy; 2024 TU Casa RD. Todos los derechos reservados.</p>
             </div>
@@ -272,4 +288,5 @@
     <script src="js/app.js"></script>
     <script src="js/carousel.js"></script>
 </body>
+
 </html>

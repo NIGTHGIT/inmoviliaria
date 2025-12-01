@@ -1346,6 +1346,28 @@ body {
 }
 
 /* CONTACTO.HTML */
+
+/*API de WHATSAPP*/
+.whatsapp-floating {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25d366;
+    color: white;
+    font-size: 28px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 9999;
+}
+.whatsapp-floating:hover {
+    background: #1ebe5d;
+}
+
 .contact-hero-tucasa {
     background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
     color: white;
