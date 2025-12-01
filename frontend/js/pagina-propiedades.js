@@ -105,7 +105,7 @@ class PropertiesPageManager {
         gridEl.innerHTML = items.map(p => `
             <div class="property-card-tucasa">
                 <div class="property-image-tucasa">
-                    <img src="${(Array.isArray(p.imagenes) && p.imagenes[0]) || 'https://via.placeholder.com/600x400?text=Propiedad'}" alt="${p.titulo}">
+                    <img src="${(Array.isArray(p.imagenes) && p.imagenes[0]) || 'https://via.placeholder.com/600x400?text=Propiedad'}" alt="${p.titulo}" onerror="this.onerror=null; this.src='https://via.placeholder.com/600x400?text=Propiedad';">
                     <div class="property-badge-tucasa">${this.getStatusText(p.estado)}</div>
                     <div class="property-price-tucasa">${this.formatPrice(p.precio)}</div>
                 </div>
@@ -119,7 +119,7 @@ class PropertiesPageManager {
                     </div>
                     <div class="property-actions-tucasa">
                         <a href="propiedad-detalle.html?id=${p.id}" class="btn-primary-tucasa">Ver Detalles</a>
-                        <button class="btn-outline-tucasa" onclick="window.favoritesManager?.toggleFavorite('${p.id}')">
+                        <button class="btn-outline-tucasa" data-property-id="${p.id}" onclick="window.favoritesManager?.toggleFavorite('${p.id}')">
                             <i class="far fa-heart"></i>
                         </button>
                     </div>
@@ -130,6 +130,10 @@ class PropertiesPageManager {
         const loadMoreBtn = document.getElementById('load-more-properties');
         if (loadMoreBtn) {
             loadMoreBtn.style.display = this.visible < this.filtered.length ? 'inline-flex' : 'none';
+        }
+
+        if (window.favoritesManager) {
+            items.forEach(p => window.favoritesManager.updateFavoriteButton(String(p.id)));
         }
     }
 }
