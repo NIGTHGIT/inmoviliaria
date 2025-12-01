@@ -1519,6 +1519,7 @@ body {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: var(--shadow);
+    position: relative;
 }
 
 .map-container iframe {
@@ -1526,6 +1527,11 @@ body {
     height: 100%;
     border: 0;
     display: block;
+}
+
+.map-actions {
+    text-align: center;
+    margin-top: 1rem;
 }
 
 .map-placeholder-large {
