@@ -1398,7 +1398,6 @@ body {
     justify-content:center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     z-index: 9999;
-    text-decoration: none;
 }
 .whatsapp-floating:hover {
     background: #1ebe5d;
@@ -1527,11 +1526,6 @@ body {
     height: 100%;
     border: 0;
     display: block;
-}
-
-.map-actions {
-    text-align: center;
-    margin-top: 1rem;
 }
 
 .map-placeholder-large {
