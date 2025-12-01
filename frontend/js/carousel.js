@@ -70,10 +70,10 @@ class CarouselManagerTucasa {
                             <span><i class="fas fa-ruler-combined"></i> ${slide.metrosCuadrados} m²</span>
                         </div>
                         <div class="property-actions-tucasa">
-                            <a href="propiedad-detalle.html?id=${slide.id}" class="btn-primary-tucasa">Ver Detalles</a>
-                            <button class="btn-outline-tucasa" onclick="window.favoritesManager?.toggleFavorite('${slide.id}')">
-                                <i class="far fa-heart"></i>
-                            </button>
+                        <a href="propiedad-detalle.html?id=${slide.id}" class="btn-primary-tucasa">Ver Detalles</a>
+                        <button class="btn-outline-tucasa" data-property-id="${slide.id}" onclick="window.favoritesManager?.toggleFavorite('${slide.id}')">
+                            <i class="far fa-heart"></i>
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="property-actions-tucasa">
                     <a href="propiedad-detalle.html?id=${property.id}" class="btn-primary-tucasa">Ver Detalles</a>
-                    <button class="btn-outline-tucasa" onclick="window.favoritesManager?.toggleFavorite('${property.id}')">
+                    <button class="btn-outline-tucasa" data-property-id="${property.id}" onclick="window.favoritesManager?.toggleFavorite('${property.id}')">
                         <i class="far fa-heart"></i>
                     </button>
                 </div>
