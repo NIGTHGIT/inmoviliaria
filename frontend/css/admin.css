@@ -4,21 +4,21 @@
 
 /* Variables */
 :root {
-    --admin-primary: #6366f1;
-    --admin-primary-dark: #4f46e5;
-    --admin-primary-light: #818cf8;
-    --admin-secondary: #64748b;
+    --admin-primary: var(--primary-blue);
+    --admin-primary-dark: var(--dark-blue);
+    --admin-primary-light: var(--light-blue);
+    --admin-secondary: var(--text-light);
     --admin-success: #10b981;
     --admin-danger: #ef4444;
     --admin-warning: #f59e0b;
-    --admin-info: #3b82f6;
-    --admin-sidebar: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --admin-info: var(--secondary-blue);
+    --admin-sidebar: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
     --admin-sidebar-hover: rgba(255, 255, 255, 0.1);
-    --admin-bg: #f8fafc;
-    --admin-card: #ffffff;
-    --admin-border: #e2e8f0;
-    --admin-text: #0f172a;
-    --admin-text-light: #64748b;
+    --admin-bg: var(--bg-light);
+    --admin-card: var(--bg-white);
+    --admin-border: var(--border-color);
+    --admin-text: var(--text-dark);
+    --admin-text-light: var(--text-light);
     --admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --admin-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -34,7 +34,10 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-image: url('https://d2p0bx8wfdkjkb.cloudfront.net/static/media/Tu%20Casa%20RD/2024/11/NKPu8fmCSB-BANNER_SANTO_DOMINGO_2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     padding: 20px;
     position: relative;
     overflow: hidden;
