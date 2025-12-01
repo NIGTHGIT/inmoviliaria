@@ -108,8 +108,91 @@ class App {
     init() {
         this.themeManager = new ThemeManager();
         this.navigationManager = new NavigationManager();
+        this.setupHomeSearch();
+        this.setupAutocomplete('home-search-location');
+        this.setupAutocomplete('filter-location');
         
         console.log('🚀 TU Casa RD - Aplicación inicializada');
+    }
+
+    setupHomeSearch() {
+        const btn = document.getElementById('home-search-button');
+        if (!btn) return;
+
+        btn.addEventListener('click', () => {
+            const loc = document.getElementById('home-search-location')?.value || '';
+            const tipo = document.getElementById('home-search-type')?.value || '';
+            const rooms = document.getElementById('home-search-rooms')?.value || '';
+            const parq = document.getElementById('home-search-parking')?.value || '';
+            const max = document.getElementById('home-search-price')?.value || '';
+
+            const params = new URLSearchParams();
+            if (loc) params.set('loc', loc);
+            if (tipo) params.set('tipo', tipo);
+            if (rooms) params.set('rooms', rooms);
+            if (parq) params.set('parq', parq);
+            if (max) params.set('max', max);
+            params.set('from', 'home');
+
+            window.location.href = `propiedades.html?${params.toString()}`;
+        });
+    }
+
+    setupAutocomplete(inputId) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        const cities = [
+            'Santo Domingo', 'Santiago', 'Punta Cana', 'La Romana', 'Puerto Plata',
+            'San Cristóbal', 'San Francisco de Macorís', 'Higüey', 'Bávaro', 'Baní',
+            'Bonao', 'Moca', 'Nagua', 'Samaná', 'Jarabacoa', 'Constanza', 'Barahona',
+            'Azua', 'La Vega', 'San Pedro de Macorís', 'Hato Mayor', 'Monte Plata',
+            'Mao', 'Monte Cristi', 'Dajabón', 'Pedernales', 'Neyba', 'Jimaní',
+            'Salcedo', 'Villa Altagracia', 'Bayaguana', 'Cabrera', 'Sosúa', 'Cabarete'
+        ];
+
+        const norm = (s) => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+        const list = document.createElement('div');
+        list.className = 'autocomplete-list';
+        input.parentElement.appendChild(list);
+
+        const render = (matches) => {
+            if (!matches.length) {
+                list.innerHTML = '';
+                list.style.display = 'none';
+                return;
+            }
+            list.innerHTML = matches.map(c => `<div class="autocomplete-item">${c}</div>`).join('');
+            list.style.display = 'block';
+            list.querySelectorAll('.autocomplete-item').forEach(item => {
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    input.value = item.textContent;
+                    list.style.display = 'none';
+                });
+            });
+        };
+
+        input.addEventListener('input', () => {
+            const q = input.value.trim();
+            if (q.length < 2) { list.style.display = 'none'; return; }
+            const nq = norm(q);
+            const matches = cities.filter(c => norm(c).includes(nq)).slice(0, 8);
+            render(matches);
+        });
+
+        input.addEventListener('blur', () => {
+            setTimeout(() => { list.style.display = 'none'; }, 150);
+        });
+
+        input.addEventListener('focus', () => {
+            if (input.value.trim().length >= 2) {
+                const nq = norm(input.value.trim());
+                const matches = cities.filter(c => norm(c).includes(nq)).slice(0, 8);
+                render(matches);
+            }
+        });
     }
 }
 

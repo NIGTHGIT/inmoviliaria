@@ -18,11 +18,7 @@ class PropertiesPageManager {
             });
         });
 
-        const apply = () => this.applyFilters();
-        document.getElementById('filter-location')?.addEventListener('change', apply);
-        document.getElementById('filter-type')?.addEventListener('change', apply);
-        document.getElementById('filter-rooms')?.addEventListener('change', apply);
-        document.getElementById('filter-price')?.addEventListener('change', apply);
+        this.prefillFromQuery();
 
         document.getElementById('load-more-properties')?.addEventListener('click', () => {
             this.visible += this.pageSize;
@@ -34,24 +30,51 @@ class PropertiesPageManager {
         try {
             const res = await window.api.get('/propiedades');
             this.all = Array.isArray(res?.data) ? res.data : [];
-            this.applyFilters();
+            if (this.hasQueryParams) {
+                this.applyFilters();
+            } else {
+                this.filtered = this.all;
+                this.visible = Math.min(this.pageSize, this.filtered.length);
+                this.render();
+            }
         } catch (e) {
             console.error('Error obteniendo propiedades:', e);
             this.all = [];
-            this.applyFilters();
+            this.filtered = this.all;
+            this.visible = 0;
+            this.render();
         }
+    }
+
+    prefillFromQuery() {
+        const params = new URLSearchParams(window.location.search);
+        const loc = params.get('loc') || '';
+        const tipo = params.get('tipo') || '';
+        const rooms = params.get('rooms') || '';
+        const max = params.get('max') || '';
+
+        this.hasQueryParams = !!(loc || tipo || rooms || max);
+
+        const locEl = document.getElementById('filter-location');
+        const tipoEl = document.getElementById('filter-type');
+        const roomsEl = document.getElementById('filter-rooms');
+        const maxEl = document.getElementById('filter-price');
+        if (locEl) locEl.value = loc;
+        if (tipoEl) tipoEl.value = tipo;
+        if (roomsEl) roomsEl.value = rooms;
+        if (maxEl) maxEl.value = max;
     }
 
     applyFilters() {
         const loc = document.getElementById('filter-location')?.value.trim().toLowerCase() || '';
         const tipo = document.getElementById('filter-type')?.value || '';
-        const rooms = parseInt(document.getElementById('filter-rooms')?.value || '') || 0;
+        const roomsRaw = document.getElementById('filter-rooms')?.value || '';
         const max = parseInt(document.getElementById('filter-price')?.value || '') || 0;
 
         this.filtered = this.all.filter(p => {
             const byLoc = loc ? (p.ubicacion || '').toLowerCase().includes(loc) : true;
             const byTipo = tipo ? p.tipo === tipo : true;
-            const byRooms = rooms ? (p.habitaciones || 0) >= rooms : true;
+            const byRooms = roomsRaw ? (roomsRaw === '4+' ? (p.habitaciones || 0) >= 4 : (p.habitaciones || 0) === parseInt(roomsRaw)) : true;
             const byPrice = max ? (p.precio || 0) <= max : true;
             return byLoc && byTipo && byRooms && byPrice;
         });
@@ -114,4 +137,3 @@ class PropertiesPageManager {
 document.addEventListener('DOMContentLoaded', () => {
     window.propertiesManager = new PropertiesPageManager();
 });
-

@@ -2,6 +2,8 @@ class CarouselManagerTucasa {
     constructor() {
         this.currentSlide = 0;
         this.slides = [];
+        this.allProperties = [];
+        this.featuredSlides = [];
         this.autoPlayInterval = null;
         this.init();
     }
@@ -17,7 +19,7 @@ class CarouselManagerTucasa {
         try {
             const res = await window.api.get('/propiedades');
             const list = Array.isArray(res?.data) ? res.data : [];
-            this.slides = list.map(p => ({
+            this.allProperties = list.map(p => ({
                 id: p.id,
                 titulo: p.titulo,
                 precio: p.precio,
@@ -30,9 +32,15 @@ class CarouselManagerTucasa {
                 metrosCuadrados: p.metrosCuadrados || 0,
                 caracteristicas: p.caracteristicas || []
             }));
+
+            // Seleccionar 10 más caras para destacadas
+            this.featuredSlides = [...this.allProperties]
+                .sort((a, b) => (b.precio || 0) - (a.precio || 0))
+                .slice(0, 10);
         } catch (e) {
             console.error('Error cargando propiedades del API:', e);
-            this.slides = [];
+            this.allProperties = [];
+            this.featuredSlides = [];
         }
     }
 
@@ -42,12 +50,12 @@ class CarouselManagerTucasa {
 
         if (!track || !dots) return;
 
-        // Render slides
-        track.innerHTML = this.slides.map((slide, index) => `
+        // Render slides (destacadas: 10 más caras)
+        track.innerHTML = this.featuredSlides.map((slide, index) => `
             <div class="carousel-slide-tucasa" data-index="${index}">
                 <div class="property-card-tucasa">
                     <div class="property-image-tucasa">
-                        <img src="${slide.imagenes[0]}" alt="${slide.titulo}">
+                        <img src="${slide.imagenes[0] || 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 400\"><rect width=\"600\" height=\"400\" fill=\"%23dbeafe\"/><text x=\"300\" y=\"200\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"%231e3a8a\" font-size=\"24\">Imagen no disponible</text></svg>'}" alt="${slide.titulo}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 400\"><rect width=\"600\" height=\"400\" fill=\"%23dbeafe\"/><text x=\"300\" y=\"200\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"%231e3a8a\" font-size=\"24\">Imagen no disponible</text></svg>';">
                         <div class="property-badge-tucasa">${this.getStatusText(slide.estado)}</div>
                         <div class="property-price-tucasa">${this.formatPrice(slide.precio)}</div>
                     </div>
@@ -73,7 +81,7 @@ class CarouselManagerTucasa {
         `).join('');
 
         // Render dots
-        dots.innerHTML = this.slides.map((_, index) => `
+        dots.innerHTML = this.featuredSlides.map((_, index) => `
             <button class="carousel-dot-tucasa ${index === 0 ? 'active' : ''}" 
                     data-index="${index}"></button>
         `).join('');
@@ -107,12 +115,12 @@ class CarouselManagerTucasa {
     }
 
     nextSlide() {
-        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+        this.currentSlide = (this.currentSlide + 1) % this.featuredSlides.length;
         this.updateCarousel();
     }
 
     prevSlide() {
-        this.currentSlide = this.currentSlide === 0 ? this.slides.length - 1 : this.currentSlide - 1;
+        this.currentSlide = this.currentSlide === 0 ? this.featuredSlides.length - 1 : this.currentSlide - 1;
         this.updateCarousel();
     }
 
@@ -207,14 +215,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Extender el carousel manager para el grid de propiedades
-CarouselManagerTucasa.prototype.renderPropertiesGrid = function() {
-    const grid = document.getElementById('properties-grid');
-    if (!grid) return;
+    CarouselManagerTucasa.prototype.renderPropertiesGrid = function() {
+        const grid = document.getElementById('properties-grid');
+        if (!grid) return;
 
-    grid.innerHTML = this.slides.map(property => `
+    // Mostrar catálogo completo en el grid
+    grid.innerHTML = this.allProperties.map(property => `
         <div class="property-card-tucasa">
             <div class="property-image-tucasa">
-                <img src="${property.imagenes[0]}" alt="${property.titulo}">
+                <img src="${property.imagenes[0] || 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 400\"><rect width=\"600\" height=\"400\" fill=\"%23dbeafe\"/><text x=\"300\" y=\"200\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"%231e3a8a\" font-size=\"24\">Imagen no disponible</text></svg>'}" alt="${property.titulo}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 400\"><rect width=\"600\" height=\"400\" fill=\"%23dbeafe\"/><text x=\"300\" y=\"200\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"%231e3a8a\" font-size=\"24\">Imagen no disponible</text></svg>';">
                 <div class="property-badge-tucasa">${this.getStatusText(property.estado)}</div>
                 <div class="property-price-tucasa">${this.formatPrice(property.precio)}</div>
             </div>

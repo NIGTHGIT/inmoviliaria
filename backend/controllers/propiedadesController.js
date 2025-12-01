@@ -99,7 +99,8 @@ exports.getPropiedades = (req, res) => {
         }
         
         if (estado) {
-            propiedades = propiedades.filter(p => p.estado === estado);
+            const norm = estado.toLowerCase().replace(/\s+/g, ' ');
+            propiedades = propiedades.filter(p => (p.estado || '').toLowerCase() === norm);
         }
         
         res.json({
@@ -161,6 +162,7 @@ exports.createPropiedad = (req, res) => {
             ubicacion: req.body.ubicacion,
             habitaciones: parseInt(req.body.habitaciones) || 0,
             banos: parseInt(req.body.banos) || 0,
+            parqueos: parseInt(req.body.parqueos) || 0,
             metrosCuadrados: parseFloat(req.body.metrosCuadrados),
             estado: req.body.estado || 'en venta',
             descripcion: req.body.descripcion || '',

@@ -296,6 +296,11 @@ body {
 
 .search-group {
     text-align: left;
+    position: relative;
+}
+
+.filter-group {
+    position: relative;
 }
 
 .search-group label {
@@ -345,6 +350,36 @@ body {
 .search-btn-tucasa:hover {
     background: #ea580c;
     transform: translateY(-2px);
+}
+
+/* Autocomplete */
+.autocomplete-list {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    z-index: 2000;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.autocomplete-list.autocomplete-up {
+    top: auto;
+    bottom: calc(100% + 6px);
+}
+
+.autocomplete-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    color: var(--text-dark);
+}
+
+.autocomplete-item:hover {
+    background: var(--light-blue);
 }
 
 /* Carrusel */
@@ -922,6 +957,8 @@ body {
 .filters-section-tucasa {
     padding: 3rem 0;
     background: var(--bg-light);
+    position: relative;
+    z-index: 100;
 }
 
 .filters-container-tucasa {
@@ -929,6 +966,8 @@ body {
     padding: 2rem;
     border-radius: 15px;
     box-shadow: var(--shadow);
+    position: relative;
+    z-index: 30;
 }
 
 .filter-row {
@@ -1518,4 +1557,292 @@ body {
     .filter-row {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+.property-detail-tucasa {
+    padding: 120px 0 60px;
+    background: var(--bg-white);
+}
+
+.property-detail-content {
+    display: grid;
+    gap: 2rem;
+}
+
+.property-gallery-tucasa {
+    margin-bottom: 1rem;
+}
+
+.main-image-container {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-light);
+}
+
+#main-property-image {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.85);
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.gallery-nav:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.gallery-nav.prev { left: 12px; }
+.gallery-nav.next { right: 12px; }
+
+.gallery-thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 90px));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    justify-content: start;
+}
+
+.gallery-thumb {
+    aspect-ratio: 1 / 1;
+    height: auto;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--bg-white);
+}
+
+.gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-thumb:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.gallery-thumb.active {
+    border-color: var(--accent-orange);
+}
+
+.property-layout-tucasa {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.property-header-tucasa h1 {
+    font-size: 2rem;
+    line-height: 1.25;
+    color: var(--primary-blue);
+    font-weight: 800;
+}
+
+.property-location-detail {
+    color: var(--text-light);
+    margin-top: 0.5rem;
+}
+
+.property-price-main {
+    margin-top: 1rem;
+    display: inline-block;
+    background: var(--primary-blue);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.property-summary-tucasa h2,
+.property-description-tucasa h2,
+.property-features-detail h2 {
+    color: var(--primary-blue);
+    font-size: 1.4rem;
+    margin: 1.25rem 0 0.75rem;
+    font-weight: 700;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.summary-item {
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+}
+
+.summary-label {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.summary-value {
+    color: var(--primary-blue);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.property-description-tucasa p {
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    line-height: 1.7;
+}
+
+.features-grid-detail {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.feature-item-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+}
+
+.feature-item-detail i {
+    color: var(--accent-orange);
+}
+
+.property-sidebar-tucasa {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.agent-card-tucasa {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.25rem;
+}
+
+.agent-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.agent-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.agent-contact .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+}
+
+.agent-actions a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.agent-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.btn-call-tucasa {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.btn-call-tucasa:hover {
+    background: var(--dark-blue);
+}
+
+.btn-whatsapp-tucasa {
+    background: #25D366;
+    color: white;
+}
+
+.btn-whatsapp-tucasa:hover {
+    background: #1ebe57;
+}
+
+.interest-form-tucasa {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.25rem;
+}
+
+.form-group-tucasa input:focus,
+.form-group-tucasa textarea:focus {
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+    outline: none;
+}
+
+.btn-submit-interest {
+    background: var(--accent-orange);
+    color: white;
+    border: none;
+    padding: 0.9rem 1.2rem;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.btn-submit-interest i {
+    margin-right: 0.5rem;
+}
+
+.btn-submit-interest:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
 }

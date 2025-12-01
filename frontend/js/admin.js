@@ -204,6 +204,8 @@ function showViewModal(prop) {
     document.getElementById('viewUbicacion').textContent = prop.ubicacion;
     document.getElementById('viewHabitaciones').textContent = prop.habitaciones || 'N/A';
     document.getElementById('viewBanos').textContent = prop.banos || 'N/A';
+    const vp = document.getElementById('viewParqueos');
+    if (vp) vp.textContent = prop.parqueos || 'N/A';
     document.getElementById('viewMetros').textContent = `${prop.metrosCuadrados} m²`;
     document.getElementById('viewDescripcion').textContent = prop.descripcion || 'Sin descripción';
     
@@ -546,6 +548,7 @@ if (document.getElementById('propiedadForm')) {
                 metrosCuadrados: parseFloat(document.getElementById('metrosCuadrados').value),
                 habitaciones: parseInt(document.getElementById('habitaciones').value) || 0,
                 banos: parseInt(document.getElementById('banos').value) || 0,
+                parqueos: parseInt(document.getElementById('parqueos').value) || 0,
                 ubicacion: document.getElementById('ubicacion').value,
                 descripcion: document.getElementById('descripcion').value,
                 imagenes,

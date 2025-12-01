@@ -57,12 +57,12 @@
                 <div class="search-row">
                     <div class="search-group">
                         <label><i class="fas fa-map-marker-alt"></i> Sectores o ciudades donde deseas buscar</label>
-                        <input type="text" placeholder="Ej: Santo Domingo, Punta Cana...">
+                        <input id="home-search-location" type="text" placeholder="Ej: Santo Domingo, Punta Cana...">
                     </div>
                     
                     <div class="search-group">
                         <label><i class="fas fa-building"></i> Tipo de inmueble</label>
-                        <select>
+                        <select id="home-search-type">
                             <option value="">Todos los tipos</option>
                             <option value="casa">Casa</option>
                             <option value="apartamento">Apartamento</option>
@@ -76,29 +76,28 @@
                 <div class="search-row">
                     <div class="search-group">
                         <label><i class="fas fa-bed"></i> Habitaciones</label>
-                        <select>
+                        <select id="home-search-rooms">
                             <option value="">Cualquier cantidad</option>
-                            <option value="1">1+</option>
-                            <option value="2">2+</option>
-                            <option value="3">3+</option>
-                            <option value="4">4+</option>
-                            <option value="5">5+</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4+">+4</option>
                         </select>
                     </div>
                     
                     <div class="search-group">
                         <label><i class="fas fa-car"></i> Parqueos</label>
-                        <select>
+                        <select id="home-search-parking">
                             <option value="">Cualquier cantidad</option>
-                            <option value="1">1+</option>
-                            <option value="2">2+</option>
-                            <option value="3">3+</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
                         </select>
                     </div>
                     
                     <div class="search-group">
                         <label><i class="fas fa-dollar-sign"></i> Precio</label>
-                        <select>
+                        <select id="home-search-price">
                             <option value="">Cualquier precio</option>
                             <option value="50000">Hasta US$ 50,000</option>
                             <option value="100000">Hasta US$ 100,000</option>
@@ -109,7 +108,7 @@
                     </div>
                 </div>
                 
-                <button class="search-btn-tucasa">
+                <button id="home-search-button" class="search-btn-tucasa">
                     <i class="fas fa-search"></i> BUSCAR PROPIEDADES
                 </button>
             </div>
