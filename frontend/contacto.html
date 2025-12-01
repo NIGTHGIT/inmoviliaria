@@ -139,74 +139,7 @@
                         </form>
                     </div>
 
-                    <br>
-                    <br>
-
-                    <!-- TAB 2: Formulario de Agendar Cita -->
-                    <div class="tab-content-tucasa" id="tab-cita">
-                        <h2>Agendar Cita con un Agente</h2>
-
-                        <div id="cita-response" class="form-message-tucasa"></div>
-
-                        <form id="contact-form-cita">
-                            <div class="form-row">
-                                <div class="form-group-tucasa">
-                                    <input type="text" name="nombre" placeholder="Nombre completo *" required>
-                                </div>
-                                <div class="form-group-tucasa">
-                                    <input type="email" name="email" placeholder="Correo electrónico *" required>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group-tucasa">
-                                    <input type="tel" name="telefono" placeholder="Teléfono *" required>
-                                </div>
-                                <div class="form-group-tucasa">
-                                    <select name="agente" required>
-                                        <option value="">Selecciona un agente *</option>
-                                        <option value="Laura García Valdez">Laura García Valdez - Agente Senior</option>
-                                        <option value="Carlos Rodríguez">Carlos Rodríguez - Especialista en Proyectos
-                                        </option>
-                                        <option value="María Fernández">María Fernández - Gerente Comercial</option>
-                                        <option value="Cualquier agente">Cualquier agente disponible</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group-tucasa">
-                                    <input type="date" name="fecha" placeholder="Fecha de la cita *" id="date-input" required>
-                                </div>
-                                <div class="form-group-tucasa">
-                                    <input type="time" name="hora" placeholder="Hora *" id="time-input" required min="09:00" max="16:00">
-                                </div>
-                            </div>
-
-                            <div class="form-group-tucasa">
-                                <select name="tipo_servicio" required>
-                                    <option value="">Tipo de servicio *</option>
-                                    <option value="Compra de propiedad">Compra de propiedad</option>
-                                    <option value="Venta de propiedad">Venta de propiedad</option>
-                                    <option value="Alquiler">Alquiler</option>
-                                    <option value="Inversión">Asesoría en inversiones</option>
-                                    <option value="Proyecto nuevo">Información sobre proyecto nuevo</option>
-                                    <option value="Valoración">Valoración de propiedad</option>
-                                    <option value="Otro">Otro</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group-tucasa">
-                                <textarea name="mensaje" placeholder="Mensaje adicional (opcional)..."
-                                    rows="4"></textarea>
-                            </div>
-
-                            <button type="submit" class="btn-submit-tucasa" id="btn-cita">
-                                <span class="spinner"></span>
-                                <i class="fas fa-calendar-check"></i> Agendar Cita
-                            </button>
-                        </form>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -215,14 +148,17 @@
     <section class="map-section-tucasa">
         <div class="container-tucasa">
             <div class="map-container">
-                <div class="map-placeholder-large">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <h3>Ubicación de Nuestra Oficina</h3>
-                    <p>Av. Abraham Lincoln #123, Santo Domingo</p>
-                    <button class="btn-outline-tucasa" style="margin-top: 1rem;">
-                        <i class="fas fa-directions"></i> Cómo Llegar
-                    </button>
-                </div>
+                <iframe id="googleMap" 
+                        src="https://www.google.com/maps?q=Av.+Abraham+Lincoln+%23123,+Santo+Domingo&output=embed"
+                        allowfullscreen 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <a class="btn-outline-tucasa" target="_blank" 
+                   href="https://www.google.com/maps/search/?api=1&query=Av.+Abraham+Lincoln+%23123,+Santo+Domingo">
+                    <i class="fas fa-directions"></i> Cómo Llegar
+                </a>
             </div>
         </div>
     </section>
@@ -276,20 +212,7 @@
     </script>
 
     <script>
-    emailjs.init("qHyX0bsqfanDPm8vy"); // Public Key
-    document.getElementById('contact-form-cita').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        emailjs.sendForm("service_f8crp6f", "template_zvwaapq", this)
-        .then(() => {
-            alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
-            this.reset();
-        })
-        .catch((err) => {
-            console.error(err);
-            alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
-        });
-    });
+    emailjs.init("qHyX0bsqfanDPm8vy");
 
     document.getElementById('contact-form-general').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -306,47 +229,9 @@
     });
 </script>
 
-<script>
-     // Bloquear fechas anteriores a hoy
-    const hoy = new Date().toISOString().split("T")[0];
-    document.getElementById("date-input").setAttribute("min", hoy);
 
-    // Limitar la hora permitida (9:00 AM – 4:00 PM)
-    const timeInput = document.getElementById("time-input");
 
-    timeInput.addEventListener("change", () => {
-        let time = timeInput.value;
-        if (time < "09:00") timeInput.value = "09:00";
-        if (time > "16:00") timeInput.value = "16:00";
-    });
-</script>
-
-<script>
-    function initMap() {
-        // Coordenadas de la oficina (puedes cambiarlas si quieres tu dirección exacta)
-        const oficina = { lat: 18.473211, lng: -69.939879 }; // Ejemplo: Av Abraham Lincoln, Santo Domingo
-
-        // Crear mapa
-        const map = new google.maps.Map(document.getElementById("googleMap"), {
-            zoom: 16,
-            center: oficina,
-            mapTypeControl: false,
-            streetViewControl: false,
-        });
-
-        // Colocar marcador
-        const marker = new google.maps.Marker({
-            position: oficina,
-            map: map,
-            title: "TU Casa RD - Oficina Principal",
-        });
-    }
-</script>
-
-<!-- Cargar Google Maps API -->
-<script async defer 
-    src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=initMap">
-</script>
+    
 </body>
 
 </html>
