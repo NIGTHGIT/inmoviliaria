@@ -108,8 +108,91 @@ class App {
     init() {
         this.themeManager = new ThemeManager();
         this.navigationManager = new NavigationManager();
+        this.setupHomeSearch();
+        this.setupAutocomplete('home-search-location');
+        this.setupAutocomplete('filter-location');
         
         console.log('🚀 TU Casa RD - Aplicación inicializada');
+    }
+
+    setupHomeSearch() {
+        const btn = document.getElementById('home-search-button');
+        if (!btn) return;
+
+        btn.addEventListener('click', () => {
+            const loc = document.getElementById('home-search-location')?.value || '';
+            const tipo = document.getElementById('home-search-type')?.value || '';
+            const rooms = document.getElementById('home-search-rooms')?.value || '';
+            const parq = document.getElementById('home-search-parking')?.value || '';
+            const max = document.getElementById('home-search-price')?.value || '';
+
+            const params = new URLSearchParams();
+            if (loc) params.set('loc', loc);
+            if (tipo) params.set('tipo', tipo);
+            if (rooms) params.set('rooms', rooms);
+            if (parq) params.set('parq', parq);
+            if (max) params.set('max', max);
+            params.set('from', 'home');
+
+            window.location.href = `propiedades.html?${params.toString()}`;
+        });
+    }
+
+    setupAutocomplete(inputId) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        const cities = [
+            'Santo Domingo', 'Santiago', 'Punta Cana', 'La Romana', 'Puerto Plata',
+            'San Cristóbal', 'San Francisco de Macorís', 'Higüey', 'Bávaro', 'Baní',
+            'Bonao', 'Moca', 'Nagua', 'Samaná', 'Jarabacoa', 'Constanza', 'Barahona',
+            'Azua', 'La Vega', 'San Pedro de Macorís', 'Hato Mayor', 'Monte Plata',
+            'Mao', 'Monte Cristi', 'Dajabón', 'Pedernales', 'Neyba', 'Jimaní',
+            'Salcedo', 'Villa Altagracia', 'Bayaguana', 'Cabrera', 'Sosúa', 'Cabarete'
+        ];
+
+        const norm = (s) => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+        const list = document.createElement('div');
+        list.className = 'autocomplete-list';
+        input.parentElement.appendChild(list);
+
+        const render = (matches) => {
+            if (!matches.length) {
+                list.innerHTML = '';
+                list.style.display = 'none';
+                return;
+            }
+            list.innerHTML = matches.map(c => `<div class="autocomplete-item">${c}</div>`).join('');
+            list.style.display = 'block';
+            list.querySelectorAll('.autocomplete-item').forEach(item => {
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    input.value = item.textContent;
+                    list.style.display = 'none';
+                });
+            });
+        };
+
+        input.addEventListener('input', () => {
+            const q = input.value.trim();
+            if (q.length < 2) { list.style.display = 'none'; return; }
+            const nq = norm(q);
+            const matches = cities.filter(c => norm(c).includes(nq)).slice(0, 8);
+            render(matches);
+        });
+
+        input.addEventListener('blur', () => {
+            setTimeout(() => { list.style.display = 'none'; }, 150);
+        });
+
+        input.addEventListener('focus', () => {
+            if (input.value.trim().length >= 2) {
+                const nq = norm(input.value.trim());
+                const matches = cities.filter(c => norm(c).includes(nq)).slice(0, 8);
+                render(matches);
+            }
+        });
     }
 }
 
@@ -118,73 +201,3 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app = new App();
 });
 
- <script type="text/javascript">
-        emailjs.init('qHyX0bsqfanDPm8vy')
-    </script>
-
-
-        emailjs.init("qHyX0bsqfanDPm8vy"); // Public Key
-        document.getElementById('contact-form-cita').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            emailjs.sendForm("service_f8crp6f", "template_zvwaapq", this)
-                .then(() => {
-                    alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
-                    this.reset();
-                })
-                .catch((err) => {
-                    console.error(err);
-                    alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
-                });
-        });
-
-        document.getElementById('contact-form-general').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            emailjs.sendForm("service_f8crp6f", "template_ar49unm", this)
-                .then(() => {
-                    alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
-                    this.reset();
-                })
-                .catch((err) => {
-                    console.error(err);
-                    alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
-                });
-        });
-
-
-
-        // Bloquear fechas anteriores a hoy
-        const hoy = new Date().toISOString().split("T")[0];
-        document.getElementById("date-input").setAttribute("min", hoy);
-
-        // Limitar la hora permitida (9:00 AM – 4:00 PM)
-        const timeInput = document.getElementById("time-input");
-
-        timeInput.addEventListener("change", () => {
-            let time = timeInput.value;
-            if (time < "09:00") timeInput.value = "09:00";
-            if (time > "16:00") timeInput.value = "16:00";
-        });
-
-
-
-        function initMap() {
-            // Coordenadas de la oficina (puedes cambiarlas si quieres tu dirección exacta)
-            const oficina = { lat: 18.473211, lng: -69.939879 }; // Ejemplo: Av Abraham Lincoln, Santo Domingo
-
-            // Crear mapa
-            const map = new google.maps.Map(document.getElementById("googleMap"), {
-                zoom: 16,
-                center: oficina,
-                mapTypeControl: false,
-                streetViewControl: false,
-            });
-
-            // Colocar marcador
-            const marker = new google.maps.Marker({
-                position: oficina,
-                map: map,
-                title: "TU Casa RD - Oficina Principal",
-            });
-        }
