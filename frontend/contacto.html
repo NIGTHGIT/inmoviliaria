@@ -226,14 +226,16 @@
     <section class="map-section-tucasa">
         <div class="container-tucasa">
             <div class="map-container">
-                <div class="map-placeholder-large">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <h3>Ubicación de Nuestra Oficina</h3>
-                    <p>Av. Abraham Lincoln #123, Santo Domingo</p>
-                    <button class="btn-outline-tucasa" style="margin-top: 1rem;">
-                        <i class="fas fa-directions"></i> Cómo Llegar
-                    </button>
-                </div>
+                <iframe id="googleMap"
+                        src="https://www.google.com/maps?q=Av.+Abraham+Lincoln+%23123,+Santo+Domingo&output=embed"
+                        allowfullscreen
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div style="text-align:center; margin-top: 1rem;">
+                <a class="btn-outline-tucasa" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Av.+Abraham+Lincoln+%23123,+Santo+Domingo">
+                    <i class="fas fa-directions"></i> Cómo Llegar
+                </a>
             </div>
         </div>
     </section>
@@ -338,30 +340,6 @@
         });
     </script>
 
-    <script>
-        function initMap() {
-            // Coordenadas de la oficina (puedes cambiarlas si quieres tu dirección exacta)
-            const oficina = { lat: 18.473211, lng: -69.939879 }; // Ejemplo: Av Abraham Lincoln, Santo Domingo
-
-            // Crear mapa
-            const map = new google.maps.Map(document.getElementById("googleMap"), {
-                zoom: 16,
-                center: oficina,
-                mapTypeControl: false,
-                streetViewControl: false,
-            });
-
-            // Colocar marcador
-            const marker = new google.maps.Marker({
-                position: oficina,
-                map: map,
-                title: "TU Casa RD - Oficina Principal",
-            });
-        }
-    </script>
-
-    <!-- Cargar Google Maps API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=initMap">
-    </script>
+    
 </body>
 </html>
