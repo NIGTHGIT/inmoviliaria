@@ -64,6 +64,7 @@ class NavigationManager {
     init() {
         this.setupMobileMenu();
         this.setupActiveLinks();
+        this.setupHideOnScroll();
     }
 
     setupMobileMenu() {
@@ -97,6 +98,35 @@ class NavigationManager {
             }
         });
     }
+
+    setupHideOnScroll() {
+        const header = document.querySelector('.header-tucasa');
+        if (!header) return;
+
+        let lastY = window.scrollY;
+        let ticking = false;
+
+        const update = () => {
+            const y = window.scrollY;
+            const scrollingDown = y > lastY;
+
+            if (y > 100 && scrollingDown) {
+                header.classList.add('nav-hidden');
+            } else {
+                header.classList.remove('nav-hidden');
+            }
+
+            lastY = y;
+            ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(update);
+                ticking = true;
+            }
+        }, { passive: true });
+    }
 }
 
 // Inicialización de la aplicación
@@ -111,6 +141,8 @@ class App {
         this.setupHomeSearch();
         this.setupAutocomplete('home-search-location');
         this.setupAutocomplete('filter-location');
+        this.setupProjectCTA();
+        this.setupContactPrefill();
 
         console.log('🚀 TU Casa RD - Aplicación inicializada');
     }
@@ -193,6 +225,61 @@ class App {
                 render(matches);
             }
         });
+    }
+
+    setupProjectCTA() {
+        const buttons = document.querySelectorAll('.project-action');
+        if (!buttons.length) return;
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.getAttribute('data-action');
+                if (action === 'info') return;
+                const project = btn.getAttribute('data-project') || '';
+                const params = new URLSearchParams({ from: 'proyectos', type: action || 'cita', project });
+                window.location.href = `contacto.html?${params.toString()}`;
+            });
+        });
+    }
+
+    setupContactPrefill() {
+        const currentPage = window.location.pathname.split('/').pop();
+        if (currentPage !== 'contacto.html') return;
+
+        const q = new URLSearchParams(window.location.search);
+        const type = q.get('type');
+        const project = q.get('project');
+
+        const mensajeTab = document.getElementById('tab-mensaje');
+        const citaTab = document.getElementById('tab-cita');
+        if (!mensajeTab || !citaTab) return;
+
+        // Reset active
+        mensajeTab.classList.remove('active');
+        citaTab.classList.remove('active');
+
+        if (type === 'cita') {
+            citaTab.classList.add('active');
+            // Prefill mensaje adicional
+            const citaMsg = document.querySelector('#contact-form-cita textarea[name="mensaje"]');
+            if (citaMsg && project) {
+                citaMsg.value = `Me interesa agendar una visita al proyecto: ${project}`;
+            }
+            // Prefill agente select hint optional (no change)
+            const container = document.querySelector('.contact-page-content');
+            if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            mensajeTab.classList.add('active');
+            // Prefill motivo y mensaje
+            const motivo = document.querySelector('#contact-form-general select[name="motivo"]');
+            if (motivo) motivo.value = 'proyecto';
+            const msg = document.querySelector('#contact-form-general textarea[name="mensaje"]');
+            if (msg && project) {
+                msg.value = `Quiero más información sobre el proyecto: ${project}`;
+            }
+            const container = document.querySelector('.contact-page-content');
+            if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 }
 

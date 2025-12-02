@@ -1,7 +1,9 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const config = require('./backend/config/config');
 const propiedadesRoutes = require('./backend/routes/propiedades');
+const proyectosRoutes = require('./backend/routes/proyectos');
 const authRoutes = require('./backend/routes/auth');
 const uploadRoutes = require('./backend/routes/upload');
 const localStorage = require('./backend/utils/localStorage');
@@ -24,6 +26,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'backend/storage/uploads
 app.use('/api/auth', authRoutes);
 app.use('/api/propiedades', propiedadesRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/proyectos', proyectosRoutes);
 
 // Rutas para servir las páginas HTML
 app.get('/', (req, res) => {
@@ -46,6 +49,10 @@ app.get('/contacto', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'contacto.html'));
 });
 
+app.get('/proyectos', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'proyectos.html'));
+});
+
 // Rutas del panel de administración
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'login.html'));
@@ -57,6 +64,36 @@ app.get('/admin', (req, res) => {
 
 app.get('/admin/propiedades', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'admin-propiedades.html'));
+});
+
+app.get('/admin/proyectos', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'admin-proyectos.html'));
+});
+
+// Rutas alternativas por si el navegador solicita variaciones
+app.get('/admin-proyectos', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'admin-proyectos.html'));
+});
+app.get('/admin/proyectos.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'admin-proyectos.html'));
+});
+
+// Fallback genérico: mapear rutas sin extensión a archivos "<ruta>.html" o "<ruta-reemplazada>.html"
+app.get('*', (req, res, next) => {
+    const raw = (req.path || '').replace(/^\/+|\/+$/g, '');
+    if (!raw) return next();
+    // Intento 1: ruta.html en raíz frontend
+    const candidate1 = path.join(__dirname, 'frontend', `${raw}.html`);
+    if (fs.existsSync(candidate1)) {
+        return res.sendFile(candidate1);
+    }
+    // Intento 2: reemplazar "/" por "-" (ej.: /admin/proyectos -> admin-proyectos.html)
+    const replaced = raw.replace(/\//g, '-');
+    const candidate2 = path.join(__dirname, 'frontend', `${replaced}.html`);
+    if (fs.existsSync(candidate2)) {
+        return res.sendFile(candidate2);
+    }
+    next();
 });
 
 // Manejo de rutas no encontradas

@@ -6,6 +6,25 @@
     <title>Proyectos - TU Casa RD</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+      .project-detail-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000}
+      .project-detail-dialog{background:#fff;max-width:900px;width:95%;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.2);padding:20px;position:relative}
+      .project-detail-close{position:absolute;right:12px;top:12px;background:#eee;border:none;border-radius:6px;padding:6px 10px;cursor:pointer}
+      .detail-header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px}
+      .detail-badge{background:#0ea5e9;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px}
+      .detail-location{color:#555;margin:8px 0}
+      .detail-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:10px 0}
+      .detail-info-item{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
+      .detail-info-item span{color:#6b7280;font-size:12px}
+      .detail-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:12px 0}
+      .detail-image{width:100%;height:140px;object-fit:cover;border-radius:8px}
+      .detail-description{margin:10px 0;line-height:1.5}
+      .detail-features-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
+      .detail-feature-item{display:flex;gap:10px;align-items:center;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
+      .detail-feature-item i{color:#22c55e}
+      .detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+      .btn-secondary-tucasa{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px;display:inline-flex;gap:8px;align-items:center;color:#111}
+    </style>
 </head>
 <body>
     <header class="header-tucasa">
@@ -42,137 +61,7 @@
 
     <section class="projects-grid-tucasa">
         <div class="container-tucasa">
-            <!-- Proyecto 1 -->
-            <div class="project-card-large">
-                <div class="project-header-large">
-                    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1000" alt="Residencial Vista Sol">
-                    <div class="project-badge-large">PROYECTO EN DESARROLLO</div>
-                </div>
-                <div class="project-content-large">
-                    <h2>Residencial Vista Sol Etapa III</h2>
-                    <p class="project-location-large">
-                        <i class="fas fa-map-marker-alt"></i> La Barranquita, Santiago
-                    </p>
-                    
-                    <div class="project-prices-large">
-                        <div class="price-range-large">
-                            <span>DESDE</span>
-                            <strong>US$ 125,000</strong>
-                        </div>
-                        <div class="price-range-large">
-                            <span>HASTA</span>
-                            <strong>US$ 199,500</strong>
-                        </div>
-                    </div>
-                    
-                    <p class="project-description-large">
-                        Moderno y lujoso proyecto de apartamentos ubicado en una de las zonas de mayor crecimiento de Santiago. 
-                        Contamos con amenities completos que incluyen piscina, gimnasio, áreas verdes y seguridad 24/7. 
-                        Diseños modernos y eficientes pensados para tu comodidad.
-                    </p>
-                    
-                    <div class="project-features-large">
-                        <div class="project-feature-item">
-                            <i class="fas fa-swimming-pool"></i>
-                            <div class="project-feature-info">
-                                <h4>Piscina y Área Social</h4>
-                                <p>Amplias áreas comunes para disfrutar</p>
-                            </div>
-                        </div>
-                        <div class="project-feature-item">
-                            <i class="fas fa-dumbbell"></i>
-                            <div class="project-feature-info">
-                                <h4>Gimnasio Equipado</h4>
-                                <p>Equipo de última generación</p>
-                            </div>
-                        </div>
-                        <div class="project-feature-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <div class="project-feature-info">
-                                <h4>Seguridad 24/7</h4>
-                                <p>Sistema de vigilancia completo</p>
-                            </div>
-                        </div>
-                        <div class="project-feature-item">
-                            <i class="fas fa-tree"></i>
-                            <div class="project-feature-info">
-                                <h4>Áreas Verdes</h4>
-                                <p>Espacios naturales integrados</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button class="btn-primary-tucasa">
-                        <i class="fas fa-info-circle"></i> Más Información
-                    </button>
-                </div>
-            </div>
-
-            <!-- Proyecto 2 -->
-            <div class="project-card-large">
-                <div class="project-header-large">
-                    <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1000" alt="Torre Caribe">
-                    <div class="project-badge-large">PROYECTO PREVENTA</div>
-                </div>
-                <div class="project-content-large">
-                    <h2>Torre Caribe Residence</h2>
-                    <p class="project-location-large">
-                        <i class="fas fa-map-marker-alt"></i> Punta Cana, La Altagracia
-                    </p>
-                    
-                    <div class="project-prices-large">
-                        <div class="price-range-large">
-                            <span>DESDE</span>
-                            <strong>US$ 180,000</strong>
-                        </div>
-                        <div class="price-range-large">
-                            <span>HASTA</span>
-                            <strong>US$ 350,000</strong>
-                        </div>
-                    </div>
-                    
-                    <p class="project-description-large">
-                        Exclusivo proyecto frente al mar en la zona más privilegiada de Punta Cana. 
-                        Apartamentos con vistas panorámicas al Caribe, acabados de lujo y amenities 
-                        de categoría internacional. Oportunidad única de inversión en el paraíso.
-                    </p>
-                    
-                    <div class="project-features-large">
-                        <div class="project-feature-item">
-                            <i class="fas fa-umbrella-beach"></i>
-                            <div class="project-feature-info">
-                                <h4>Frente al Mar</h4>
-                                <p>Vistas directas al Caribe</p>
-                            </div>
-                        </div>
-                        <div class="project-feature-item">
-                            <i class="fas fa-infinity"></i>
-                            <div class="project-feature-info">
-                                <h4>Piscina Infinity</h4>
-                                <p>Diseño único con vista al mar</p>
-                            </div>
-                        </div>
-                        <div class="project-feature-item">
-                            <i class="fas fa-concierge-bell"></i>
-                            <div class="project-feature-info">
-                                <h4>Servicio Concierge</h4>
-                                <p>Atención personalizada 24/7</p>
-                            </div>
-                        </div>
-                        <div class="project-feature-item">
-                            <i class="fas fa-wine-glass-alt"></i>
-                            <div class="project-feature-info">
-                                <h4>Roof Top Bar</h4>
-                                <p>Bar exclusivo con vistas 360°</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button class="btn-primary-tucasa">
-                        <i class="fas fa-calendar-check"></i> Agendar Visita
-                    </button>
-                </div>
-            </div>
+            <div id="projectsContainer"><p class="loading">Cargando proyectos...</p></div>
         </div>
     </section>
 
@@ -185,7 +74,16 @@
         <!-- Mismo footer que index.html -->
     </footer>
 
+    <div id="projectDetailModal" class="project-detail-modal" style="display:none;">
+        <div class="project-detail-dialog">
+            <button class="project-detail-close" id="projectDetailClose">✕</button>
+            <div id="projectDetailContent"></div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/proyectos.js"></script>
     <script src="js/favoritos.js"></script>
 </body>
 </html>
