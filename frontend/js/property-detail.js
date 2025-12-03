@@ -1,249 +1,305 @@
-class PropertyDetailManager {
+// Property Detail Page Functionality
+class PropertyDetail {
     constructor() {
-        this.currentProperty = null;
+        this.property = null;
         this.currentImageIndex = 0;
+        this.images = [];
+        
         this.init();
     }
 
     async init() {
-        await this.loadProperty();
-        this.setupEventListeners();
-    }
-
-    async loadProperty() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const propertyId = urlParams.get('id');
+        const propertyId = this.getPropertyId();
         if (!propertyId) {
-            this.showError('No se especificó una propiedad');
+            this.showError('ID de propiedad no especificado');
             return;
         }
+
+        await this.loadProperty(propertyId);
+        this.renderPropertyDetails();
+        this.setupEventListeners();
+        this.setupWhatsAppButton();
+        this.setupCallButton();
+        this.setupInterestForm();
+    }
+
+    getPropertyId() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id') || urlParams.get('property');
+    }
+
+    async loadProperty(id) {
         try {
-            const res = await window.api.get(`/propiedades/${propertyId}`);
-            const p = res?.data;
-            if (!p) {
-                this.showError('Propiedad no encontrada');
-                return;
+            // Simular carga de datos - en producción esto vendría de una API
+            const properties = JSON.parse(localStorage.getItem('properties')) || [];
+            this.property = properties.find(p => p.id === id || p.property_id === id);
+            
+            if (!this.property) {
+                // Si no se encuentra en localStorage, intentar cargar de la API
+                const response = await fetch(`https://api.tucasard.com/properties/${id}`);
+                if (response.ok) {
+                    this.property = await response.json();
+                } else {
+                    throw new Error('Propiedad no encontrada');
+                }
             }
-            this.currentProperty = p;
-            this.renderProperty();
-        } catch (e) {
-            this.showError('Error al cargar la propiedad');
+
+            // Preparar imágenes
+            this.images = this.property.images || [this.property.image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'];
+            
+        } catch (error) {
+            console.error('Error loading property:', error);
+            this.showError('No se pudo cargar la información de la propiedad');
         }
     }
 
-    renderProperty() {
-        if (!this.currentProperty) return;
+    renderPropertyDetails() {
+        if (!this.property) return;
 
-        const bc = document.getElementById('breadcrumb-title');
-        if (bc) bc.textContent = this.currentProperty.titulo;
+        // Actualizar breadcrumb
+        document.getElementById('breadcrumb-title').textContent = this.property.title || 'Detalles';
 
-        // Renderizar galería
+        // Título y ubicación
+        document.getElementById('property-detail-title').textContent = this.property.title;
+        document.getElementById('property-location-detail').innerHTML = `
+            <i class="fas fa-map-marker-alt"></i> ${this.property.location || 'Ubicación no especificada'}
+        `;
+
+        // Precio
+        document.getElementById('property-price-main').textContent = this.property.price || 'Consultar';
+
+        // Resumen
+        document.getElementById('property-code').textContent = this.property.code || this.property.id || '-';
+        document.getElementById('property-type').textContent = this.property.type || 'Propiedad';
+        document.getElementById('property-rooms').textContent = this.property.rooms || 'N/A';
+        document.getElementById('property-parking').textContent = this.property.parking || 'N/A';
+        document.getElementById('property-area').textContent = this.property.area ? `${this.property.area} m²` : 'N/A';
+        document.getElementById('property-bathrooms').textContent = this.property.bathrooms || 'N/A';
+
+        // Descripción
+        document.getElementById('property-description-text').textContent = 
+            this.property.description || 'Sin descripción disponible.';
+
+        // Características
+        const featuresGrid = document.getElementById('features-grid');
+        if (this.property.features && Array.isArray(this.property.features)) {
+            featuresGrid.innerHTML = this.property.features.map(feature => `
+                <div class="feature-item-detail">
+                    <i class="fas fa-check"></i>
+                    <span>${feature}</span>
+                </div>
+            `).join('');
+        } else {
+            featuresGrid.innerHTML = '<p>No hay características especificadas.</p>';
+        }
+
+        // Agente
+        document.getElementById('agent-name').textContent = this.property.agent_name || 'Laura García Valdez';
+        document.getElementById('agent-phone').textContent = this.property.agent_phone || '+1 (829) 552-1083';
+        document.getElementById('agent-email').textContent = this.property.agent_email || 'laura@tucasard.com';
+
+        // Galería
         this.renderGallery();
 
-        // Renderizar información principal
-        this.renderMainInfo();
-
-        // Renderizar características
-        this.renderFeatures();
-
-        // Renderizar agente
-        this.renderAgent();
-
-        // Renderizar propiedades similares
-        this.renderSimilarProperties();
+        // Actualizar título de la página
+        document.title = `${this.property.title} - TU Casa RD`;
     }
 
     renderGallery() {
         const mainImage = document.getElementById('main-property-image');
-        const thumbsContainer = document.getElementById('gallery-thumbs');
+        const galleryThumbs = document.getElementById('gallery-thumbs');
 
-        if (!mainImage || !thumbsContainer) return;
+        if (this.images.length > 0) {
+            mainImage.src = this.images[0];
+            mainImage.alt = this.property.title;
 
-        const imgs = Array.isArray(this.currentProperty.imagenes) ? this.currentProperty.imagenes : [];
-        const toUrl = (u) => {
-            if (!u) return '';
-            return u.startsWith('/uploads') ? `${window.location.origin}${u}` : u;
-        };
-        const fallbackSVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420"><rect width="800" height="420" fill="%23dbeafe"/><text x="400" y="210" text-anchor="middle" dominant-baseline="middle" fill="%231e3a8a" font-size="28">Imagen no disponible</text></svg>';
-        mainImage.src = toUrl(imgs[this.currentImageIndex] || imgs[0] || fallbackSVG);
-        mainImage.onerror = () => {
-            mainImage.onerror = null;
-            mainImage.src = fallbackSVG;
-        };
-
-        thumbsContainer.innerHTML = imgs.map((img, index) => `
-            <div class="gallery-thumb ${index === this.currentImageIndex ? 'active' : ''}" 
-                 onclick="propertyDetailManager.changeImage(${index})">
-                <img src="${toUrl(img)}" alt="Imagen ${index + 1}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 200\"><rect width=\"300\" height=\"200\" fill=\"%23dbeafe\"/><text x=\"150\" y=\"100\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"%231e3a8a\" font-size=\"16\">Sin imagen</text></svg>';">
-            </div>
-        `).join('');
-    }
-
-    renderMainInfo() {
-        const t = this.currentProperty;
-        document.getElementById('property-detail-title').textContent = t.titulo || '';
-        document.getElementById('property-location-detail').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${t.ubicacion || ''}`;
-        document.getElementById('property-price-main').textContent = this.formatPrice(t.precio || 0);
-        document.getElementById('property-code').textContent = `#${t.id}`;
-        document.getElementById('property-type').textContent = t.tipo || '';
-        const cityEl = document.getElementById('property-city');
-        if (cityEl) cityEl.textContent = '-';
-        const sectorEl = document.getElementById('property-sector');
-        if (sectorEl) sectorEl.textContent = '-';
-        document.getElementById('property-rooms').textContent = t.habitaciones || 0;
-        document.getElementById('property-parking').textContent = t.parqueos || 0;
-        document.getElementById('property-area').textContent = `${t.metrosCuadrados || 0} m²`;
-        document.getElementById('property-bathrooms').textContent = t.banos || 0;
-        document.getElementById('property-description-text').textContent = t.descripcion || '';
-    }
-
-    renderFeatures() {
-        const featuresGrid = document.getElementById('features-grid');
-        if (!featuresGrid) return;
-        const list = Array.isArray(this.currentProperty.caracteristicas) ? this.currentProperty.caracteristicas : [];
-        featuresGrid.innerHTML = list.map(feature => `
-            <div class="feature-item-detail">
-                <i class="fas fa-check"></i>
-                <span>${feature}</span>
-            </div>
-        `).join('');
-    }
-
-    renderAgent() {
-        const name = 'Equipo TU Casa RD';
-        const phone = '+18091234567';
-        const email = 'info@tucasard.com';
-        document.getElementById('agent-name').textContent = name;
-        document.getElementById('agent-phone').textContent = phone;
-        document.getElementById('agent-email').textContent = email;
-        const callBtn = document.querySelector('.btn-call-tucasa');
-        const whatsappBtn = document.querySelector('.btn-whatsapp-tucasa');
-        if (callBtn) callBtn.href = `tel:${phone}`;
-        if (whatsappBtn) {
-            const message = `Hola, estoy interesado en la propiedad: ${this.currentProperty.titulo}`;
-            whatsappBtn.href = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(message)}`;
+            galleryThumbs.innerHTML = this.images.map((img, index) => `
+                <img src="${img}" 
+                     alt="Imagen ${index + 1}" 
+                     class="gallery-thumb ${index === 0 ? 'active' : ''}"
+                     onclick="propertyDetail.changeImage(${index})"
+                     onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'">
+            `).join('');
         }
-    }
-
-    renderSimilarProperties() {
-        const similarContainer = document.getElementById('similar-properties');
-        if (!similarContainer) return;
-        (async () => {
-            try {
-                const res = await window.api.get('/propiedades');
-                const all = Array.isArray(res?.data) ? res.data : [];
-                const sameType = all.filter(p => p.tipo === this.currentProperty.tipo && p.id !== this.currentProperty.id).slice(0, 2);
-                similarContainer.innerHTML = sameType.map(p => `
-                    <a href="propiedad-detalle.html?id=${p.id}" class="similar-property">
-                        <img src="${(Array.isArray(p.imagenes) && p.imagenes[0] ? (p.imagenes[0].startsWith('/uploads') ? `${window.location.origin}${p.imagenes[0]}` : p.imagenes[0]) : 'https://via.placeholder.com/300x200?text=Propiedad')}" alt="${p.titulo}">
-                        <div class="similar-property-info">
-                            <h4>${p.titulo}</h4>
-                            <div class="similar-property-price">${this.formatPrice(p.precio)}</div>
-                            <small>${p.tipo}</small>
-                        </div>
-                    </a>
-                `).join('');
-            } catch {}
-        })();
     }
 
     changeImage(index) {
         if (typeof index === 'number') {
-            // Navegación por flechas
-            this.currentImageIndex = (this.currentImageIndex + index + this.currentProperty.imagenes.length) % this.currentProperty.imagenes.length;
-        } else {
-            // Click directo en miniatura
             this.currentImageIndex = index;
+        } else {
+            this.currentImageIndex = (this.currentImageIndex + index + this.images.length) % this.images.length;
         }
 
         const mainImage = document.getElementById('main-property-image');
         const thumbs = document.querySelectorAll('.gallery-thumb');
 
-        if (mainImage) {
-            const fallbackSVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420"><rect width="800" height="420" fill="%23dbeafe"/><text x="400" y="210" text-anchor="middle" dominant-baseline="middle" fill="%231e3a8a" font-size="28">Imagen no disponible</text></svg>';
-            const u = this.currentProperty.imagenes[this.currentImageIndex];
-            mainImage.src = u ? (u.startsWith('/uploads') ? `${window.location.origin}${u}` : u) : fallbackSVG;
-            mainImage.onerror = () => {
-                mainImage.onerror = null;
-                mainImage.src = fallbackSVG;
-            };
-        }
+        mainImage.src = this.images[this.currentImageIndex];
+        mainImage.alt = `Imagen ${this.currentImageIndex + 1} - ${this.property.title}`;
 
-        // Actualizar estado activo de miniaturas
         thumbs.forEach((thumb, i) => {
             thumb.classList.toggle('active', i === this.currentImageIndex);
         });
     }
 
-    formatPrice(price) {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(price);
+    setupWhatsAppButton() {
+        const whatsappBtn = document.getElementById('whatsapp-btn');
+        const message = encodeURIComponent(
+            `Hola, estoy interesado en la propiedad:\n` +
+            `${this.property.title}\n` +
+            `Código: ${this.property.code || this.property.id}\n` +
+            `Precio: ${this.property.price || 'Consultar'}\n` +
+            `Ubicación: ${this.property.location || 'No especificada'}`
+        );
+        
+        const phone = this.property.agent_phone || '18497077848';
+        whatsappBtn.href = `https://wa.me/${phone}?text=${message}`;
+    }
+
+    setupCallButton() {
+        const callBtn = document.getElementById('call-btn');
+        const phone = this.property.agent_phone || '+18295521083';
+        callBtn.href = `tel:${phone}`;
+    }
+
+    setupInterestForm() {
+        const form = document.getElementById('interest-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.submitInterestForm(form);
+        });
+    }
+
+    async submitInterestForm(form) {
+        const formData = new FormData(form);
+        const data = {
+            property_id: this.property.id,
+            property_title: this.property.title,
+            property_price: this.property.price,
+            name: formData.get('nombre'),
+            email: formData.get('email'),
+            phone: formData.get('telefono'),
+            message: formData.get('mensaje'),
+            date: new Date().toISOString()
+        };
+
+        try {
+            // Simular envío a API
+            const response = await fetch('https://api.tucasard.com/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                this.showSuccess('¡Consulta enviada correctamente! Un agente te contactará pronto.');
+                form.reset();
+                
+                // También enviar a EmailJS
+                this.sendEmailJS(data);
+            } else {
+                throw new Error('Error al enviar la consulta');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            this.showError('Hubo un error al enviar la consulta. Por favor, intenta de nuevo.');
+        }
+    }
+
+    sendEmailJS(data) {
+        if (typeof emailjs === 'undefined') return;
+
+        emailjs.send("service_f8crp6f", "template_zvwaapq", {
+            to_email: this.property.agent_email || 'info@tucasard.com',
+            from_name: data.name,
+            from_email: data.email,
+            phone: data.phone,
+            message: `Consulta sobre propiedad: ${this.property.title}\n\n${data.message || 'Sin mensaje adicional'}`,
+            property_title: this.property.title,
+            property_code: this.property.code || this.property.id,
+            property_price: this.property.price,
+            property_url: window.location.href
+        }).then(
+            () => console.log('Email enviado correctamente'),
+            (error) => console.error('Error enviando email:', error)
+        );
+    }
+
+    showSuccess(message) {
+        this.showMessage(message, 'success');
     }
 
     showError(message) {
-        const main = document.querySelector('.property-details-tucasa');
-        if (main) {
-            main.innerHTML = `
-                <div class="container-tucasa">
-                    <div class="error-state" style="text-align: center; padding: 4rem;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--accent-orange); margin-bottom: 1rem;"></i>
-                        <h2>Propiedad No Encontrada</h2>
-                        <p>${message}</p>
-                        <a href="propiedades.html" class="btn-primary-tucasa" style="margin-top: 2rem;">
-                            Volver a Propiedades
-                        </a>
-                    </div>
-                </div>
-            `;
-        }
+        this.showMessage(message, 'error');
+    }
+
+    showMessage(message, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message-tucasa ${type}`;
+        messageDiv.textContent = message;
+        
+        const form = document.getElementById('interest-form');
+        form.insertBefore(messageDiv, form.firstChild);
+        
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
     }
 
     setupEventListeners() {
-        // Formulario de interés
-        const interestForm = document.getElementById('interest-form');
-        if (interestForm) {
-            interestForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.handleInterestForm(e.target);
-            });
+        // Navegación de imágenes
+        document.querySelector('.gallery-nav.prev').addEventListener('click', () => this.changeImage(-1));
+        document.querySelector('.gallery-nav.next').addEventListener('click', () => this.changeImage(1));
+
+        // Botón de favoritos
+        const favoriteBtn = document.createElement('button');
+        favoriteBtn.className = 'favorite-btn-tucasa';
+        favoriteBtn.innerHTML = '<i class="far fa-heart"></i>';
+        favoriteBtn.addEventListener('click', () => this.toggleFavorite());
+        
+        const imageContainer = document.querySelector('.main-image-container');
+        imageContainer.appendChild(favoriteBtn);
+
+        // Verificar si ya está en favoritos
+        this.checkFavoriteStatus();
+    }
+
+    toggleFavorite() {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const propertyIndex = favorites.findIndex(fav => fav.id === this.property.id);
+        const favoriteBtn = document.querySelector('.main-image-container .favorite-btn-tucasa');
+
+        if (propertyIndex === -1) {
+            // Agregar a favoritos
+            favorites.push(this.property);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+            favoriteBtn.classList.add('active');
+            this.showSuccess('Propiedad agregada a favoritos');
+        } else {
+            // Quitar de favoritos
+            favorites.splice(propertyIndex, 1);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            favoriteBtn.innerHTML = '<i class="far fa-heart"></i>';
+            favoriteBtn.classList.remove('active');
+            this.showSuccess('Propiedad eliminada de favoritos');
         }
     }
 
-    handleInterestForm(form) {
-        const formData = new FormData(form);
-        const nombre = form.querySelector('input[type="text"]').value;
-        const email = form.querySelector('input[type="email"]').value;
-        const telefono = form.querySelector('input[type="tel"]').value;
-        const mensaje = form.querySelector('textarea').value;
-
-        const data = {
-            nombre: nombre,
-            email: email,
-            telefono: telefono,
-            mensaje: mensaje,
-            propiedad: this.currentProperty.titulo,
-            codigo: this.currentProperty.codigo
-        };
-
-        // Simular envío
-        console.log('Formulario de interés:', data);
+    checkFavoriteStatus() {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const isFavorite = favorites.some(fav => fav.id === this.property.id);
+        const favoriteBtn = document.querySelector('.main-image-container .favorite-btn-tucasa');
         
-        // Mostrar mensaje de éxito
-        alert('¡Gracias por tu interés! Nos pondremos en contacto contigo pronto.');
-        form.reset();
+        if (isFavorite) {
+            favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+            favoriteBtn.classList.add('active');
+        }
     }
 }
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    window.propertyDetailManager = new PropertyDetailManager();
+    window.propertyDetail = new PropertyDetail();
 });
-
-// Función global para cambiar imágenes
-function changeImage(direction) {
-    if (window.propertyDetailManager) {
-        window.propertyDetailManager.changeImage(direction);
-    }
-}

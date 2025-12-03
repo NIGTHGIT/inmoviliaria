@@ -1,48 +1,113 @@
-(() => {
-  const API_BASE = `${window.location.origin}/api`;
-  const getSessionId = () => localStorage.getItem('sessionId');
-  const buildHeaders = (extra = {}, hasBody = false) => {
-    const h = hasBody ? { 'Content-Type': 'application/json' } : {};
-    const sid = getSessionId();
-    if (sid) h['x-session-id'] = sid;
-    return { ...h, ...extra };
-  };
-  const handleResponse = async (resp) => {
-    const ct = resp.headers.get('content-type') || '';
-    const payload = ct.includes('application/json') ? await resp.json() : await resp.text();
-    if (!resp.ok) {
-      const message = payload && payload.message ? payload.message : typeof payload === 'string' ? payload : `HTTP ${resp.status}`;
-      throw { status: resp.status, message, data: payload };
+// API Configuration and Utility Functions
+class API {
+    constructor() {
+        this.baseURL = 'https://api.tucasard.com';
+        this.endpoints = {
+            properties: '/properties',
+            projects: '/projects',
+            contact: '/contact',
+            favorites: '/favorites'
+        };
     }
-    return payload;
-  };
-  const withParams = (url, params) => {
-    if (!params) return url;
-    const usp = new URLSearchParams();
-    Object.entries(params).forEach(([k, v]) => {
-      if (v !== undefined && v !== null && v !== '') usp.append(k, v);
-    });
-    const sep = url.includes('?') ? '&' : '?';
-    const qs = usp.toString();
-    return qs ? url + sep + qs : url;
-  };
-  const apiGet = async (path, opts = {}) => {
-    const url = withParams(`${API_BASE}${path}`, opts.params);
-    const resp = await fetch(url, { method: 'GET', headers: buildHeaders(opts.headers, false) });
-    return handleResponse(resp);
-  };
-  const apiPost = async (path, body = {}, opts = {}) => {
-    const resp = await fetch(`${API_BASE}${path}`, { method: 'POST', headers: buildHeaders(opts.headers, true), body: JSON.stringify(body) });
-    return handleResponse(resp);
-  };
-  const apiPut = async (path, body = {}, opts = {}) => {
-    const resp = await fetch(`${API_BASE}${path}`, { method: 'PUT', headers: buildHeaders(opts.headers, true), body: JSON.stringify(body) });
-    return handleResponse(resp);
-  };
-  const apiDelete = async (path, opts = {}) => {
-    const resp = await fetch(`${API_BASE}${path}`, { method: 'DELETE', headers: buildHeaders(opts.headers, false) });
-    return handleResponse(resp);
-  };
-  window.api = { get: apiGet, post: apiPost, put: apiPut, delete: apiDelete, base: API_BASE, sessionId: getSessionId };
-})();
 
+    async fetchProperties(params = {}) {
+        try {
+            const queryString = new URLSearchParams(params).toString();
+            const response = await fetch(`${this.baseURL}${this.endpoints.properties}?${queryString}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching properties:', error);
+            // Return sample data if API fails
+            return this.getSampleProperties();
+        }
+    }
+
+    async fetchProjects() {
+        try {
+            const response = await fetch(`${this.baseURL}${this.endpoints.projects}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+            return [];
+        }
+    }
+
+    async submitContact(formData) {
+        try {
+            const response = await fetch(`${this.baseURL}${this.endpoints.contact}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error submitting contact:', error);
+            throw error;
+        }
+    }
+
+    getSampleProperties() {
+        return [
+            {
+                id: '1',
+                title: 'Hermosa Casa en Piantini',
+                price: 'US$ 450,000',
+                location: 'Piantini, Santo Domingo',
+                image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600',
+                type: 'casa',
+                rooms: 4,
+                bathrooms: 3,
+                area: '350',
+                parking: 2,
+                description: 'Hermosa casa familiar en una de las mejores zonas de Santo Domingo. Amplios espacios, diseño moderno y todas las comodidades.',
+                features: ['Piscina', 'Jardín', 'Cocina equipada', 'Área de lavado', 'Estacionamiento techado']
+            },
+            // Agregar más propiedades de ejemplo...
+        ];
+    }
+
+    // Cache management
+    cacheData(key, data, ttl = 3600000) { // 1 hour default
+        const cacheItem = {
+            data: data,
+            timestamp: Date.now(),
+            ttl: ttl
+        };
+        localStorage.setItem(key, JSON.stringify(cacheItem));
+    }
+
+    getCachedData(key) {
+        const cached = localStorage.getItem(key);
+        if (!cached) return null;
+
+        const cacheItem = JSON.parse(cached);
+        const now = Date.now();
+
+        if (now - cacheItem.timestamp > cacheItem.ttl) {
+            localStorage.removeItem(key);
+            return null;
+        }
+
+        return cacheItem.data;
+    }
+}
+
+// Initialize API instance
+window.API = new API();
