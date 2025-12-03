@@ -8,8 +8,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
       .project-detail-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000}
-      .project-detail-dialog{background:#fff;max-width:900px;width:95%;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.2);padding:20px;position:relative}
-      .project-detail-close{position:absolute;right:12px;top:12px;background:#eee;border:none;border-radius:6px;padding:6px 10px;cursor:pointer}
+      .project-detail-dialog{background:#fff;max-width:900px;width:95%;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.2);padding:28px 20px 20px;position:relative}
+      .project-detail-close{position:absolute;right:12px;top:6px;background:#f1f5f9;border:none;border-radius:20px;padding:6px 10px;cursor:pointer;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
       .detail-header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px}
       .detail-badge{background:#0ea5e9;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px}
       .detail-location{color:#555;margin:8px 0}
@@ -22,8 +22,12 @@
       .detail-features-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
       .detail-feature-item{display:flex;gap:10px;align-items:center;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
       .detail-feature-item i{color:#22c55e}
-      .detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+      .detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;justify-content:space-between}
       .btn-secondary-tucasa{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px;display:inline-flex;gap:8px;align-items:center;color:#111}
+      .whatsapp-btn{background:#25D366;color:#fff;border:none;border-radius:999px;padding:10px 14px;display:inline-flex;gap:8px;align-items:center;font-weight:600}
+      .whatsapp-btn{text-decoration:none}
+      .whatsapp-btn i{color:#fff}
+      .whatsapp-btn:hover{filter:brightness(0.95)}
     </style>
 </head>
 <body>

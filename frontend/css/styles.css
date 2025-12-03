@@ -1403,6 +1403,7 @@ body {
     justify-content:center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     z-index: 9999;
+    text-decoration: none;
 }
 .whatsapp-floating:hover {
     background: #1ebe5d;
@@ -2058,6 +2059,7 @@ body {
 .btn-whatsapp-tucasa {
     background: #25D366;
     color: white;
+    text-decoration: none;
 }
 
 .btn-whatsapp-tucasa:hover {

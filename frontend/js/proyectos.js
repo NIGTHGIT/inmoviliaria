@@ -2,20 +2,23 @@ function formatUSD(n) {
   return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n || 0);
 }
 
+// Amenidades predefinidas con íconos para render público
+const AMENITY_LABELS = {
+  piscina: { label: 'Piscina', icon: 'fas fa-swimming-pool' },
+  gimnasio: { label: 'Gimnasio', icon: 'fas fa-dumbbell' },
+  seguridad: { label: 'Seguridad', icon: 'fas fa-shield-alt' },
+  areas_verdes: { label: 'Áreas verdes', icon: 'fas fa-tree' },
+  parqueo: { label: 'Parqueo', icon: 'fas fa-parking' },
+  parque_infantil: { label: 'Parque infantil', icon: 'fas fa-child' },
+  rooftop_bar: { label: 'Rooftop bar', icon: 'fas fa-wine-glass-alt' },
+  concierge: { label: 'Concierge', icon: 'fas fa-concierge-bell' },
+  frente_mar: { label: 'Frente al mar', icon: 'fas fa-umbrella-beach' },
+};
+
 function renderProjectCard(p) {
   const imgs = p.imagenes && p.imagenes.length ? p.imagenes : (p.imagenPrincipal ? [p.imagenPrincipal] : []);
   const img = imgs[0] || '';
-  const labels = {
-    piscina: { label: 'Piscina', icon: 'fas fa-swimming-pool' },
-    gimnasio: { label: 'Gimnasio', icon: 'fas fa-dumbbell' },
-    seguridad: { label: 'Seguridad', icon: 'fas fa-shield-alt' },
-    areas_verdes: { label: 'Áreas verdes', icon: 'fas fa-tree' },
-    parqueo: { label: 'Parqueo', icon: 'fas fa-parking' },
-    parque_infantil: { label: 'Parque infantil', icon: 'fas fa-child' },
-    rooftop_bar: { label: 'Rooftop bar', icon: 'fas fa-wine-glass-alt' },
-    concierge: { label: 'Concierge', icon: 'fas fa-concierge-bell' },
-    frente_mar: { label: 'Frente al mar', icon: 'fas fa-umbrella-beach' },
-  };
+  const labels = AMENITY_LABELS;
   const a = p.amenities || {};
   const amenList = Object.keys(labels).filter(k => !!a[k]).slice(0, 4);
   const featuresHtml = (amenList.length ? amenList.map(k => `
@@ -77,6 +80,7 @@ function renderProjectsList(list) {
     return;
   }
   window.projectsById = {};
+  window.projectsList = Array.isArray(list) ? list.slice() : [];
   list.forEach(p => { if (p && (p.id !== undefined && p.id !== null)) window.projectsById[String(p.id)] = p; });
   container.innerHTML = list.map(renderProjectCard).join('');
 
@@ -119,11 +123,11 @@ function openProjectDetailModal(p) {
   const imgs = p.imagenes && p.imagenes.length ? p.imagenes : (p.imagenPrincipal ? [p.imagenPrincipal] : []);
   const gallery = imgs.map((src, i) => `<img src="${src}" alt="${p.titulo} ${i+1}" class="detail-image" onerror="this.style.display='none'">`).join('');
   const a2 = p.amenities || {};
-  const amenKeys = Object.keys(labels).filter(k => !!a2[k]);
+  const amenKeys = Object.keys(AMENITY_LABELS).filter(k => !!a2[k]);
   const features = (amenKeys.length ? amenKeys.map(k => `
     <div class="detail-feature-item">
-      <i class="${labels[k].icon}"></i>
-      <span>${labels[k].label}</span>
+      <i class="${AMENITY_LABELS[k].icon}"></i>
+      <span>${AMENITY_LABELS[k].label}</span>
     </div>
   `) : (p.features || []).map(f => {
     const text = typeof f === 'string' ? f : [f.titulo, f.descripcion].filter(Boolean).join(' - ');
@@ -151,7 +155,7 @@ function openProjectDetailModal(p) {
     <div class="detail-features-list">${features}</div>
     <div class="detail-actions">
       <a class="btn-primary-tucasa" href="contacto.html?${new URLSearchParams({ from: 'proyectos', type: 'cita', project: p.titulo }).toString()}"><i class="fas fa-calendar-check"></i> Agendar Visita</a>
-      <a class="btn-secondary-tucasa" target="_blank" href="https://wa.me/18497077848?text=${encodeURIComponent('Hola, me interesa el proyecto ' + p.titulo)}"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a class="btn-secondary-tucasa whatsapp-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/18497077848?text=${encodeURIComponent('Hola, me interesa el proyecto ' + p.titulo)}"><i class="fab fa-whatsapp"></i> WhatsApp</a>
     </div>
   `;
 
@@ -179,19 +183,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       const projectId = btn.getAttribute('data-project-id');
       const projectName = btn.getAttribute('data-project');
       if (action === 'info' && projectId) {
-        try {
-          const idNum = Number(projectId);
-          const data = await api.get(`/proyectos/${idNum}`);
-          if (data && data.success) {
-            openProjectDetailModal(data.data);
-          } else {
-            const fallback = window.projectsById && window.projectsById[String(projectId)];
-            if (fallback) openProjectDetailModal(fallback); else alert('No se pudo cargar la información del proyecto');
-          }
-        } catch (e) {
-          console.error('Error cargando proyecto:', e);
-          const fallback = window.projectsById && window.projectsById[String(projectId)];
-          if (fallback) openProjectDetailModal(fallback); else alert('No se pudo cargar la información del proyecto');
+        const idKey = String(projectId).trim();
+        const local = (window.projectsById && window.projectsById[idKey])
+          || (Array.isArray(window.projectsList) ? window.projectsList.find(p => String(p.id) === idKey) : null)
+          || collectDomProject(btn);
+        if (local) openProjectDetailModal(local);
+        const idNum = parseInt(idKey, 10);
+        if (!isNaN(idNum)) {
+          api.get(`/proyectos/${idNum}`).then(data => {
+            if (data && data.success) openProjectDetailModal(data.data);
+          }).catch(e => { /* silencioso */ });
         }
       } else if (action === 'cita') {
         const params = new URLSearchParams({ from: 'proyectos', type: 'cita', project: projectName || '' });
@@ -223,23 +224,33 @@ async function openProjectInfo(el) {
     const modal = document.getElementById('projectDetailModal');
     const content = document.getElementById('projectDetailContent');
     if (modal) modal.style.display = 'flex';
-    if (content) content.innerHTML = '<p class="loading">Cargando información...</p>';
+    const idKey = String(projectId).trim();
+    const local = (window.projectsById && window.projectsById[idKey])
+      || (Array.isArray(window.projectsList) ? window.projectsList.find(p => String(p.id) === idKey) : null)
+      || collectDomProject(el);
+    if (local) {
+      openProjectDetailModal(local);
+    } else if (content) {
+      content.innerHTML = '<p class="loading">Cargando información...</p>';
+    }
     const idNum = parseInt(String(projectId).trim(), 10);
     if (isNaN(idNum)) {
       const fb = window.projectsById && window.projectsById[String(projectId).trim()];
       if (fb) { openProjectDetailModal(fb); return; }
     }
-    let completed = false;
+    let completed = !!local;
     const safetyTimer = setTimeout(() => {
       if (completed) return;
-      const fallback = window.projectsById && window.projectsById[String(projectId).trim()];
+      const fallback = (window.projectsById && window.projectsById[idKey])
+        || (Array.isArray(window.projectsList) ? window.projectsList.find(p => String(p.id) === idKey) : null)
+        || collectDomProject(el);
       if (fallback) {
         completed = true;
         openProjectDetailModal(fallback);
       } else if (content) {
         content.innerHTML = '<p class="error">No se pudo cargar la información del proyecto.</p>';
       }
-    }, 2500);
+    }, 1000);
     const data = await api.get(`/proyectos/${idNum}`);
     if (data && data.success) {
       completed = true;
@@ -258,5 +269,26 @@ async function openProjectInfo(el) {
       if (content) content.innerHTML = '<p class="error">No se pudo cargar la información del proyecto.</p>';
       alert('No se pudo cargar la información del proyecto');
     }
+  }
+}
+function collectDomProject(el){
+  try {
+    const card = el.closest('.project-card-large');
+    if (!card) return null;
+    const idAttr = card.getAttribute('data-id');
+    const id = idAttr ? parseInt(idAttr, 10) : undefined;
+    const titulo = card.querySelector('.project-content-large h2')?.textContent?.trim() || '';
+    const ubicacion = card.querySelector('.project-location-large')?.textContent?.replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ]+/, '').trim() || '';
+    const precioDesdeText = card.querySelectorAll('.price-range-large strong')[0]?.textContent || '';
+    const precioHastaText = card.querySelectorAll('.price-range-large strong')[1]?.textContent || '';
+    const n = (s)=> parseInt(String(s).replace(/[^0-9]/g,''),10) || 0;
+    const precioDesde = n(precioDesdeText);
+    const precioHasta = n(precioHastaText);
+    const descripcion = card.querySelector('.project-description-large')?.textContent?.trim() || '';
+    const img = card.querySelector('.project-header-large img')?.getAttribute('src') || '';
+    const imagenes = img ? [img] : [];
+    return { id, titulo, ubicacion, precioDesde, precioHasta, descripcion, imagenPrincipal: img, imagenes, badge: card.querySelector('.project-badge-large')?.textContent || '' };
+  } catch(e){
+    return null;
   }
 }
