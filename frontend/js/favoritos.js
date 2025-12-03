@@ -1,176 +1,70 @@
-// Favoritos.js - Funcionalidad completa
-class FavoritesManager {
+// Favorites Page Manager
+class FavoritesPageManager {
     constructor() {
         this.favorites = [];
-        this.selectedForComparison = new Set();
+        this.comparingProperties = new Set(); // Set para propiedades en comparación
         this.init();
     }
 
-    async init() {
-        await this.loadFavorites();
+    init() {
+        this.loadFavorites();
         this.setupEventListeners();
         this.renderFavorites();
-        this.updateSummary();
-        
-        // Verificar si hay propiedades en el localStorage de ejemplo
-        await this.checkForSampleData();
+        this.setupCompareModal();
     }
 
-    async checkForSampleData() {
-        // Si no hay favoritos, mostrar datos de ejemplo para demo
-        if (this.favorites.length === 0 && localStorage.getItem('showSampleFavorites') !== 'false') {
-            const addSample = confirm('¿Deseas ver datos de ejemplo para probar la funcionalidad de favoritos?');
-            
-            if (addSample) {
-                await this.addSampleFavorites();
-                localStorage.setItem('showSampleFavorites', 'false');
-            } else {
-                localStorage.setItem('showSampleFavorites', 'false');
-            }
-        }
-    }
-
-    async addSampleFavorites() {
-        const sampleProperties = [
-            {
-                id: 'fav1',
-                title: 'Penthouse de Lujo en Piantini',
-                price: 'US$ 850,000',
-                location: 'Piantini, Santo Domingo',
-                image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600',
-                type: 'apartamento',
-                rooms: 4,
-                bathrooms: 3,
-                parking: 2,
-                area: '280 m²',
-                description: 'Penthouse de lujo con vistas panorámicas, acabados premium y amenities exclusivos.',
-                features: ['Terraza privada', 'Piscina', 'Gimnasio', 'Vista panorámica', 'Cocina gourmet'],
-                addedDate: new Date().toISOString()
-            },
-            {
-                id: 'fav2',
-                title: 'Villa con Piscina en Casa de Campo',
-                price: 'US$ 1,200,000',
-                location: 'Casa de Campo, La Romana',
-                image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=600',
-                type: 'villa',
-                rooms: 5,
-                bathrooms: 4,
-                parking: 3,
-                area: '450 m²',
-                description: 'Villa espectacular en comunidad exclusiva con acceso a campo de golf y marina.',
-                features: ['Piscina privada', 'Jardín', 'BBQ area', 'Seguridad 24/7', 'Cocina al aire libre'],
-                addedDate: new Date(Date.now() - 86400000).toISOString() // Ayer
-            },
-            {
-                id: 'fav3',
-                title: 'Apartamento Moderno en Naco',
-                price: 'US$ 325,000',
-                location: 'Naco, Santo Domingo',
-                image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
-                type: 'apartamento',
-                rooms: 3,
-                bathrooms: 2,
-                parking: 1,
-                area: '180 m²',
-                description: 'Apartamento completamente renovado en edificio con amenities y ubicación privilegiada.',
-                features: ['Balcón', 'Área social', 'Estacionamiento techado', 'Seguridad', 'Cerca de amenities'],
-                addedDate: new Date(Date.now() - 172800000).toISOString() // Hace 2 días
-            }
-        ];
-
-        this.favorites = sampleProperties;
-        localStorage.setItem('favorites', JSON.stringify(this.favorites));
-        this.renderFavorites();
-        this.updateSummary();
-        this.showToast('¡Datos de ejemplo agregados!', 'success');
-    }
-
-    async loadFavorites() {
-        try {
-            // Cargar de localStorage
-            const stored = localStorage.getItem('favorites');
-            this.favorites = stored ? JSON.parse(stored) : [];
-            
-            // También intentar cargar de API si existe
-            if (this.favorites.length === 0) {
-                const response = await fetch('https://api.tucasard.com/favorites');
-                if (response.ok) {
-                    const apiFavorites = await response.json();
-                    this.favorites = apiFavorites;
-                    localStorage.setItem('favorites', JSON.stringify(apiFavorites));
-                }
-            }
-        } catch (error) {
-            console.error('Error loading favorites:', error);
-            this.favorites = [];
-        }
-    }
-
-    saveFavorites() {
-        localStorage.setItem('favorites', JSON.stringify(this.favorites));
-        // También enviar a API si está configurada
-        this.syncWithAPI();
-    }
-
-    async syncWithAPI() {
-        // En producción, aquí se sincronizaría con el backend
-        try {
-            const response = await fetch('https://api.tucasard.com/favorites/sync', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-                },
-                body: JSON.stringify({ favorites: this.favorites })
-            });
-            
-            if (!response.ok) {
-                console.warn('No se pudo sincronizar con la API');
-            }
-        } catch (error) {
-            console.error('Error syncing favorites:', error);
-        }
+    loadFavorites() {
+        this.favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        this.updateFavoritesCounter();
     }
 
     setupEventListeners() {
-        // Botón limpiar todos
-        document.getElementById('clear-all-favorites')?.addEventListener('click', () => this.clearAllFavorites());
-        
-        // Botón compartir
-        document.getElementById('share-favorites')?.addEventListener('click', () => this.shareFavorites());
-        
-        // Botón exportar
-        document.getElementById('export-favorites')?.addEventListener('click', () => this.exportFavorites());
-        
-        // Botón comparar
-        document.getElementById('compare-favorites')?.addEventListener('click', () => this.openCompareModal());
-        
-        // Modal de comparación
-        document.getElementById('close-compare')?.addEventListener('click', () => this.closeCompareModal());
-        document.getElementById('clear-comparison')?.addEventListener('click', () => this.clearComparison());
-        document.getElementById('download-comparison')?.addEventListener('click', () => this.downloadComparison());
-        
-        // Cerrar modal al hacer clic fuera
+        // Clear all favorites button
+        document.getElementById('clear-all-favorites')?.addEventListener('click', () => {
+            this.clearAllFavorites();
+        });
+
+        // Share favorites button
+        document.getElementById('share-favorites')?.addEventListener('click', () => {
+            this.shareFavorites();
+        });
+
+        // Export favorites button
+        document.getElementById('export-favorites')?.addEventListener('click', () => {
+            this.exportFavorites();
+        });
+
+        // Compare favorites button
+        document.getElementById('compare-favorites')?.addEventListener('click', () => {
+            this.openCompareModal();
+        });
+
+        // Close compare modal
+        document.getElementById('close-compare')?.addEventListener('click', () => {
+            this.closeCompareModal();
+        });
+
+        // Clear comparison button
+        document.getElementById('clear-comparison')?.addEventListener('click', () => {
+            this.clearComparison();
+        });
+
+        // Download comparison button
+        document.getElementById('download-comparison')?.addEventListener('click', () => {
+            this.downloadComparison();
+        });
+
+        // Close modal when clicking outside
         document.getElementById('compare-modal')?.addEventListener('click', (e) => {
             if (e.target.id === 'compare-modal') {
                 this.closeCompareModal();
             }
         });
-        
-        // Cerrar con Escape
+
+        // Close with Escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && document.getElementById('compare-modal').style.display !== 'none') {
+            if (e.key === 'Escape' && document.getElementById('compare-modal').style.display === 'flex') {
                 this.closeCompareModal();
-            }
-        });
-        
-        // Escuchar cambios en localStorage desde otras pestañas
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'favorites') {
-                this.loadFavorites();
-                this.renderFavorites();
-                this.updateSummary();
             }
         });
     }
@@ -180,11 +74,7 @@ class FavoritesManager {
         const emptyState = document.getElementById('favorites-empty');
         const actions = document.getElementById('favorites-actions');
         const summary = document.getElementById('favorites-summary');
-        const counter = document.getElementById('favorites-counter');
-        
-        // Actualizar contador
-        counter.textContent = this.favorites.length;
-        
+
         if (this.favorites.length === 0) {
             grid.style.display = 'none';
             emptyState.style.display = 'block';
@@ -192,350 +82,371 @@ class FavoritesManager {
             summary.style.display = 'none';
             return;
         }
-        
+
         grid.style.display = 'grid';
         emptyState.style.display = 'none';
         actions.style.display = 'flex';
         summary.style.display = 'block';
-        
-        grid.innerHTML = this.favorites.map((favorite, index) => `
-            <div class="favorite-card-tucasa" data-id="${favorite.id}">
-                <div class="property-image-tucasa">
-                    <img src="${favorite.image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'}" 
-                         alt="${favorite.title}"
-                         onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'">
-                    <div class="property-badge-tucasa">${favorite.type || 'Propiedad'}</div>
-                    <div class="property-price-tucasa">${favorite.price || 'Consultar'}</div>
-                    <div class="favorite-actions">
-                        <button class="favorite-remove" onclick="favoritesManager.removeFavorite('${favorite.id}')" 
-                                title="Eliminar de favoritos">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="compare-checkbox ${this.selectedForComparison.has(favorite.id) ? 'selected' : ''}" 
-                                onclick="favoritesManager.toggleComparison('${favorite.id}')"
-                                title="${this.selectedForComparison.has(favorite.id) ? 'Quitar de comparación' : 'Comparar propiedad'}">
-                            <i class="fas ${this.selectedForComparison.has(favorite.id) ? 'fa-check-square' : 'fa-balance-scale'}"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="property-info-tucasa">
-                    <h3 class="property-title-tucasa">${favorite.title}</h3>
-                    <p class="property-location-tucasa">
-                        <i class="fas fa-map-marker-alt"></i> ${favorite.location}
-                    </p>
-                    <div class="property-features-tucasa">
-                        <span><i class="fas fa-bed"></i> ${favorite.rooms || 'N/A'} hab</span>
-                        <span><i class="fas fa-bath"></i> ${favorite.bathrooms || 'N/A'} baños</span>
-                        <span><i class="fas fa-car"></i> ${favorite.parking || 'N/A'} parq</span>
-                        ${favorite.area ? `<span><i class="fas fa-ruler-combined"></i> ${favorite.area}</span>` : ''}
-                    </div>
-                    <div class="property-description-tucasa">
-                        <p>${favorite.description ? favorite.description.substring(0, 120) + '...' : 'Sin descripción disponible.'}</p>
-                    </div>
-                    <div class="property-actions-tucasa">
-                        <a href="detalle-propiedad.html?id=${favorite.id}" class="btn-primary-tucasa">
-                            <i class="fas fa-eye"></i> Ver Detalles
-                        </a>
-                        <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20la%20propiedad%20${encodeURIComponent(favorite.title)}" 
-                           class="btn-outline-tucasa" target="_blank">
-                            <i class="fab fa-whatsapp"></i> Contactar
-                        </a>
-                    </div>
-                    ${favorite.addedDate ? `
-                        <div class="favorite-added-date">
-                            <small><i class="far fa-calendar"></i> Agregado el ${new Date(favorite.addedDate).toLocaleDateString('es-ES')}</small>
-                        </div>
-                    ` : ''}
+
+        grid.innerHTML = this.favorites.map(favorite => this.createFavoriteCard(favorite)).join('');
+
+        // Update summary
+        this.updateFavoritesSummary();
+
+        // Add event listeners to the new buttons
+        this.setupFavoriteCardListeners();
+    }
+
+   createFavoriteCard(property) {
+    const isComparing = this.comparingProperties.has(property.id);
+    const badgeText = property.isForRent ? 'Alquiler' : 'Venta';
+    const badgeColor = property.isForRent ? 'alquiler' : 'venta';
+
+    return `
+        <div class="favorite-card-tucasa" data-id="${property.id}">
+            <!-- Header con botones de eliminar y comparar -->
+            <div class="favorite-card-header">
+                <div class="favorite-card-actions">
+                    <button class="favorite-compare-toggle ${isComparing ? 'comparing' : ''}" 
+                            data-id="${property.id}"
+                            title="${isComparing ? 'Quitar de comparación' : 'Agregar a comparación'}">
+                        <i class="fas fa-balance-scale"></i>
+                    </button>
+                    <button class="favorite-remove" data-id="${property.id}" title="Eliminar de favoritos">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
-        `).join('');
-    }
+            
+            <!-- Imagen de la propiedad -->
+            <div class="property-image-tucasa">
+                <img src="${property.image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'}" 
+                     alt="${property.title}"
+                     onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'}">
+                <div class="property-badge-tucasa ${badgeColor}">${badgeText}</div>
+                <div class="property-price-tucasa">${property.price || 'Consultar'}</div>
+            </div>
+            
+            <!-- Información de la propiedad -->
+            <div class="property-info-tucasa">
+                <h3 class="property-title-tucasa">${property.title}</h3>
+                <p class="property-location-tucasa">
+                    <i class="fas fa-map-marker-alt"></i> ${property.location || 'Ubicación no especificada'}
+                </p>
+                
+                <div class="property-features-tucasa">
+                    ${property.rooms ? `<span><i class="fas fa-bed"></i> ${property.rooms} hab</span>` : ''}
+                    ${property.bathrooms ? `<span><i class="fas fa-bath"></i> ${property.bathrooms} baños</span>` : ''}
+                    ${property.parking ? `<span><i class="fas fa-car"></i> ${property.parking} parq</span>` : ''}
+                    ${property.area ? `<span><i class="fas fa-ruler-combined"></i> ${property.area} m²</span>` : ''}
+                </div>
+                
+                <!-- Acciones principales (Ver y WhatsApp) -->
+                <div class="favorite-actions-bottom">
+                    <div class="property-actions-tucasa">
+                        <a href="detalle-propiedad.html?id=${property.id}" class="btn-primary-tucasa">
+                            <i class="fas fa-eye"></i> Ver Detalles
+                        </a>
+                        <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20la%20propiedad%20${encodeURIComponent(property.title)}" 
+                           class="btn-outline-tucasa" target="_blank">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
 
-    updateSummary() {
-        if (this.favorites.length === 0) return;
-        
-        // Calcular rango de precios
-        const prices = this.favorites.map(fav => {
-            const priceStr = fav.price || '0';
-            const priceNum = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
-            return priceNum;
-        }).filter(price => price > 0);
-        
-        let priceRange = 'Consultar';
-        if (prices.length > 0) {
-            const minPrice = Math.min(...prices);
-            const maxPrice = Math.max(...prices);
-            priceRange = `US$ ${this.formatNumber(minPrice)} - US$ ${this.formatNumber(maxPrice)}`;
-        }
-        
-        // Tipos de propiedades
-        const types = {};
-        this.favorites.forEach(fav => {
-            const type = fav.type || 'otros';
-            types[type] = (types[type] || 0) + 1;
+    setupFavoriteCardListeners() {
+        // Remove buttons
+        document.querySelectorAll('.favorite-remove').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const propertyId = btn.dataset.id;
+                this.removeFavorite(propertyId);
+            });
         });
-        const typesText = Object.entries(types)
-            .map(([type, count]) => `${count} ${type}`)
-            .join(', ');
-        
-        // Ubicaciones únicas
-        const locations = new Set(this.favorites.map(fav => fav.location).filter(loc => loc));
-        const locationsText = `${locations.size} ubicación${locations.size !== 1 ? 'es' : ''}`;
-        
-        // Actualizar DOM
-        document.getElementById('price-range').textContent = priceRange;
-        document.getElementById('property-types').textContent = typesText || 'Variados';
-        document.getElementById('locations-count').textContent = locationsText;
-    }
 
-    formatNumber(num) {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // Compare toggle buttons
+        document.querySelectorAll('.favorite-compare-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const propertyId = btn.dataset.id;
+                this.toggleComparison(propertyId, btn);
+            });
+        });
+
+        // Update compare button text
+        this.updateCompareButtonText();
     }
 
     removeFavorite(propertyId) {
-        const property = this.favorites.find(fav => fav.id === propertyId);
-        if (!property) return;
-        
-        if (confirm(`¿Estás seguro de que quieres eliminar "${property.title}" de tus favoritos?`)) {
+        if (confirm('¿Estás seguro de que quieres eliminar esta propiedad de tus favoritos?')) {
             const index = this.favorites.findIndex(fav => fav.id === propertyId);
             if (index !== -1) {
                 this.favorites.splice(index, 1);
-                this.selectedForComparison.delete(propertyId);
-                this.saveFavorites();
-                this.renderFavorites();
-                this.updateSummary();
-                this.showToast('Propiedad eliminada de favoritos', 'success');
+                localStorage.setItem('favorites', JSON.stringify(this.favorites));
                 
-                // Disparar evento personalizado para que otras páginas se actualicen
-                window.dispatchEvent(new CustomEvent('favoritesUpdated', { 
-                    detail: { favorites: this.favorites } 
-                }));
+                // Also remove from comparison if it was selected
+                this.comparingProperties.delete(propertyId);
+                
+                this.showNotification('Propiedad eliminada de favoritos', 'success');
+                this.renderFavorites();
+                this.updateFavoritesCounter();
+                this.updateCompareButtonText();
             }
         }
     }
 
     clearAllFavorites() {
         if (this.favorites.length === 0) {
-            this.showToast('No hay favoritos para eliminar', 'info');
+            this.showNotification('No hay favoritos para eliminar', 'info');
             return;
         }
-        
-        if (confirm(`¿Estás seguro de que quieres eliminar todas las propiedades (${this.favorites.length}) de tus favoritos?`)) {
+
+        if (confirm('¿Estás seguro de que quieres eliminar TODOS tus favoritos?')) {
             this.favorites = [];
-            this.selectedForComparison.clear();
-            this.saveFavorites();
-            this.renderFavorites();
-            this.updateSummary();
-            this.showToast('Todos los favoritos han sido eliminados', 'success');
+            this.comparingProperties.clear();
+            localStorage.setItem('favorites', JSON.stringify(this.favorites));
             
-            // Disparar evento personalizado
-            window.dispatchEvent(new CustomEvent('favoritesUpdated', { 
-                detail: { favorites: [] } 
-            }));
+            this.showNotification('Todos los favoritos han sido eliminados', 'success');
+            this.renderFavorites();
+            this.updateFavoritesCounter();
+            this.updateCompareButtonText();
         }
     }
 
-    toggleComparison(propertyId) {
-        if (this.selectedForComparison.has(propertyId)) {
-            this.selectedForComparison.delete(propertyId);
+    toggleComparison(propertyId, button) {
+        if (this.comparingProperties.has(propertyId)) {
+            this.comparingProperties.delete(propertyId);
+            button.classList.remove('comparing');
+            button.title = 'Agregar a comparación';
+            this.showNotification('Propiedad eliminada de la comparación', 'info');
         } else {
-            if (this.selectedForComparison.size >= 4) {
-                this.showToast('Máximo 4 propiedades para comparar', 'error');
+            if (this.comparingProperties.size >= 4) {
+                this.showNotification('Solo puedes comparar hasta 4 propiedades a la vez', 'error');
                 return;
             }
-            this.selectedForComparison.add(propertyId);
+            this.comparingProperties.add(propertyId);
+            button.classList.add('comparing');
+            button.title = 'Quitar de comparación';
+            this.showNotification('Propiedad agregada a la comparación', 'success');
         }
         
-        // Actualizar UI
-        this.renderFavorites();
-        
-        // Actualizar contador en botón de comparar
+        this.updateCompareButtonText();
+    }
+
+    updateCompareButtonText() {
         const compareBtn = document.getElementById('compare-favorites');
+        const compareCount = this.comparingProperties.size;
+        
         if (compareBtn) {
-            const count = this.selectedForComparison.size;
-            compareBtn.innerHTML = `<i class="fas fa-balance-scale"></i> Comparar ${count > 0 ? `(${count})` : ''}`;
+            if (compareCount > 0) {
+                compareBtn.innerHTML = `<i class="fas fa-balance-scale"></i> Comparar (${compareCount})`;
+                compareBtn.disabled = false;
+            } else {
+                compareBtn.innerHTML = `<i class="fas fa-balance-scale"></i> Comparar Propiedades`;
+                compareBtn.disabled = true;
+            }
         }
     }
 
     openCompareModal() {
-        if (this.selectedForComparison.size < 2) {
-            this.showToast('Selecciona al menos 2 propiedades para comparar', 'error');
+        const compareCount = this.comparingProperties.size;
+        if (compareCount === 0) {
+            this.showNotification('Selecciona al menos una propiedad para comparar', 'error');
             return;
         }
-        
+
+        if (compareCount === 1) {
+            this.showNotification('Selecciona al menos 2 propiedades para comparar', 'error');
+            return;
+        }
+
         const modal = document.getElementById('compare-modal');
-        const compareGrid = document.getElementById('compare-grid');
-        
-        // Filtrar propiedades seleccionadas
-        const selectedProperties = this.favorites.filter(fav => 
-            this.selectedForComparison.has(fav.id)
+        const grid = document.getElementById('compare-grid');
+
+        // Get properties that are being compared
+        const comparingProperties = this.favorites.filter(fav => 
+            this.comparingProperties.has(fav.id)
         );
-        
-        // Generar tabla de comparación
-        compareGrid.innerHTML = selectedProperties.map(property => `
-            <div class="compare-item selected" data-id="${property.id}">
-                <div class="compare-item-header">
-                    <h4>${property.title}</h4>
-                    <button class="compare-remove-item" onclick="favoritesManager.toggleComparison('${property.id}')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <img src="${property.image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'}" 
-                     alt="${property.title}" 
-                     class="compare-image"
-                     onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'">
-                <div class="compare-details">
-                    <div class="compare-detail">
-                        <span>Precio:</span>
-                        <strong>${property.price || 'Consultar'}</strong>
-                    </div>
-                    <div class="compare-detail">
-                        <span>Ubicación:</span>
-                        <strong>${property.location || 'N/A'}</strong>
-                    </div>
-                    <div class="compare-detail">
-                        <span>Habitaciones:</span>
-                        <strong>${property.rooms || 'N/A'}</strong>
-                    </div>
-                    <div class="compare-detail">
-                        <span>Baños:</span>
-                        <strong>${property.bathrooms || 'N/A'}</strong>
-                    </div>
-                    <div class="compare-detail">
-                        <span>Parqueos:</span>
-                        <strong>${property.parking || 'N/A'}</strong>
-                    </div>
-                    ${property.area ? `
-                        <div class="compare-detail">
-                            <span>Área:</span>
-                            <strong>${property.area}</strong>
-                        </div>
-                    ` : ''}
-                    <div class="compare-actions">
-                        <a href="detalle-propiedad.html?id=${property.id}" class="btn-primary-tucasa">
-                            Ver Detalles
-                        </a>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-        
+
+        // Create comparison table
+        grid.innerHTML = this.createComparisonTable(comparingProperties);
+
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
 
+    createComparisonTable(properties) {
+        if (properties.length === 0) return '';
+
+        // Get all unique features from all properties
+        const allFeatures = new Set();
+        properties.forEach(prop => {
+            if (prop.features && Array.isArray(prop.features)) {
+                prop.features.forEach(feature => allFeatures.add(feature));
+            }
+        });
+
+        const featuresArray = Array.from(allFeatures);
+
+        return `
+            <div class="compare-table">
+                <div class="compare-header">
+                    <div class="compare-cell compare-label"></div>
+                    ${properties.map(prop => `
+                        <div class="compare-cell compare-property">
+                            <div class="compare-property-image">
+                                <img src="${prop.image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'}" 
+                                     alt="${prop.title}">
+                                <button class="remove-from-compare" data-id="${prop.id}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <h4>${prop.title}</h4>
+                            <p class="compare-price">${prop.price || 'Consultar'}</p>
+                            <p class="compare-location">
+                                <i class="fas fa-map-marker-alt"></i> ${prop.location}
+                            </p>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="compare-row">
+                    <div class="compare-cell compare-label">Tipo</div>
+                    ${properties.map(prop => `
+                        <div class="compare-cell">${prop.type || 'N/A'}</div>
+                    `).join('')}
+                </div>
+                
+                <div class="compare-row">
+                    <div class="compare-cell compare-label">Habitaciones</div>
+                    ${properties.map(prop => `
+                        <div class="compare-cell">${prop.rooms || 'N/A'}</div>
+                    `).join('')}
+                </div>
+                
+                <div class="compare-row">
+                    <div class="compare-cell compare-label">Baños</div>
+                    ${properties.map(prop => `
+                        <div class="compare-cell">${prop.bathrooms || 'N/A'}</div>
+                    `).join('')}
+                </div>
+                
+                <div class="compare-row">
+                    <div class="compare-cell compare-label">Parqueos</div>
+                    ${properties.map(prop => `
+                        <div class="compare-cell">${prop.parking || 'N/A'}</div>
+                    `).join('')}
+                </div>
+                
+                <div class="compare-row">
+                    <div class="compare-cell compare-label">Área (m²)</div>
+                    ${properties.map(prop => `
+                        <div class="compare-cell">${prop.area || 'N/A'}</div>
+                    `).join('')}
+                </div>
+                
+                ${featuresArray.length > 0 ? `
+                    <div class="compare-row">
+                        <div class="compare-cell compare-label">Características</div>
+                        ${properties.map(prop => `
+                            <div class="compare-cell">
+                                <ul class="compare-features">
+                                    ${featuresArray.map(feature => `
+                                        <li class="${prop.features && prop.features.includes(feature) ? 'has-feature' : 'no-feature'}">
+                                            <i class="fas fa-${prop.features && prop.features.includes(feature) ? 'check' : 'times'}"></i>
+                                            ${feature}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+                
+                <div class="compare-row compare-actions-row">
+                    <div class="compare-cell compare-label">Acciones</div>
+                    ${properties.map(prop => `
+                        <div class="compare-cell">
+                            <div class="compare-property-actions">
+                                <a href="detalle-propiedad.html?id=${prop.id}" class="btn-primary-tucasa btn-sm">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
+                                <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20la%20propiedad%20${encodeURIComponent(prop.title)}" 
+                                   class="btn-outline-tucasa btn-sm" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
     closeCompareModal() {
-        document.getElementById('compare-modal').style.display = 'none';
+        const modal = document.getElementById('compare-modal');
+        modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 
     clearComparison() {
-        this.selectedForComparison.clear();
+        this.comparingProperties.clear();
+        this.updateCompareButtonText();
         this.closeCompareModal();
-        this.renderFavorites();
-        this.showToast('Comparación limpiada', 'success');
+        this.renderFavorites(); // Update the cards to remove comparing state
+        this.showNotification('Comparación limpiada', 'success');
     }
 
-    async downloadComparison() {
-        const selectedProperties = this.favorites.filter(fav => 
-            this.selectedForComparison.has(fav.id)
-        );
-        
-        if (selectedProperties.length === 0) {
-            this.showToast('No hay propiedades seleccionadas para exportar', 'error');
-            return;
-        }
-        
-        // Crear contenido para el PDF/Excel
-        const content = `
-            COMPARACIÓN DE PROPIEDADES - TU Casa RD
-            Fecha: ${new Date().toLocaleDateString('es-ES')}
-            
-            ${selectedProperties.map((prop, index) => `
-            PROPIEDAD ${index + 1}:
-            --------------------------
-            Título: ${prop.title}
-            Precio: ${prop.price || 'Consultar'}
-            Ubicación: ${prop.location || 'N/A'}
-            Habitaciones: ${prop.rooms || 'N/A'}
-            Baños: ${prop.bathrooms || 'N/A'}
-            Parqueos: ${prop.parking || 'N/A'}
-            Área: ${prop.area || 'N/A'}
-            Descripción: ${prop.description || 'Sin descripción'}
-            Tipo: ${prop.type || 'Propiedad'}
-            --------------------------
-            `).join('\n')}
-            
-            Información de Contacto:
-            TU Casa RD
-            Tel: +1 (809) 123-4567
-            WhatsApp: +1 (809) 987-6543
-            Email: info@tucasard.com
-        `;
-        
-        // Crear y descargar archivo
-        const blob = new Blob([content], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `comparacion-propiedades-${new Date().toISOString().split('T')[0]}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        this.showToast('Comparación descargada', 'success');
+    setupCompareModal() {
+        // Add event listener for remove from compare buttons in the modal
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-from-compare')) {
+                const propertyId = e.target.closest('.remove-from-compare').dataset.id;
+                this.comparingProperties.delete(propertyId);
+                this.updateCompareButtonText();
+                
+                // If less than 2 properties, close modal
+                if (this.comparingProperties.size < 2) {
+                    this.closeCompareModal();
+                    this.showNotification('Necesitas al menos 2 propiedades para comparar', 'info');
+                } else {
+                    // Refresh the comparison table
+                    this.openCompareModal();
+                }
+                
+                // Update the favorite cards
+                this.renderFavorites();
+            }
+        });
     }
 
-    exportFavorites() {
-        if (this.favorites.length === 0) {
-            this.showToast('No hay favoritos para exportar', 'info');
-            return;
-        }
-        
-        const exportData = {
-            exportDate: new Date().toISOString(),
-            totalProperties: this.favorites.length,
-            properties: this.favorites.map(fav => ({
-                ...fav,
-                exportedDate: new Date().toISOString()
-            }))
-        };
-        
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `favoritos-tucasard-${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        this.showToast('Favoritos exportados exitosamente', 'success');
+    downloadComparison() {
+        this.showNotification('Funcionalidad de descarga próximamente disponible', 'info');
+        // TODO: Implement PDF/Excel export
     }
 
     shareFavorites() {
         if (this.favorites.length === 0) {
-            this.showToast('No hay favoritos para compartir', 'info');
+            this.showNotification('No hay favoritos para compartir', 'info');
             return;
         }
-        
+
         const shareText = `🌟 Mis propiedades favoritas en TU Casa RD 🌟\n\n` +
-            `He guardado ${this.favorites.length} propiedades que me interesan:\n\n` +
-            this.favorites.slice(0, 5).map((fav, i) => 
-                `${i + 1}. ${fav.title} - ${fav.price}\n   📍 ${fav.location}\n`
-            ).join('\n') +
-            `\n¡Échales un vistazo! 👀\n\n` +
-            `🔗 ${window.location.origin}`;
-        
+                         this.favorites.map((fav, index) => 
+                             `${index + 1}. ${fav.title} - ${fav.price}\n📍 ${fav.location}`
+                         ).join('\n\n') +
+                         `\n\n🏠 Más propiedades en: ${window.location.origin}`;
+
         if (navigator.share) {
             navigator.share({
                 title: 'Mis propiedades favoritas - TU Casa RD',
                 text: shareText,
                 url: window.location.href
-            }).catch(err => {
-                console.log('Error sharing:', err);
+            }).catch(() => {
                 this.copyToClipboard(shareText);
             });
         } else {
@@ -543,150 +454,126 @@ class FavoritesManager {
         }
     }
 
-    async copyToClipboard(text) {
-        try {
-            await navigator.clipboard.writeText(text);
-            this.showToast('¡Lista copiada al portapapeles!', 'success');
-        } catch (err) {
-            console.error('Error copying to clipboard:', err);
-            
-            // Fallback para navegadores antiguos
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            this.showToast('¡Lista copiada al portapapeles!', 'success');
+    copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            this.showNotification('Lista de favoritos copiada al portapapeles', 'success');
+        }).catch(() => {
+            this.showNotification('Error al copiar al portapapeles', 'error');
+        });
+    }
+
+    exportFavorites() {
+        if (this.favorites.length === 0) {
+            this.showNotification('No hay favoritos para exportar', 'info');
+            return;
+        }
+
+        const exportData = {
+            timestamp: new Date().toISOString(),
+            total: this.favorites.length,
+            properties: this.favorites
+        };
+
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = `favoritos-tucasard-${new Date().toISOString().split('T')[0]}.json`;
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        
+        this.showNotification('Favoritos exportados exitosamente', 'success');
+    }
+
+    updateFavoritesCounter() {
+        const counter = document.getElementById('favorites-counter');
+        if (counter) {
+            counter.textContent = this.favorites.length;
         }
     }
 
-    showToast(message, type = 'info') {
-        // Remover toast anteriores
-        const existingToasts = document.querySelectorAll('.favorite-toast');
-        existingToasts.forEach(toast => toast.remove());
-        
-        // Crear nuevo toast
-        const toast = document.createElement('div');
-        toast.className = `favorite-toast ${type}`;
-        
-        const icon = type === 'success' ? 'fas fa-check-circle' : 
-                    type === 'error' ? 'fas fa-exclamation-circle' : 
-                    'fas fa-info-circle';
-        
-        toast.innerHTML = `
-            <div class="toast-icon">
-                <i class="${icon}"></i>
+    updateFavoritesSummary() {
+        if (this.favorites.length === 0) return;
+
+        // Price range
+        const prices = this.favorites.map(fav => {
+            const priceStr = fav.price || '0';
+            const match = priceStr.match(/[\d,]+/);
+            return match ? parseInt(match[0].replace(/,/g, '')) : 0;
+        }).filter(price => price > 0);
+
+        let priceRangeText = 'Variado';
+        if (prices.length > 0) {
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            priceRangeText = `US$ ${minPrice.toLocaleString()} - ${maxPrice.toLocaleString()}`;
+        }
+
+        document.getElementById('price-range').textContent = priceRangeText;
+
+        // Property types
+        const types = {};
+        this.favorites.forEach(fav => {
+            types[fav.type] = (types[fav.type] || 0) + 1;
+        });
+        const typeText = Object.entries(types)
+            .map(([type, count]) => `${type} (${count})`)
+            .join(', ');
+        document.getElementById('property-types').textContent = typeText || 'Variado';
+
+        // Locations count
+        const uniqueLocations = new Set(this.favorites.map(fav => fav.location));
+        document.getElementById('locations-count').textContent = `${uniqueLocations.size} ubicaciones diferentes`;
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `custom-notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
             </div>
-            <div class="toast-content">
-                <h4>${type === 'success' ? '¡Éxito!' : type === 'error' ? 'Error' : 'Información'}</h4>
-                <p>${message}</p>
-            </div>
-            <button class="toast-close" onclick="this.parentElement.remove()">
-                <i class="fas fa-times"></i>
-            </button>
+            <button class="notification-close"><i class="fas fa-times"></i></button>
         `;
         
-        document.body.appendChild(toast);
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            animation: slideInRight 0.3s ease;
+            max-width: 400px;
+        `;
         
-        // Auto-remover después de 5 segundos
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 3 seconds
         setTimeout(() => {
-            if (toast.parentElement) {
-                toast.remove();
-            }
-        }, 5000);
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+        
+        // Close button
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        });
     }
 }
 
-// Función global para agregar/remover favoritos desde otras páginas
-window.addToFavorites = function(property) {
-    if (!window.favoritesManager) {
-        // Si no está inicializado, inicializar primero
-        window.favoritesManager = new FavoritesManager();
-    }
-    
-    const exists = window.favoritesManager.favorites.some(fav => fav.id === property.id);
-    if (!exists) {
-        window.favoritesManager.favorites.push({
-            ...property,
-            addedDate: new Date().toISOString()
-        });
-        window.favoritesManager.saveFavorites();
-        window.favoritesManager.showToast('Propiedad agregada a favoritos', 'success');
-        
-        // Disparar evento
-        window.dispatchEvent(new CustomEvent('favoritesUpdated', { 
-            detail: { favorites: window.favoritesManager.favorites } 
-        }));
-        
-        return true;
-    }
-    return false;
-};
-
-window.removeFromFavorites = function(propertyId) {
-    if (!window.favoritesManager) return false;
-    
-    const index = window.favoritesManager.favorites.findIndex(fav => fav.id === propertyId);
-    if (index !== -1) {
-        window.favoritesManager.favorites.splice(index, 1);
-        window.favoritesManager.selectedForComparison.delete(propertyId);
-        window.favoritesManager.saveFavorites();
-        window.favoritesManager.showToast('Propiedad eliminada de favoritos', 'success');
-        
-        // Disparar evento
-        window.dispatchEvent(new CustomEvent('favoritesUpdated', { 
-            detail: { favorites: window.favoritesManager.favorites } 
-        }));
-        
-        return true;
-    }
-    return false;
-};
-
-// Inicializar cuando el DOM esté listo
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    window.favoritesManager = new FavoritesManager();
-    
-    // También inicializar en otras páginas que tengan botones de favoritos
-    if (document.querySelector('.favorite-btn-tucasa')) {
-        window.favoritesManager.setupFavoriteButtons();
-    }
+    window.favoritesPageManager = new FavoritesPageManager();
 });
-
-// Agregar este método al FavoritesManager para botones en otras páginas
-FavoritesManager.prototype.setupFavoriteButtons = function() {
-    document.querySelectorAll('.favorite-btn-tucasa').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const propertyId = btn.dataset.propertyId;
-            if (!propertyId) return;
-            
-            // En una implementación real, aquí obtendrías los datos de la propiedad
-            // Por ahora, usar datos del dataset
-            const property = {
-                id: propertyId,
-                title: btn.dataset.propertyTitle || 'Propiedad',
-                price: btn.dataset.propertyPrice || 'Consultar',
-                location: btn.dataset.propertyLocation || 'Ubicación no especificada',
-                image: btn.dataset.propertyImage,
-                type: btn.dataset.propertyType || 'propiedad'
-            };
-            
-            const isCurrentlyFavorite = this.favorites.some(fav => fav.id === propertyId);
-            
-            if (isCurrentlyFavorite) {
-                this.removeFavorite(propertyId);
-                btn.innerHTML = '<i class="far fa-heart"></i>';
-                btn.classList.remove('active');
-            } else {
-                if (this.addToFavorites(property)) {
-                    btn.innerHTML = '<i class="fas fa-heart"></i>';
-                    btn.classList.add('active');
-                }
-            }
-        });
-    });
-};

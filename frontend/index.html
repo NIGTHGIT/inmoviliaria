@@ -3,52 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Encuentra tu propiedad ideal en República Dominicana con Tropical Living RD. Casas, apartamentos, villas y más.">
-    <meta name="keywords" content="inmobiliaria, propiedades, República Dominicana, casas, apartamentos, venta, alquiler">
-    <title>Tropical Living RD - Inmobiliaria de República Dominicana</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
-    <!-- Estilos -->
+    <title>TU Casa RD - Inmobiliaria en República Dominicana</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Preload de imágenes críticas -->
-    <link rel="preload" as="image" href="https://d2p0bx8wfdkjkb.cloudfront.net/static/media/Tu%20Casa%20RD/2024/11/NKPu8fmCSB-BANNER_SANTO_DOMINGO_2.jpg">
 </head>
-
-<body style="visibility: hidden;">
-    <!-- ============================================
-         HEADER
-         ============================================ -->
+<body>
     <header class="header-tucasa">
         <nav class="nav-tucasa">
             <div class="nav-container-tucasa">
                 <div class="logo-tucasa">
-                    <h1>Tropical Living RD</h1>
-                    <p>La Inmobiliaria de República Dominicana</p>
+                    <h1>TU Casa RD</h1>
+                    <p>Somos la Inmobiliaria de República Dominicana</p>
                 </div>
-                
                 <ul class="nav-menu-tucasa">
                     <li><a href="index.html" class="active">Inicio</a></li>
                     <li><a href="propiedades.html">Propiedades</a></li>
                     <li><a href="proyectos.html">Proyectos</a></li>
-                    <li>
-                        <a href="favoritos.html">
-                            Favoritos
-                            <span class="favorites-badge" style="display: none;">0</span>
-                        </a>
-                    </li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
                     <li><a href="nosotros.html">Nosotros</a></li>
                     <li><a href="contacto.html">Contacto</a></li>
-                    <li>
-                        <button id="theme-toggle" class="theme-btn-tucasa" title="Cambiar tema">
-                            <i class="fas fa-moon"></i>
-                        </button>
-                    </li>
+                    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
                 </ul>
-                
                 <div class="hamburger-tucasa">
                     <span></span>
                     <span></span>
@@ -58,7 +33,8 @@
         </nav>
     </header>
 
-    <!-- ============================================
+    <main class="main-content-tucasa">
+       <!-- ============================================
          HERO SECTION
          ============================================ -->
     <section class="hero-tucasa">
@@ -169,214 +145,126 @@
         </div>
     </section>
 
-    <!-- ============================================
-         CARRUSEL DE PROPIEDADES DESTACADAS
-         ============================================ -->
-    <section class="featured-carousel-tucasa">
-        <div class="container-tucasa">
-            <div class="section-header-tucasa">
-                <h2>Propiedades Destacadas</h2>
-                <p>Las mejores oportunidades del mercado inmobiliario</p>
+
+        <!-- Properties Grid Section -->
+        <section class="properties-grid-tucasa">
+            <div class="container-tucasa">
+                <div class="section-header-tucasa">
+                    <h2>Propiedades Destacadas</h2>
+                    <p>Descubre nuestras mejores propiedades seleccionadas para ti</p>
+                </div>
+                
+                <div class="properties-grid-modern-tucasa" id="propertiesGrid">
+                    <!-- Las propiedades se cargan aquí con JavaScript -->
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="propiedades.html" class="btn-primary-tucasa">
+                        <i class="fas fa-list"></i> Ver Todas las Propiedades
+                    </a>
+                </div>
             </div>
+        </section>
 
-            <div class="carousel-container-tucasa">
-                <div class="carousel-track-tucasa" id="carousel-track">
-                    <!-- Propiedad 1 -->
-                    <div class="carousel-slide-tucasa">
-                        <div class="property-card-tucasa">
-                            <div class="property-image-tucasa">
-                                <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800" alt="Villa de Lujo en Punta Cana">
-                                <span class="property-badge-tucasa">Destacada</span>
-                                <div class="property-price-tucasa">US$ 450,000</div>
-                                <button class="favorite-btn-tucasa" data-property-id="1">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="property-info-tucasa">
-                                <h3 class="property-title-tucasa">Villa de Lujo en Punta Cana</h3>
-                                <p class="property-location-tucasa">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    Punta Cana, La Altagracia
-                                </p>
-                                <div class="property-features-tucasa">
-                                    <span><i class="fas fa-bed"></i> 4 Hab</span>
-                                    <span><i class="fas fa-bath"></i> 3.5 Baños</span>
-                                    <span><i class="fas fa-ruler-combined"></i> 350 m²</span>
-                                    <span><i class="fas fa-car"></i> 2 Parq</span>
+        <!-- Featured Properties Carousel -->
+        <section class="featured-carousel-tucasa">
+            <div class="container-tucasa">
+                <div class="section-header-tucasa">
+                    <h2>Propiedades Exclusivas</h2>
+                    <p>Nuestras propiedades premium con las mejores ubicaciones</p>
+                </div>
+                
+                <div class="carousel-container-tucasa">
+                    <button class="carousel-btn-tucasa carousel-prev-tucasa">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="carousel-track-tucasa">
+                        <!-- Slides se cargan aquí -->
+                        <div class="carousel-slide-tucasa">
+                            <div class="property-card-tucasa">
+                                <div class="property-image-tucasa">
+                                    <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w-600" alt="Villa de lujo">
+                                    <div class="property-badge-tucasa">VIP</div>
+                                    <div class="property-price-tucasa">US$ 2,500,000</div>
                                 </div>
-                                <div class="property-actions-tucasa">
-                                    <a href="#" class="btn-primary-tucasa">
-                                        <i class="fas fa-eye"></i> Ver Detalles
-                                    </a>
+                                <div class="property-info-tucasa">
+                                    <h3 class="property-title-tucasa">Villa Exclusiva en Costa Norte</h3>
+                                    <p class="property-location-tucasa">
+                                        <i class="fas fa-map-marker-alt"></i> Puerto Plata
+                                    </p>
+                                    <div class="property-actions-tucasa">
+                                        <a href="#" class="btn-primary-tucasa">Ver Detalles</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Agrega más slides según sea necesario -->
                     </div>
-
-                    <!-- Propiedad 2 -->
-                    <div class="carousel-slide-tucasa">
-                        <div class="property-card-tucasa">
-                            <div class="property-image-tucasa">
-                                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800" alt="Apartamento Moderno Santo Domingo">
-                                <span class="property-badge-tucasa">Nuevo</span>
-                                <div class="property-price-tucasa">US$ 185,000</div>
-                                <button class="favorite-btn-tucasa" data-property-id="2">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="property-info-tucasa">
-                                <h3 class="property-title-tucasa">Apartamento Moderno</h3>
-                                <p class="property-location-tucasa">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    Piantini, Santo Domingo
-                                </p>
-                                <div class="property-features-tucasa">
-                                    <span><i class="fas fa-bed"></i> 3 Hab</span>
-                                    <span><i class="fas fa-bath"></i> 2 Baños</span>
-                                    <span><i class="fas fa-ruler-combined"></i> 120 m²</span>
-                                    <span><i class="fas fa-car"></i> 1 Parq</span>
-                                </div>
-                                <div class="property-actions-tucasa">
-                                    <a href="#" class="btn-primary-tucasa">
-                                        <i class="fas fa-eye"></i> Ver Detalles
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Propiedad 3 -->
-                    <div class="carousel-slide-tucasa">
-                        <div class="property-card-tucasa">
-                            <div class="property-image-tucasa">
-                                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800" alt="Casa Colonial Santiago">
-                                <span class="property-badge-tucasa">Oferta</span>
-                                <div class="property-price-tucasa">US$ 275,000</div>
-                                <button class="favorite-btn-tucasa" data-property-id="3">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="property-info-tucasa">
-                                <h3 class="property-title-tucasa">Casa Colonial</h3>
-                                <p class="property-location-tucasa">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    Santiago, Santiago
-                                </p>
-                                <div class="property-features-tucasa">
-                                    <span><i class="fas fa-bed"></i> 5 Hab</span>
-                                    <span><i class="fas fa-bath"></i> 4 Baños</span>
-                                    <span><i class="fas fa-ruler-combined"></i> 280 m²</span>
-                                    <span><i class="fas fa-car"></i> 3 Parq</span>
-                                </div>
-                                <div class="property-actions-tucasa">
-                                    <a href="#" class="btn-primary-tucasa">
-                                        <i class="fas fa-eye"></i> Ver Detalles
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                    
+                    <button class="carousel-btn-tucasa carousel-next-tucasa">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <div class="carousel-dots-tucasa">
+                        <button class="carousel-dot-tucasa active"></button>
+                        <button class="carousel-dot-tucasa"></button>
+                        <button class="carousel-dot-tucasa"></button>
                     </div>
                 </div>
-
-                <button class="carousel-btn-tucasa carousel-prev-tucasa">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="carousel-btn-tucasa carousel-next-tucasa">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-
-                <div class="carousel-dots-tucasa" id="carousel-dots"></div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ============================================
-         GRID DE PROPIEDADES
-         ============================================ -->
-    <section class="properties-grid-tucasa">
-        <div class="container-tucasa">
-            <div class="section-header-tucasa">
-                <h2>Todas las Propiedades</h2>
-                <p>Explora nuestro catálogo completo de propiedades</p>
-            </div>
-
-            <div class="properties-grid-modern-tucasa" id="properties-grid">
-                <!-- Las propiedades se cargan dinámicamente con JavaScript -->
-            </div>
-
-            <div class="load-more-container-tucasa">
-                <button class="btn-outline-tucasa" id="load-more">
-                    <i class="fas fa-plus-circle"></i> Ver Más Propiedades
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SECCIÓN DE CONTACTO
-         ============================================ -->
-    <section class="contact-section-tucasa" style="background-image: url('https://www.visitcentroamerica.com/wp-content/uploads/2025/04/Santo-Domingo-Colonial-City-Dominican-Republic-Centroamerica-01.webp');">
-        <div class="contact-overlay-tucasa">
+        <!-- Contact Section -->
+        <section class="contact-section-tucasa">
+            <div class="contact-overlay-tucasa"></div>
             <div class="container-tucasa">
                 <div class="contact-content-tucasa">
                     <div class="contact-info-tucasa">
-                        <h2>¿Listo para encontrar tu hogar?</h2>
-                        <p>Contáctanos y te ayudaremos a encontrar la propiedad perfecta para ti</p>
-
+                        <h2>¿Necesitas ayuda para encontrar tu propiedad ideal?</h2>
+                        <p>Nuestros agentes están listos para ayudarte en cada paso del proceso</p>
+                        
                         <div class="contact-methods">
                             <div class="contact-method">
                                 <i class="fas fa-phone"></i>
                                 <div>
-                                    <h4>Teléfono</h4>
-                                    <p>+1 (809) 123-4567</p>
+                                    <h3>Llámanos</h3>
+                                    <p>+1 (829) 552-1083</p>
                                 </div>
                             </div>
-
-                            <div class="contact-method">
-                                <i class="fab fa-whatsapp"></i>
-                                <div>
-                                    <h4>WhatsApp</h4>
-                                    <p>+1 (849) 707-7848</p>
-                                </div>
-                            </div>
-
                             <div class="contact-method">
                                 <i class="fas fa-envelope"></i>
                                 <div>
-                                    <h4>Email</h4>
-                                    <p>info@tropicallivingrd.com</p>
+                                    <h3>Email</h3>
+                                    <p>info@tucasard.com</p>
                                 </div>
                             </div>
-
                             <div class="contact-method">
                                 <i class="fas fa-clock"></i>
                                 <div>
-                                    <h4>Horario</h4>
-                                    <p>Lun-Vie: 9:00 AM - 6:00 PM<br>Sáb: 9:00 AM - 2:00 PM</p>
+                                    <h3>Horario</h3>
+                                    <p>Lun-Vie: 9:00 AM - 6:00 PM</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="contact-form-tucasa">
                         <h3>Envíanos un Mensaje</h3>
-                        <form id="contact-form-tucasa">
+                        <form id="contactFormIndex">
                             <div class="form-group-tucasa">
-                                <input type="text" name="nombre" placeholder="Nombre completo *" required>
+                                <input type="text" name="name" placeholder="Nombre completo" required>
                             </div>
-
                             <div class="form-group-tucasa">
-                                <input type="email" name="correo" placeholder="Email *" required>
+                                <input type="email" name="email" placeholder="Correo electrónico" required>
                             </div>
-
                             <div class="form-group-tucasa">
-                                <input type="tel" name="telefono" placeholder="Teléfono">
+                                <input type="tel" name="phone" placeholder="Teléfono">
                             </div>
-
                             <div class="form-group-tucasa">
-                                <textarea name="mensaje" placeholder="¿En qué podemos ayudarte? *" rows="4" required></textarea>
+                                <textarea name="message" placeholder="Tu mensaje..." rows="4" required></textarea>
                             </div>
-
                             <button type="submit" class="btn-submit-tucasa">
                                 <i class="fas fa-paper-plane"></i> Enviar Mensaje
                             </button>
@@ -384,36 +272,23 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- ============================================
-         BOTÓN FLOTANTE DE WHATSAPP
-         ============================================ -->
-    <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20una%20propiedad"
-       class="whatsapp-floating" 
-       target="_blank"
-       title="Contáctanos por WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <!-- ============================================
-         FOOTER
-         ============================================ -->
+    <!-- Footer -->
     <footer class="footer-tucasa">
         <div class="container-tucasa">
             <div class="footer-content-tucasa">
                 <div class="footer-section-tucasa">
-                    <h3>Tropical Living RD</h3>
-                    <p>La inmobiliaria líder en República Dominicana. Ayudamos a nuestros clientes a encontrar la propiedad de sus sueños con profesionalismo y dedicación.</p>
+                    <h3>TU Casa RD</h3>
+                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus sueños.</p>
                     <div class="social-links-tucasa">
-                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
-
+                
                 <div class="footer-section-tucasa">
                     <h4>Enlaces Rápidos</h4>
                     <ul>
@@ -425,39 +300,33 @@
                         <li><a href="contacto.html">Contacto</a></li>
                     </ul>
                 </div>
-
-                <div class="footer-section-tucasa">
-                    <h4>Servicios</h4>
-                    <ul>
-                        <li><a href="#">Compra de Propiedades</a></li>
-                        <li><a href="#">Venta de Propiedades</a></li>
-                        <li><a href="#">Alquiler</a></li>
-                        <li><a href="#">Inversiones</a></li>
-                        <li><a href="#">Asesoría Legal</a></li>
-                        <li><a href="#">Valoraciones</a></li>
-                    </ul>
-                </div>
-
+                
                 <div class="footer-section-tucasa">
                     <h4>Contacto</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln #123, Santo Domingo, DN</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
                     <p><i class="fas fa-phone"></i> +1 (809) 123-4567</p>
-                    <p><i class="fas fa-envelope"></i> info@tropicallivingrd.com</p>
+                    <p><i class="fas fa-envelope"></i> info@tucasard.com</p>
                     <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
                 </div>
             </div>
-
+            
             <div class="footer-bottom-tucasa">
-                <p>&copy; 2024 Tropical Living RD. Todos los derechos reservados. | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+                <p>&copy; 2024 TU Casa RD. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <!-- ============================================
-         SCRIPTS
-         ============================================ -->
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20una%20propiedad"
+        class="whatsapp-floating" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script src="js/api.js"></script>
+    <script>
+        emailjs.init('qHyX0bsqfanDPm8vy'); // Tu public key de EmailJS
+    </script>
     <script src="js/app.js"></script>
 </body>
 </html>

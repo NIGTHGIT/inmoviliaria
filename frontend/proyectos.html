@@ -7,27 +7,443 @@
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-      .project-detail-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1000}
-      .project-detail-dialog{background:#fff;max-width:900px;width:95%;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.2);padding:28px 20px 20px;position:relative}
-      .project-detail-close{position:absolute;right:12px;top:6px;background:#f1f5f9;border:none;border-radius:20px;padding:6px 10px;cursor:pointer;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
-      .detail-header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px}
-      .detail-badge{background:#0ea5e9;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px}
-      .detail-location{color:#555;margin:8px 0}
-      .detail-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:10px 0}
-      .detail-info-item{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
-      .detail-info-item span{color:#6b7280;font-size:12px}
-      .detail-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:12px 0}
-      .detail-image{width:100%;height:140px;object-fit:cover;border-radius:8px}
-      .detail-description{margin:10px 0;line-height:1.5}
-      .detail-features-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
-      .detail-feature-item{display:flex;gap:10px;align-items:center;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
-      .detail-feature-item i{color:#22c55e}
-      .detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;justify-content:space-between}
-      .btn-secondary-tucasa{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px;display:inline-flex;gap:8px;align-items:center;color:#111}
-      .whatsapp-btn{background:#25D366;color:#fff;border:none;border-radius:999px;padding:10px 14px;display:inline-flex;gap:8px;align-items:center;font-weight:600}
-      .whatsapp-btn{text-decoration:none}
-      .whatsapp-btn i{color:#fff}
-      .whatsapp-btn:hover{filter:brightness(0.95)}
+        /* Additional styles for projects page */
+        .project-badge-tucasa.venta {
+            background: var(--accent-orange) !important;
+        }
+        
+        .project-badge-tucasa.pre-venta {
+            background: var(--secondary-blue) !important;
+        }
+        
+        .project-badge-tucasa.construccion {
+            background: #f59e0b !important;
+        }
+        
+        .project-badge-tucasa.terminado {
+            background: #10b981 !important;
+        }
+        
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: var(--radius);
+        }
+        
+        .project-info-item {
+            text-align: center;
+        }
+        
+        .project-info-label {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .project-info-value {
+            display: block;
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .project-price {
+            color: var(--accent-orange);
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        /* Project detail modal styles */
+        .project-detail-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .project-detail-dialog {
+            background: var(--bg-white);
+            max-width: 900px;
+            width: 95%;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .project-detail-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-light);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            transition: var(--transition);
+            z-index: 10;
+        }
+        
+        .project-detail-close:hover {
+            background: var(--accent-orange);
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .project-detail-content {
+            padding: 2.5rem;
+        }
+        
+        .detail-header {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .detail-badge {
+            background: var(--accent-orange);
+            color: white;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .detail-badge.venta { background: var(--accent-orange); }
+        .detail-badge.pre-venta { background: var(--secondary-blue); }
+        .detail-badge.construccion { background: #f59e0b; }
+        .detail-badge.terminado { background: #10b981; }
+        
+        .detail-location {
+            color: var(--text-light);
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .detail-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .detail-info-item {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .detail-info-item span {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .detail-info-item strong {
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        
+        .detail-gallery-section {
+            margin: 2rem 0;
+        }
+        
+        .detail-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .detail-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .detail-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow);
+        }
+        
+        .detail-description {
+            margin: 2rem 0;
+            line-height: 1.8;
+        }
+        
+        .detail-description h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .detail-features {
+            margin: 2rem 0;
+        }
+        
+        .detail-features h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .detail-features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .detail-feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1rem;
+            transition: var(--transition);
+        }
+        
+        .detail-feature-item:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+        
+        .detail-feature-item i {
+            color: var(--accent-orange);
+        }
+        
+        .detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+        
+        .detail-contact h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-contact p {
+            color: var(--text-light);
+        }
+        
+        .detail-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 1rem 1.5rem;
+            display: inline-flex;
+            gap: 0.8rem;
+            align-items: center;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .whatsapp-btn:hover {
+            background: #1ebe5d;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Image gallery modal */
+        .image-gallery-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .gallery-modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+        
+        .gallery-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .gallery-main-image {
+            max-width: 80vw;
+            max-height: 70vh;
+            overflow: hidden;
+            border-radius: var(--radius);
+        }
+        
+        .gallery-main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            z-index: 10;
+            transition: var(--transition);
+        }
+        
+        .gallery-nav:hover {
+            background: white;
+            color: var(--accent-orange);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .gallery-nav.prev {
+            left: -60px;
+        }
+        
+        .gallery-nav.next {
+            right: -60px;
+        }
+        
+        .gallery-thumbnails {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            overflow-x: auto;
+            padding: 0.5rem;
+        }
+        
+        .gallery-thumb {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+        
+        .gallery-thumb.active,
+        .gallery-thumb:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px var(--accent-orange);
+        }
+        
+        @media (max-width: 768px) {
+            .project-detail-dialog {
+                padding: 1.5rem;
+            }
+            
+            .project-detail-content {
+                padding: 1.5rem;
+            }
+            
+            .detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .detail-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .detail-buttons {
+                flex-direction: column;
+            }
+            
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .gallery-nav.prev {
+                left: -50px;
+            }
+            
+            .gallery-nav.next {
+                right: -50px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -35,18 +451,18 @@
         <nav class="nav-tucasa">
             <div class="nav-container-tucasa">
                 <div class="logo-tucasa">
-    <h1>Tropical Living RD</h1>
-    <p>Tu Hogar en el Paraíso Dominicano</p>
-</div>
+                    <h1>Tropical Living RD</h1>
+                    <p>Tu Hogar en el Paraíso Dominicano</p>
+                </div>
                 <ul class="nav-menu-tucasa">
-    <li><a href="index.html" class="active">Inicio</a></li>
-    <li><a href="propiedades.html">Propiedades</a></li>
-    <li><a href="proyectos.html">Proyectos</a></li>
-    <li><a href="favoritos.html">Favoritos</a></li>
-    <li><a href="nosotros.html">Nosotros</a></li>
-    <li><a href="contacto.html">Contacto</a></li>
-    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
-</ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="propiedades.html">Propiedades</a></li>
+                    <li><a href="proyectos.html" class="active">Proyectos</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="nosotros.html">Nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+                </ul>
                 <div class="hamburger-tucasa">
                     <span></span>
                     <span></span>
@@ -56,6 +472,7 @@
         </nav>
     </header>
 
+    <!-- Hero Section -->
     <section class="projects-hero-tucasa">
         <div class="container-tucasa">
             <h1>Proyectos Inmobiliarios</h1>
@@ -63,31 +480,128 @@
         </div>
     </section>
 
-    <section class="projects-grid-tucasa">
+    <!-- Filters Section -->
+    <section class="filters-section-tucasa">
         <div class="container-tucasa">
-            <div id="projectsContainer"><p class="loading">Cargando proyectos...</p></div>
+            <div class="filters-container-tucasa">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label><i class="fas fa-chart-line"></i> Estado</label>
+                        <select id="filter-status">
+                            <option value="">Todos los estados</option>
+                            <option value="en_venta">En Venta</option>
+                            <option value="pre_venta">Pre-Venta</option>
+                            <option value="en_construccion">En Construcción</option>
+                            <option value="terminado">Terminado</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Ubicación</label>
+                        <input type="text" placeholder="Ciudad o región" id="filter-location">
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-building"></i> Tipo</label>
+                        <select id="filter-type">
+                            <option value="">Todos los tipos</option>
+                            <option value="apartamentos">Apartamentos</option>
+                            <option value="villas">Villas</option>
+                            <option value="casas">Casas</option>
+                            <option value="mixto">Mixto</option>
+                            <option value="lofts">Lofts</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>&nbsp;</label>
+                        <button class="btn-filter-tucasa btn-filter-projects">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                    </div>
+                </div>
+                <div class="filter-actions" style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <button class="btn-outline-tucasa" id="clear-project-filters">
+                        <i class="fas fa-times"></i> Limpiar Filtros
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- Active Filters Display -->
+    <section class="container-tucasa" style="margin-top: 2rem;">
+        <div id="active-project-filters" class="active-filters-container" style="display: none;"></div>
+        <div class="properties-header-tucasa">
+            <h2>Nuestros Proyectos <span id="projects-results-count" style="font-size: 1rem; color: var(--text-light); margin-left: 1rem;"></span></h2>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="projects-grid-tucasa">
+        <div class="container-tucasa">
+            <div class="projects-grid-modern-tucasa" id="projectsContainer">
+                <!-- Proyectos se cargan con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20una%20propiedad"
         class="whatsapp-floating" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <!-- Footer -->
     <footer class="footer-tucasa">
-        <!-- Mismo footer que index.html -->
+        <div class="container-tucasa">
+            <div class="footer-content-tucasa">
+                <div class="footer-section-tucasa">
+                    <h3>Tropical Living RD</h3>
+                    <p>Tu Hogar en el Paraíso Dominicano. Te ayudamos a encontrar la propiedad de tus sueños.</p>
+                    <div class="social-links-tucasa">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="propiedades.html">Propiedades</a></li>
+                        <li><a href="proyectos.html">Proyectos</a></li>
+                        <li><a href="favoritos.html">Favoritos</a></li>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
+                    <p><i class="fas fa-phone"></i> +1 (809) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@tropicallivingrd.com</p>
+                    <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom-tucasa">
+                <p>&copy; 2024 Tropical Living RD. Todos los derechos reservados.</p>
+            </div>
+        </div>
     </footer>
 
-    <div id="projectDetailModal" class="project-detail-modal" style="display:none;">
+    <!-- Project Detail Modal -->
+    <div id="projectDetailModal" class="project-detail-modal">
         <div class="project-detail-dialog">
-            <button class="project-detail-close" id="projectDetailClose">✕</button>
-            <div id="projectDetailContent"></div>
+            <button class="project-detail-close" id="projectDetailClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="project-detail-content" id="projectDetailContent"></div>
         </div>
     </div>
 
-    <script src="js/api.js"></script>
+    <!-- Scripts -->
     <script src="js/app.js"></script>
-<script src="js/proyectos.js"></script>
-<script src="js/favoritos.js"></script>
+    <script src="js/proyectos.js"></script>
 </body>
 </html>
