@@ -1,30 +1,150 @@
 // Main Application JavaScript - TU Casa RD
 document.addEventListener('DOMContentLoaded', function() {
     // ============================================
-    // THEME MANAGEMENT
+    // THEME MANAGEMENT SYSTEM MEJORADO
     // ============================================
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = themeToggle?.querySelector('i');
-    
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    const savedTheme = localStorage.getItem('theme');
-    
-    // Set initial theme
-    if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
-        document.body.classList.add('theme-dark');
-        if (themeIcon) themeIcon.className = 'fas fa-sun';
-    }
-    
-    // Toggle theme
-    themeToggle?.addEventListener('click', () => {
-        document.body.classList.toggle('theme-dark');
-        const isDark = document.body.classList.contains('theme-dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        if (themeIcon) {
-            themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+    class ThemeManager {
+        constructor() {
+            this.themeToggle = document.getElementById('theme-toggle');
+            this.themeIcon = this.themeToggle?.querySelector('i');
+            this.themeKey = 'tucasard_theme';
+            this.init();
         }
-    });
-    
+
+        init() {
+            this.loadTheme();
+            this.setupEventListeners();
+            this.updateThemeIcon();
+            this.addThemeStyles();
+        }
+
+        loadTheme() {
+            // Check for saved theme
+            const savedTheme = localStorage.getItem(this.themeKey);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Set theme based on saved preference or system preference
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                this.enableDarkTheme();
+            } else {
+                this.enableLightTheme();
+            }
+            
+            // Add theme class to body for CSS targeting
+            document.body.classList.add('theme-loaded');
+        }
+
+        setupEventListeners() {
+            // Theme toggle button
+            this.themeToggle?.addEventListener('click', () => this.toggleTheme());
+            
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem(this.themeKey)) {
+                    if (e.matches) {
+                        this.enableDarkTheme();
+                    } else {
+                        this.enableLightTheme();
+                    }
+                }
+            });
+        }
+
+        toggleTheme() {
+            const isDark = document.body.classList.contains('theme-dark');
+            
+            // Add transition class for smooth change
+            document.body.classList.add('theme-transitioning');
+            
+            if (isDark) {
+                this.enableLightTheme();
+            } else {
+                this.enableDarkTheme();
+            }
+            
+            // Remove transition class after animation
+            setTimeout(() => {
+                document.body.classList.remove('theme-transitioning');
+            }, 300);
+            
+            // Dispatch event for other components
+            this.dispatchThemeChangeEvent(isDark ? 'light' : 'dark');
+        }
+
+        enableDarkTheme() {
+            document.body.classList.add('theme-dark');
+            localStorage.setItem(this.themeKey, 'dark');
+            this.updateThemeIcon();
+            this.updateMetaThemeColor('#111827');
+        }
+
+        enableLightTheme() {
+            document.body.classList.remove('theme-dark');
+            localStorage.setItem(this.themeKey, 'light');
+            this.updateThemeIcon();
+            this.updateMetaThemeColor('#ffffff');
+        }
+
+        updateThemeIcon() {
+            if (!this.themeIcon) return;
+            
+            const isDark = document.body.classList.contains('theme-dark');
+            this.themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            
+            // Add animation
+            this.themeIcon.style.animation = 'spin 0.5s ease';
+            setTimeout(() => {
+                this.themeIcon.style.animation = '';
+            }, 500);
+        }
+
+        updateMetaThemeColor(color) {
+            // Update theme-color meta tag for mobile browsers
+            let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (!metaThemeColor) {
+                metaThemeColor = document.createElement('meta');
+                metaThemeColor.name = 'theme-color';
+                document.head.appendChild(metaThemeColor);
+            }
+            metaThemeColor.content = color;
+        }
+
+        dispatchThemeChangeEvent(theme) {
+            const event = new CustomEvent('themechange', { detail: { theme } });
+            document.dispatchEvent(event);
+        }
+
+        getCurrentTheme() {
+            return document.body.classList.contains('theme-dark') ? 'dark' : 'light';
+        }
+
+        addThemeStyles() {
+            // Add CSS for theme transitions
+            const styleId = 'theme-transition-styles';
+            if (!document.getElementById(styleId)) {
+                const style = document.createElement('style');
+                style.id = styleId;
+                style.textContent = `
+                    .theme-transitioning * {
+                        transition: background-color 0.3s ease, 
+                                    border-color 0.3s ease, 
+                                    color 0.3s ease,
+                                    box-shadow 0.3s ease !important;
+                    }
+                    
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+    }
+
+    // Initialize theme manager
+    window.themeManager = new ThemeManager();
+
     // ============================================
     // MOBILE NAVIGATION
     // ============================================
@@ -135,6 +255,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // SMOOTH SCROLL
     // ============================================
     initSmoothScroll();
+    
+    // ============================================
+    // INJECT ADDITIONAL STYLES
+    // ============================================
+    injectHeroFilterStyles();
 });
 
 // ============================================

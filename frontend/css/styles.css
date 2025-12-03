@@ -1,24 +1,24 @@
 /* ============================================
-   VARIABLES Y CONFIGURACIÓN BASE
+   VARIABLES Y CONFIGURACIÓN BASE MEJORADA
    ============================================ */
 :root {
-    /* Colores principales */
+    /* Colores principales - Tema Claro */
     --primary-blue: #1e3a8a;
     --secondary-blue: #3b82f6;
     --accent-orange: #f97316;
     --dark-blue: #1e40af;
     --light-blue: #dbeafe;
     
-    /* Colores de texto */
+    /* Colores de texto - Tema Claro */
     --text-dark: #1f2937;
     --text-light: #6b7280;
     
-    /* Fondos */
+    /* Fondos - Tema Claro */
     --bg-white: #ffffff;
     --bg-light: #f8fafc;
     --bg-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
     
-    /* Bordes y sombras */
+    /* Bordes y sombras - Tema Claro */
     --border-color: #e5e7eb;
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,27 +34,302 @@
     --radius: 12px;
     --radius-lg: 16px;
     --radius-xl: 20px;
+    
+    /* Color del overlay */
+    --overlay-light: rgba(0, 0, 0, 0.5);
+    --overlay-dark: rgba(0, 0, 0, 0.7);
 }
 
-/* Tema oscuro */
+/* ============================================
+   TEMA OSCURO MEJORADO
+   ============================================ */
 .theme-dark {
+    /* Colores principales - Tema Oscuro */
+    --primary-blue: #3b82f6;
+    --secondary-blue: #60a5fa;
+    --accent-orange: #fb923c;
+    --dark-blue: #1d4ed8;
+    --light-blue: rgba(59, 130, 246, 0.1);
+    
+    /* Colores de texto - Tema Oscuro */
     --text-dark: #f3f4f6;
     --text-light: #d1d5db;
+    
+    /* Fondos - Tema Oscuro */
     --bg-white: #1f2937;
     --bg-light: #111827;
+    --bg-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    
+    /* Bordes y sombras - Tema Oscuro */
     --border-color: #374151;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
+    
+    /* Color del overlay */
+    --overlay-light: rgba(0, 0, 0, 0.7);
+    --overlay-dark: rgba(0, 0, 0, 0.9);
+    
+    /* Ajustes específicos para imágenes en modo oscuro */
+    filter: brightness(0.9) contrast(1.1);
 }
 
-/* Mantener header y footer sin tema */
+/* Ajustes de imágenes en modo oscuro */
+.theme-dark img {
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.theme-dark img:hover {
+    opacity: 1;
+}
+
+/* Ajustes para inputs en modo oscuro */
+.theme-dark input,
+.theme-dark select,
+.theme-dark textarea {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f3f4f6;
+}
+
+.theme-dark input::placeholder,
+.theme-dark select::placeholder,
+.theme-dark textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Ajustes para cards en modo oscuro */
+.theme-dark .property-card-tucasa,
+.theme-dark .project-card-tucasa,
+.theme-dark .team-card {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+/* Ajustes para modales en modo oscuro */
+.theme-dark .project-detail-dialog,
+.theme-dark .project-detail-content {
+    background: #1f2937;
+    color: #f3f4f6;
+}
+
+/* Ajustes para botones en modo oscuro */
+.theme-dark .btn-primary-tucasa {
+    background: var(--primary-blue);
+}
+
+.theme-dark .btn-outline-tucasa {
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.theme-dark .btn-outline-tucasa:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+/* Ajustes para el header y footer en modo oscuro */
+.theme-dark .header-tucasa {
+    background: rgba(31, 41, 55, 0.95) !important;
+    backdrop-filter: blur(10px);
+}
+
+.theme-dark .footer-tucasa {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+}
+
+/* Ajustes para las secciones hero en modo oscuro */
+.theme-dark .hero-tucasa,
+.theme-dark .projects-hero-tucasa,
+.theme-dark .page-hero-tucasa,
+.theme-dark .about-hero-tucasa,
+.theme-dark .contact-hero-tucasa {
+    filter: brightness(0.8);
+}
+
+/* Ajustes para el overlay en modo oscuro */
+.theme-dark .hero-overlay-tucasa,
+.theme-dark .contact-overlay-tucasa {
+    background: linear-gradient(
+        to bottom,
+        rgba(30, 58, 138, 0.8) 0%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
+}
+
+/* Ajustes para el carrusel en modo oscuro */
+.theme-dark .carousel-container-tucasa {
+    background: var(--bg-white);
+}
+
+/* Ajustes para los badges en modo oscuro */
+.theme-dark .property-badge-tucasa {
+    background: var(--accent-orange);
+}
+
+/* Ajustes para el buscador en modo oscuro */
+.theme-dark .search-form-tucasa {
+    background: rgba(31, 41, 55, 0.95);
+    border: 1px solid var(--border-color);
+}
+
+/* Ajustes para los filtros en modo oscuro */
+.theme-dark .filters-container-tucasa {
+    background: var(--bg-white);
+}
+
+/* Ajustes para los tooltips en modo oscuro */
+.theme-dark .search-group:hover::after {
+    background: var(--text-dark);
+    color: var(--bg-white);
+}
+
+/* Ajustes para las notificaciones en modo oscuro */
+.theme-dark .custom-notification {
+    background: var(--primary-blue);
+}
+
+/* ============================================
+   TRANSICIONES SUAVES PARA EL CAMBIO DE TEMA
+   ============================================ */
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Elementos que necesitan transición específica */
 .header-tucasa,
+.footer-tucasa,
+.property-card-tucasa,
+.project-card-tucasa,
+.search-form-tucasa,
+.filters-container-tucasa,
+.contact-form-tucasa {
+    transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Textos que necesitan transición */
+h1, h2, h3, h4, h5, h6,
+p, span, a, label,
+.property-title-tucasa,
+.property-location-tucasa,
+.project-description {
+    transition: color 0.5s ease;
+}
+
+/* Inputs y selects */
+input, select, textarea {
+    transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+}
+
+/* Botones */
+button, .btn-primary-tucasa, .btn-outline-tucasa {
+    transition: all 0.5s ease;
+}
+
+/* ============================================
+   AJUSTES PARA EL SWITCHER DE TEMA EN HEADER
+   ============================================ */
+
+/* Mantener header y footer sin tema específico para el switcher */
+.header-tucasa .theme-switcher-tucasa,
 .footer-tucasa {
-    --text-dark: #1f2937 !important;
-    --text-light: #6b7280 !important;
-    --bg-white: #ffffff !important;
-    --bg-light: #f8fafc !important;
-    --border-color: #e5e7eb !important;
+    --text-dark: inherit;
+    --text-light: inherit;
+    --bg-white: inherit;
+    --bg-light: inherit;
+    --border-color: inherit;
+}
+
+/* Ajustes específicos para el switcher en modo oscuro */
+.theme-dark .theme-switcher-tucasa .theme-toggle-btn {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f3f4f6;
+}
+
+.theme-dark .theme-switcher-tucasa .theme-toggle-btn:hover {
+    background: #4b5563;
+    border-color: var(--accent-orange);
+}
+
+.theme-dark .theme-switcher-tucasa .theme-options {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+.theme-dark .theme-switcher-tucasa .theme-option {
+    color: #f3f4f6;
+}
+
+.theme-dark .theme-switcher-tucasa .theme-option:hover {
+    background: #374151;
+}
+
+.theme-dark .theme-switcher-tucasa .theme-option.active {
+    background: var(--primary-blue);
+}
+
+/* ============================================
+   MEJORAS PARA LA EXPERIENCIA DEL TEMA
+   ============================================ */
+
+/* Clase para cuando el tema está cargando */
+.theme-loading * {
+    transition: none !important;
+}
+
+/* Indicador visual del tema actual */
+.theme-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--bg-white);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    z-index: 1000;
+    display: none; /* Oculto por defecto */
+}
+
+.theme-dark .theme-indicator {
+    background: #1f2937;
+    border-color: #374151;
+    color: #d1d5db;
+}
+
+/* Animación para el cambio de tema */
+@keyframes themePulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.theme-changing {
+    animation: themePulse 0.5s ease;
+}
+
+/* ============================================
+   RESPONSIVE PARA EL TEMA
+   ============================================ */
+
+@media (max-width: 768px) {
+    .theme-dark .hero-tucasa,
+    .theme-dark .projects-hero-tucasa {
+        background-attachment: scroll;
+    }
+    
+    .theme-dark .search-form-tucasa {
+        background: rgba(31, 41, 55, 0.98);
+    }
+    
+    /* Ajustar opacidad de imágenes en móvil */
+    .theme-dark img {
+        opacity: 0.85;
+    }
 }
 
 /* ============================================
@@ -893,6 +1168,7 @@ body {
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
     padding: 3rem;
+    margin: 2rem;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-xl);
 }
