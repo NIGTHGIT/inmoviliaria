@@ -620,6 +620,7 @@ function initMobileMenu() {
         menuBtn.classList.toggle('active');
         sidebar.classList.toggle('mobile-active');
         overlay.classList.toggle('active');
+        document.body.classList.toggle('mobile-menu-open');
     });
     
     // Cerrar al hacer clic en overlay
@@ -627,6 +628,7 @@ function initMobileMenu() {
         menuBtn.classList.remove('active');
         sidebar.classList.remove('mobile-active');
         overlay.classList.remove('active');
+        document.body.classList.remove('mobile-menu-open');
     });
     
     // Cerrar al hacer clic en un link
@@ -637,6 +639,7 @@ function initMobileMenu() {
                 menuBtn.classList.remove('active');
                 sidebar.classList.remove('mobile-active');
                 overlay.classList.remove('active');
+                document.body.classList.remove('mobile-menu-open');
             }
         });
     });

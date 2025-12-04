@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto - Tropical Living RD</title>
+    <title>Contacto - TU Casa RD</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -12,9 +12,9 @@
         <nav class="nav-tucasa">
             <div class="nav-container-tucasa">
                 <div class="logo-tucasa">
-    <h1>Tropical Living RD</h1>
-    <p>Tu Hogar en el Paraíso Dominicano</p>
-</div>
+                    <h1>TU Casa RD</h1>
+                    <p>Somos la Inmobiliaria de República Dominicana</p>
+                </div>
                 <ul class="nav-menu-tucasa">
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="propiedades.html">Propiedades</a></li>
@@ -90,8 +90,10 @@
                 </div>
 
                 <div class="contact-form-full">
-                    <!-- Aviso de configuración -->
-                    <div class="config-notice">
+                    <!-- Selector de pestañas -->
+                    <div class="contact-tabs">
+                        <button class="contact-tab-btn btn-primary-tucasa" data-target="mensaje">Enviar Mensaje</button>
+                        <button class="contact-tab-btn btn-outline-tucasa" data-target="cita">Agendar Cita</button>
                     </div>
 
                     <!-- TAB 1: Formulario de Contacto General -->
@@ -137,8 +139,7 @@
                         </form>
                     </div>
 
-                    <br>
-                    <br>
+                    
 
                     <!-- TAB 2: Formulario de Agendar Cita -->
                     <div class="tab-content-tucasa" id="tab-cita">
@@ -330,6 +331,37 @@
             let time = timeInput.value;
             if (time < "09:00") timeInput.value = "09:00";
             if (time > "16:00") timeInput.value = "16:00";
+        });
+    </script>
+
+    <script>
+        // Tabs: alternar entre Enviar Mensaje y Agendar Cita
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.contact-tab-btn');
+            const mensajeTab = document.getElementById('tab-mensaje');
+            const citaTab = document.getElementById('tab-cita');
+
+            function activate(target) {
+                if (target === 'mensaje') {
+                    mensajeTab.classList.add('active');
+                    citaTab.classList.remove('active');
+                } else {
+                    citaTab.classList.add('active');
+                    mensajeTab.classList.remove('active');
+                }
+                buttons.forEach(btn => {
+                    const isActive = btn.dataset.target === target;
+                    btn.classList.toggle('btn-primary-tucasa', isActive);
+                    btn.classList.toggle('btn-outline-tucasa', !isActive);
+                });
+            }
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => activate(btn.dataset.target));
+            });
+
+            // Estado inicial
+            activate('mensaje');
         });
     </script>
 

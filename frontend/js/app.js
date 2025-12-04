@@ -1,1592 +1,361 @@
-// Main Application JavaScript - TU Casa RD
-document.addEventListener('DOMContentLoaded', function() {
-    // ============================================
-    // THEME MANAGEMENT SYSTEM MEJORADO
-    // ============================================
-    class ThemeManager {
-        constructor() {
-            this.themeToggle = document.getElementById('theme-toggle');
-            this.themeIcon = this.themeToggle?.querySelector('i');
-            this.themeKey = 'tucasard_theme';
-            this.init();
-        }
+// Configuración global
+const CONFIG = {
+    THEME_KEY: 'tucasa_theme',
+    FAVORITES_KEY: 'tucasa_favorites'
+};
 
-        init() {
-            this.loadTheme();
-            this.setupEventListeners();
-            this.updateThemeIcon();
-            this.addThemeStyles();
-        }
+// Gestor de Tema (solo para contenido)
+class ThemeManager {
+    constructor() {
+        this.theme = localStorage.getItem(CONFIG.THEME_KEY) || 'light';
+        this.init();
+    }
 
-        loadTheme() {
-            // Check for saved theme
-            const savedTheme = localStorage.getItem(this.themeKey);
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            // Set theme based on saved preference or system preference
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                this.enableDarkTheme();
-            } else {
-                this.enableLightTheme();
-            }
-            
-            // Add theme class to body for CSS targeting
-            document.body.classList.add('theme-loaded');
-        }
+    init() {
+        this.applyTheme();
+        this.setupEventListeners();
+    }
 
-        setupEventListeners() {
-            // Theme toggle button
-            this.themeToggle?.addEventListener('click', () => this.toggleTheme());
-            
-            // Listen for system theme changes
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (!localStorage.getItem(this.themeKey)) {
-                    if (e.matches) {
-                        this.enableDarkTheme();
-                    } else {
-                        this.enableLightTheme();
-                    }
-                }
+    setupEventListeners() {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => this.toggleTheme());
+        }
+    }
+
+    toggleTheme() {
+        this.theme = this.theme === 'light' ? 'dark' : 'light';
+        this.applyTheme();
+        localStorage.setItem(CONFIG.THEME_KEY, this.theme);
+    }
+
+    applyTheme() {
+        // Aplicar tema solo al contenido principal, no al header ni footer
+        const mainContent = document.querySelector('main');
+        const sections = document.querySelectorAll('section');
+        const propertyCards = document.querySelectorAll('.property-card-tucasa');
+
+        // Remover tema anterior
+        document.body.classList.remove('theme-light', 'theme-dark');
+        if (mainContent) mainContent.classList.remove('theme-light', 'theme-dark');
+        sections.forEach(section => section.classList.remove('theme-light', 'theme-dark'));
+        propertyCards.forEach(card => card.classList.remove('theme-light', 'theme-dark'));
+
+        // Aplicar nuevo tema solo al contenido
+        document.body.classList.add(`theme-${this.theme}`);
+        if (mainContent) mainContent.classList.add(`theme-${this.theme}`);
+        sections.forEach(section => section.classList.add(`theme-${this.theme}`));
+        propertyCards.forEach(card => card.classList.add(`theme-${this.theme}`));
+
+        // Actualizar icono
+        const themeIcon = document.querySelector('#theme-toggle i');
+        if (themeIcon) {
+            themeIcon.className = this.theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+    }
+}
+
+// Gestor de Navegación Móvil
+class NavigationManager {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.setupMobileMenu();
+        this.setupActiveLinks();
+        this.setupHideOnScroll();
+    }
+
+    setupMobileMenu() {
+        const hamburger = document.querySelector('.hamburger-tucasa');
+        const navMenu = document.querySelector('.nav-menu-tucasa');
+
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            // Cerrar menú al hacer clic en un enlace
+            document.querySelectorAll('.nav-menu-tucasa a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
             });
         }
+    }
 
-        toggleTheme() {
-            const isDark = document.body.classList.contains('theme-dark');
-            
-            // Add transition class for smooth change
-            document.body.classList.add('theme-transitioning');
-            
-            if (isDark) {
-                this.enableLightTheme();
+    setupActiveLinks() {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-menu-tucasa a').forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if (linkPage === currentPage) {
+                link.classList.add('active');
             } else {
-                this.enableDarkTheme();
-            }
-            
-            // Remove transition class after animation
-            setTimeout(() => {
-                document.body.classList.remove('theme-transitioning');
-            }, 300);
-            
-            // Dispatch event for other components
-            this.dispatchThemeChangeEvent(isDark ? 'light' : 'dark');
-        }
-
-        enableDarkTheme() {
-            document.body.classList.add('theme-dark');
-            localStorage.setItem(this.themeKey, 'dark');
-            this.updateThemeIcon();
-            this.updateMetaThemeColor('#111827');
-        }
-
-        enableLightTheme() {
-            document.body.classList.remove('theme-dark');
-            localStorage.setItem(this.themeKey, 'light');
-            this.updateThemeIcon();
-            this.updateMetaThemeColor('#ffffff');
-        }
-
-        updateThemeIcon() {
-            if (!this.themeIcon) return;
-            
-            const isDark = document.body.classList.contains('theme-dark');
-            this.themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-            
-            // Add animation
-            this.themeIcon.style.animation = 'spin 0.5s ease';
-            setTimeout(() => {
-                this.themeIcon.style.animation = '';
-            }, 500);
-        }
-
-        updateMetaThemeColor(color) {
-            // Update theme-color meta tag for mobile browsers
-            let metaThemeColor = document.querySelector('meta[name="theme-color"]');
-            if (!metaThemeColor) {
-                metaThemeColor = document.createElement('meta');
-                metaThemeColor.name = 'theme-color';
-                document.head.appendChild(metaThemeColor);
-            }
-            metaThemeColor.content = color;
-        }
-
-        dispatchThemeChangeEvent(theme) {
-            const event = new CustomEvent('themechange', { detail: { theme } });
-            document.dispatchEvent(event);
-        }
-
-        getCurrentTheme() {
-            return document.body.classList.contains('theme-dark') ? 'dark' : 'light';
-        }
-
-        addThemeStyles() {
-            // Add CSS for theme transitions
-            const styleId = 'theme-transition-styles';
-            if (!document.getElementById(styleId)) {
-                const style = document.createElement('style');
-                style.id = styleId;
-                style.textContent = `
-                    .theme-transitioning * {
-                        transition: background-color 0.3s ease, 
-                                    border-color 0.3s ease, 
-                                    color 0.3s ease,
-                                    box-shadow 0.3s ease !important;
-                    }
-                    
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        }
-    }
-
-    // Initialize theme manager
-    window.themeManager = new ThemeManager();
-
-    // ============================================
-    // MOBILE NAVIGATION
-    // ============================================
-    const hamburger = document.querySelector('.hamburger-tucasa');
-    const navMenu = document.querySelector('.nav-menu-tucasa');
-    
-    hamburger?.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navMenu?.classList.toggle('active');
-        document.body.style.overflow = navMenu?.classList.contains('active') ? 'hidden' : '';
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (navMenu?.classList.contains('active') && 
-            !e.target.closest('.nav-menu-tucasa') && 
-            !e.target.closest('.hamburger-tucasa')) {
-            hamburger?.classList.remove('active');
-            navMenu?.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-    
-    // Close menu on link click
-    document.querySelectorAll('.nav-menu-tucasa a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger?.classList.remove('active');
-            navMenu?.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-    });
-    
-    // ============================================
-    // NAVBAR SCROLL EFFECT
-    // ============================================
-    let lastScroll = 0;
-    const header = document.querySelector('.header-tucasa');
-    
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll <= 0) {
-            header?.classList.remove('nav-hidden', 'scrolled');
-            return;
-        }
-        
-        if (currentScroll > lastScroll && currentScroll > 100) {
-            // Scroll down
-            header?.classList.add('nav-hidden');
-        } else {
-            // Scroll up
-            header?.classList.remove('nav-hidden');
-        }
-        
-        if (currentScroll > 50) {
-            header?.classList.add('scrolled');
-        } else {
-            header?.classList.remove('scrolled');
-        }
-        
-        lastScroll = currentScroll;
-    });
-    
-    // ============================================
-    // HERO SEARCH FUNCTIONALITY (ON SAME PAGE)
-    // ============================================
-    initHeroSearch();
-    
-    // ============================================
-    // PROPERTY GRID FOR INDEX PAGE
-    // ============================================
-    if (document.querySelector('.properties-grid-modern-tucasa') && !document.getElementById('properties-grid')) {
-        // Initialize with all properties first
-        window.allProperties = [];
-        initPropertyGrid();
-    }
-    
-    // ============================================
-    // FEATURED CAROUSEL
-    // ============================================
-    if (document.querySelector('.carousel-track-tucasa')) {
-        initFeaturedCarousel();
-    }
-    
-    // ============================================
-    // CONTACT FORM
-    // ============================================
-    if (document.getElementById('contactFormIndex')) {
-        initContactForm();
-    }
-    
-    // ============================================
-    // FAVORITES FUNCTIONALITY
-    // ============================================
-    initFavorites();
-    
-    // ============================================
-    // LOAD MORE BUTTON
-    // ============================================
-    initLoadMore();
-    
-    // ============================================
-    // INITIALIZE WHATSAPP BUTTON
-    // ============================================
-    initWhatsAppButton();
-    
-    // ============================================
-    // SMOOTH SCROLL
-    // ============================================
-    initSmoothScroll();
-    
-    // ============================================
-    // INJECT ADDITIONAL STYLES
-    // ============================================
-    injectHeroFilterStyles();
-});
-
-// ============================================
-// HERO SEARCH FUNCTIONALITY (FILTER ON SAME PAGE)
-// ============================================
-
-function initHeroSearch() {
-    const searchForm = document.querySelector('.search-form-tucasa');
-    const searchBtn = document.querySelector('.search-btn-tucasa');
-    const typeTabs = document.querySelectorAll('.type-tab');
-    
-    if (!searchForm) return;
-    
-    let searchType = 'compra'; // Default
-    
-    // Handle tabs
-    typeTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            typeTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            searchType = tab.dataset.type;
-            updateSearchButtonText();
-            
-            // Apply filters immediately when tab changes
-            applyHeroFilters();
-        });
-    });
-    
-    // Update button text
-    function updateSearchButtonText() {
-        if (searchBtn) {
-            searchBtn.innerHTML = `<i class="fas fa-search"></i> BUSCAR PROPIEDADES PARA ${searchType.toUpperCase()}`;
-        }
-    }
-    
-    updateSearchButtonText();
-    
-    // Handle form submission
-    searchForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        applyHeroFilters();
-    });
-    
-    if (searchBtn) {
-        searchBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            applyHeroFilters();
-        });
-    }
-    
-    // Add autocomplete
-    initLocationAutocomplete();
-    
-    // Apply filters when any select changes
-    searchForm.querySelectorAll('select').forEach(select => {
-        select.addEventListener('change', () => {
-            applyHeroFilters();
-        });
-        
-        // Enter key support
-        select.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                applyHeroFilters();
-            }
-        });
-    });
-}
-
-function applyHeroFilters() {
-    const searchForm = document.querySelector('.search-form-tucasa');
-    const activeTab = document.querySelector('.type-tab.active');
-    
-    // Get search values
-    const selects = searchForm.querySelectorAll('select');
-    const searchData = {
-        type: activeTab?.dataset.type || 'compra',
-        location: selects[0]?.value || '',
-        propertyType: selects[1]?.value || '',
-        rooms: selects[2]?.value || '',
-        parking: selects[3]?.value || '',
-        maxPrice: selects[4]?.value || ''
-    };
-
-    // Save search history
-    saveSearchHistory(searchData);
-    
-    // Show feedback
-    showSearchFeedback(searchData);
-    
-    // Filter properties on the same page
-    filterPropertiesOnPage(searchData);
-}
-
-function filterPropertiesOnPage(searchData) {
-    if (!window.allProperties || window.allProperties.length === 0) {
-        console.warn('No hay propiedades cargadas para filtrar');
-        return;
-    }
-    
-    // Filter properties based on search criteria
-    const filteredProperties = window.allProperties.filter(property => {
-        // Filter by type (compra/alquiler)
-        if (searchData.type === 'alquiler' && !property.isForRent) {
-            return false;
-        }
-        if (searchData.type === 'compra' && property.isForRent) {
-            return false;
-        }
-        
-        // Filter by location
-        if (searchData.location && searchData.location !== 'Todas las ubicaciones') {
-            if (!property.location.toLowerCase().includes(searchData.location.toLowerCase())) {
-                return false;
-            }
-        }
-        
-        // Filter by property type
-        if (searchData.propertyType && searchData.propertyType !== 'Todos los tipos') {
-            if (property.type !== searchData.propertyType) {
-                return false;
-            }
-        }
-        
-        // Filter by rooms
-        if (searchData.rooms && searchData.rooms !== 'Cualquier cantidad') {
-            const minRooms = parseInt(searchData.rooms);
-            if (!property.rooms || property.rooms < minRooms) {
-                return false;
-            }
-        }
-        
-        // Filter by parking
-        if (searchData.parking && searchData.parking !== 'Cualquier cantidad') {
-            const minParking = parseInt(searchData.parking);
-            if (!property.parking || property.parking < minParking) {
-                return false;
-            }
-        }
-        
-        // Filter by price
-        if (searchData.maxPrice && searchData.maxPrice !== 'Cualquier precio') {
-            const maxPriceValue = parseInt(searchData.maxPrice);
-            const propertyPrice = extractPriceNumber(property.price);
-            
-            if (propertyPrice > maxPriceValue) {
-                return false;
-            }
-        }
-        
-        return true;
-    });
-    
-    // Update the property grid with filtered results
-    updatePropertyGrid(filteredProperties);
-    
-    // Show results count
-    updateResultsCount(filteredProperties.length);
-}
-
-function extractPriceNumber(priceString) {
-    if (!priceString) return 0;
-    const match = priceString.match(/[\d,]+/);
-    if (match) {
-        return parseInt(match[0].replace(/,/g, ''));
-    }
-    return 0;
-}
-
-function updatePropertyGrid(filteredProperties) {
-    const gridContainer = document.querySelector('.properties-grid-modern-tucasa');
-    if (!gridContainer) return;
-    
-    if (filteredProperties.length === 0) {
-        gridContainer.innerHTML = `
-            <div class="empty-state-tucasa" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
-                <i class="fas fa-search"></i>
-                <h3>No se encontraron propiedades</h3>
-                <p>No hay propiedades que coincidan con tu búsqueda. Intenta con otros filtros.</p>
-                <button class="btn-primary-tucasa" onclick="clearHeroFilters()">
-                    <i class="fas fa-times"></i> Limpiar Filtros
-                </button>
-            </div>
-        `;
-        return;
-    }
-    
-    // Show only first 6 properties on index (or all if less than 6)
-    const propertiesToShow = filteredProperties.slice(0, 6);
-    gridContainer.innerHTML = propertiesToShow.map(property => createPropertyCard(property)).join('');
-    
-    // Update "Ver Todas las Propiedades" button
-    updateViewAllButton(filteredProperties.length);
-    
-    // Re-initialize favorite buttons and detail buttons
-    initFavoriteButtons();
-    initDetailButtons();
-}
-
-function updateResultsCount(count) {
-    const sectionHeader = document.querySelector('.section-header-tucasa');
-    if (!sectionHeader) return;
-    
-    let resultsCountElement = sectionHeader.querySelector('.results-count');
-    if (!resultsCountElement) {
-        resultsCountElement = document.createElement('span');
-        resultsCountElement.className = 'results-count';
-        resultsCountElement.style.cssText = `
-            display: inline-block;
-            background: var(--accent-orange);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-left: 1rem;
-            vertical-align: middle;
-        `;
-        sectionHeader.querySelector('h2').appendChild(resultsCountElement);
-    }
-    
-    resultsCountElement.textContent = `${count} resultados`;
-}
-
-function updateViewAllButton(totalProperties) {
-    const viewAllButton = document.querySelector('.btn-primary-tucasa[href="propiedades.html"]');
-    if (!viewAllButton) return;
-    
-    if (totalProperties > 6) {
-        viewAllButton.innerHTML = `<i class="fas fa-list"></i> Ver Todas las ${totalProperties} Propiedades`;
-    } else {
-        viewAllButton.innerHTML = `<i class="fas fa-list"></i> Ver Todas las Propiedades`;
-    }
-    
-    // Update href with current filters
-    const searchForm = document.querySelector('.search-form-tucasa');
-    const activeTab = document.querySelector('.type-tab.active');
-    const selects = searchForm.querySelectorAll('select');
-    
-    const params = new URLSearchParams();
-    if (activeTab?.dataset.type) params.append('tipo', activeTab.dataset.type);
-    if (selects[0]?.value && selects[0].value !== 'Todas las ubicaciones') params.append('ubicacion', selects[0].value);
-    if (selects[1]?.value && selects[1].value !== 'Todos los tipos') params.append('propiedad', selects[1].value);
-    if (selects[2]?.value && selects[2].value !== 'Cualquier cantidad') params.append('habitaciones', selects[2].value);
-    if (selects[3]?.value && selects[3].value !== 'Cualquier cantidad') params.append('parqueos', selects[3].value);
-    if (selects[4]?.value && selects[4].value !== 'Cualquier precio') params.append('precio', selects[4].value);
-    
-    viewAllButton.href = `propiedades.html?${params.toString()}`;
-}
-
-function clearHeroFilters() {
-    const searchForm = document.querySelector('.search-form-tucasa');
-    if (!searchForm) return;
-    
-    // Reset all selects to default values
-    searchForm.querySelectorAll('select').forEach(select => {
-        select.value = '';
-        
-        // Set first option as selected
-        if (select.options.length > 0) {
-            select.selectedIndex = 0;
-        }
-    });
-    
-    // Set compra tab as active
-    const compraTab = document.querySelector('.type-tab[data-type="compra"]');
-    const alquilerTab = document.querySelector('.type-tab[data-type="alquiler"]');
-    if (compraTab && alquilerTab) {
-        compraTab.classList.add('active');
-        alquilerTab.classList.remove('active');
-    }
-    
-    // Update button text
-    const searchBtn = document.querySelector('.search-btn-tucasa');
-    if (searchBtn) {
-        searchBtn.innerHTML = '<i class="fas fa-search"></i> BUSCAR PROPIEDADES PARA COMPRA';
-    }
-    
-    // Show all properties
-    if (window.allProperties && window.allProperties.length > 0) {
-        updatePropertyGrid(window.allProperties.slice(0, 6));
-        updateResultsCount(window.allProperties.length);
-        updateViewAllButton(window.allProperties.length);
-        
-        // Remove results count if showing all
-        const resultsCountElement = document.querySelector('.results-count');
-        if (resultsCountElement) {
-            resultsCountElement.remove();
-        }
-    }
-    
-    showNotification('Filtros limpiados. Mostrando todas las propiedades.', 'info');
-}
-
-// Make clearHeroFilters available globally
-window.clearHeroFilters = clearHeroFilters;
-
-function saveSearchHistory(searchData) {
-    const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-    
-    searchHistory.unshift(searchData);
-    if (searchHistory.length > 10) {
-        searchHistory.pop();
-    }
-    
-    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-}
-
-function showSearchFeedback(searchData) {
-    const feedbackMessage = createSearchFeedbackMessage(searchData);
-    showNotification(feedbackMessage, 'info');
-    
-    const searchBtn = document.querySelector('.search-btn-tucasa');
-    if (searchBtn) {
-        const originalHtml = searchBtn.innerHTML;
-        searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> FILTRANDO...';
-        searchBtn.disabled = true;
-        
-        setTimeout(() => {
-            searchBtn.innerHTML = originalHtml;
-            searchBtn.disabled = false;
-        }, 500);
-    }
-}
-
-function createSearchFeedbackMessage(searchData) {
-    const messages = [];
-    
-    if (searchData.location && searchData.location !== 'Todas las ubicaciones') {
-        messages.push(`Ubicación: ${searchData.location}`);
-    }
-    
-    if (searchData.propertyType && searchData.propertyType !== 'Todos los tipos') {
-        messages.push(`Tipo: ${searchData.propertyType}`);
-    }
-    
-    if (searchData.rooms && searchData.rooms !== 'Cualquier cantidad') {
-        messages.push(`Habitaciones: ${searchData.rooms}+`);
-    }
-    
-    if (searchData.maxPrice && searchData.maxPrice !== 'Cualquier precio') {
-        const price = parseInt(searchData.maxPrice);
-        messages.push(`Precio máximo: US$ ${price.toLocaleString()}`);
-    }
-    
-    const typeText = searchData.type === 'compra' ? 'compra' : 'alquiler';
-    
-    if (messages.length > 0) {
-        return `Filtrando propiedades para ${typeText} - ${messages.join(', ')}`;
-    } else {
-        return `Mostrando todas las propiedades para ${typeText}`;
-    }
-}
-
-function initLocationAutocomplete() {
-    const locationSelect = document.querySelector('.search-form-tucasa select:first-of-type');
-    if (!locationSelect) return;
-    
-    // Add dynamic loading
-    locationSelect.addEventListener('focus', () => {
-        loadLocationSuggestions(locationSelect);
-    });
-    
-    // Add "Other location" option
-    const otherOption = document.createElement('option');
-    otherOption.value = 'otro';
-    otherOption.textContent = 'Otra ubicación...';
-    locationSelect.appendChild(otherOption);
-    
-    locationSelect.addEventListener('change', (e) => {
-        if (e.target.value === 'otro') {
-            showCustomLocationInput(locationSelect);
-        }
-    });
-}
-
-function loadLocationSuggestions(selectElement) {
-    const locations = [
-        { value: 'Santo Domingo', text: 'Santo Domingo' },
-        { value: 'Distrito Nacional', text: 'Distrito Nacional' },
-        { value: 'Punta Cana', text: 'Punta Cana' },
-        { value: 'Bávaro', text: 'Bávaro' },
-        { value: 'Santiago', text: 'Santiago' },
-        { value: 'Puerto Plata', text: 'Puerto Plata' },
-        { value: 'La Romana', text: 'La Romana' },
-        { value: 'San Pedro de Macorís', text: 'San Pedro de Macorís' },
-        { value: 'Samaná', text: 'Samaná' },
-        { value: 'Las Terrenas', text: 'Las Terrenas' },
-        { value: 'Juan Dolio', text: 'Juan Dolio' },
-        { value: 'Boca Chica', text: 'Boca Chica' },
-        { value: 'Jarabacoa', text: 'Jarabacoa' },
-        { value: 'Constanza', text: 'Constanza' },
-        { value: 'Higüey', text: 'Higüey' }
-    ];
-    
-    // Add options if they don't exist
-    if (selectElement.children.length <= 2) {
-        locations.forEach(location => {
-            if (!Array.from(selectElement.options).some(opt => opt.value === location.value)) {
-                const option = document.createElement('option');
-                option.value = location.value;
-                option.textContent = location.text;
-                selectElement.appendChild(option);
+                link.classList.remove('active');
             }
         });
     }
-}
 
-function showCustomLocationInput(selectElement) {
-    const customInput = document.createElement('input');
-    customInput.type = 'text';
-    customInput.className = 'custom-location-input';
-    customInput.placeholder = 'Escribe tu ubicación específica...';
-    customInput.style.cssText = `
-        width: 100%;
-        padding: 0.8rem;
-        margin-top: 0.5rem;
-        border: 2px solid var(--accent-orange);
-        border-radius: var(--radius);
-        font-size: 1rem;
-        animation: slideDown 0.3s ease;
-    `;
-    
-    selectElement.parentNode.insertBefore(customInput, selectElement.nextSibling);
-    customInput.focus();
-    
-    customInput.addEventListener('blur', () => {
-        if (customInput.value.trim()) {
-            const newOption = document.createElement('option');
-            newOption.value = customInput.value.trim();
-            newOption.textContent = customInput.value.trim();
-            selectElement.insertBefore(newOption, selectElement.lastChild);
-            selectElement.value = newOption.value;
-            
-            // Apply filters immediately after adding new location
-            setTimeout(() => applyHeroFilters(), 100);
-        }
-        customInput.remove();
-    });
-    
-    customInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            customInput.blur();
-        }
-    });
-}
+    setupHideOnScroll() {
+        const header = document.querySelector('.header-tucasa');
+        if (!header) return;
 
-// ============================================
-// PROPERTY GRID FOR INDEX PAGE
-// ============================================
+        let lastY = window.scrollY;
+        let ticking = false;
 
-async function initPropertyGrid() {
-    const gridContainer = document.querySelector('.properties-grid-modern-tucasa');
-    if (!gridContainer) return;
-    
-    try {
-        gridContainer.innerHTML = '<p class="loading">Cargando propiedades...</p>';
-        
-        let properties = await loadProperties();
-        
-        // Store all properties globally for filtering
-        window.allProperties = properties;
-        
-        if (properties.length === 0) {
-            gridContainer.innerHTML = `
-                <div class="empty-state-tucasa" style="grid-column: 1/-1;">
-                    <i class="fas fa-home"></i>
-                    <h3>No hay propiedades disponibles</h3>
-                    <p>Pronto tendremos nuevas propiedades</p>
-                </div>
-            `;
-            return;
-        }
-        
-        // Show only first 6 properties on index
-        const propertiesToShow = properties.slice(0, 6);
-        gridContainer.innerHTML = propertiesToShow.map(property => createPropertyCard(property)).join('');
-        
-        // Update view all button
-        updateViewAllButton(properties.length);
-        
-        initFavoriteButtons();
-        initDetailButtons();
-        
-    } catch (error) {
-        console.error('Error loading properties:', error);
-        gridContainer.innerHTML = `
-            <div class="empty-state-tucasa" style="grid-column: 1/-1;">
-                <i class="fas fa-exclamation-circle"></i>
-                <h3>Error al cargar propiedades</h3>
-                <p>Por favor, intenta de nuevo más tarde</p>
-            </div>
-        `;
-    }
-}
+        const update = () => {
+            const y = window.scrollY;
+            const scrollingDown = y > lastY;
 
-async function loadProperties() {
-    // Try cache first
-    const cached = localStorage.getItem('properties_cache');
-    if (cached) {
-        const cacheData = JSON.parse(cached);
-        if (Date.now() - cacheData.timestamp < 3600000) {
-            return cacheData.data;
-        }
-    }
-    
-    try {
-        // Try API
-        const response = await fetch('https://api.tucasard.com/properties');
-        if (response.ok) {
-            const properties = await response.json();
-            localStorage.setItem('properties_cache', JSON.stringify({
-                data: properties,
-                timestamp: Date.now()
-            }));
-            return properties;
-        }
-    } catch (error) {
-        console.warn('API no disponible, usando datos de ejemplo');
-    }
-    
-    // Use sample data with both compra and alquiler properties
-    return getSampleProperties();
-}
+            if (y > 100 && scrollingDown) {
+                header.classList.add('nav-hidden');
+            } else {
+                header.classList.remove('nav-hidden');
+            }
 
-function getSampleProperties() {
-    return [
-        {
-            id: '1',
-            title: 'Hermosa Casa en Piantini',
-            price: 'US$ 450,000',
-            location: 'Piantini, Santo Domingo',
-            image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600',
-            type: 'casa',
-            rooms: 4,
-            bathrooms: 3,
-            area: '350',
-            parking: 2,
-            isForRent: false,
-            description: 'Hermosa casa familiar en una de las mejores zonas de Santo Domingo.',
-            features: ['Piscina', 'Jardín', 'Cocina equipada']
-        },
-        {
-            id: '2',
-            title: 'Apartamento Moderno en Naco',
-            price: 'US$ 285,000',
-            location: 'Naco, Santo Domingo',
-            image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
-            type: 'apartamento',
-            rooms: 3,
-            bathrooms: 2,
-            area: '180',
-            parking: 1,
-            isForRent: false,
-            description: 'Apartamento moderno con vista panorámica.',
-            features: ['Terraza', 'Gimnasio', 'Piscina']
-        },
-        {
-            id: '3',
-            title: 'Villa de Lujo en Punta Cana',
-            price: 'US$ 1,200,000',
-            location: 'Punta Cana',
-            image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600',
-            type: 'villa',
-            rooms: 5,
-            bathrooms: 4,
-            area: '650',
-            parking: 3,
-            isForRent: false,
-            description: 'Villa de lujo frente al mar con acceso privado a playa.',
-            features: ['Playa privada', 'Piscina infinita', 'Jardín tropical']
-        },
-        {
-            id: '4',
-            title: 'Penthouse en Bella Vista',
-            price: 'US$ 2,500/mes',
-            location: 'Bella Vista, Santo Domingo',
-            image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
-            type: 'penthouse',
-            rooms: 4,
-            bathrooms: 3,
-            area: '320',
-            parking: 2,
-            isForRent: true,
-            description: 'Penthouse exclusivo con terraza y vista 360°.',
-            features: ['Terraza 360°', 'Jacuzzi', 'Vista panorámica']
-        },
-        {
-            id: '5',
-            title: 'Casa en Condominio Cerrado',
-            price: 'US$ 1,800/mes',
-            location: 'Los Cacicazgos, Santo Domingo',
-            image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600',
-            type: 'casa',
-            rooms: 3,
-            bathrooms: 2.5,
-            area: '280',
-            parking: 2,
-            isForRent: true,
-            description: 'Casa en condominio con seguridad 24/7 y áreas comunes.',
-            features: ['Seguridad 24/7', 'Áreas verdes', 'Salón social']
-        },
-        {
-            id: '6',
-            title: 'Terreno Residencial en Santiago',
-            price: 'US$ 150,000',
-            location: 'Santiago de los Caballeros',
-            image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600',
-            type: 'terreno',
-            area: '1200',
-            isForRent: false,
-            description: 'Terreno plano ideal para construcción residencial.',
-            features: ['Ubicación estratégica', 'Servicios básicos', 'Acceso pavimentado']
-        },
-        {
-            id: '7',
-            title: 'Apartamento Amueblado en Zona Colonial',
-            price: 'US$ 1,200/mes',
-            location: 'Zona Colonial, Santo Domingo',
-            image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
-            type: 'apartamento',
-            rooms: 2,
-            bathrooms: 1,
-            area: '85',
-            parking: 0,
-            isForRent: true,
-            description: 'Apartamento completamente amueblado en el corazón de la Zona Colonial.',
-            features: ['Completamente amueblado', 'Aire acondicionado', 'Wi-Fi incluido']
-        },
-        {
-            id: '8',
-            title: 'Casa Familiar en Gazcue',
-            price: 'US$ 380,000',
-            location: 'Gazcue, Santo Domingo',
-            image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600',
-            type: 'casa',
-            rooms: 3,
-            bathrooms: 2,
-            area: '220',
-            parking: 1,
-            isForRent: false,
-            description: 'Casa familiar en zona residencial tranquila cerca del Malecón.',
-            features: ['Patio trasero', 'Cocina remodelada', 'Seguridad']
-        }
-    ];
-}
-
-function createPropertyCard(property) {
-    // Determine badge color based on type
-    const badgeColor = property.isForRent ? 'alquiler' : 'venta';
-    const badgeText = property.isForRent ? 'Alquiler' : 'Venta';
-    
-    return `
-        <div class="property-card-tucasa" data-id="${property.id}" data-type="${property.type}" data-operation="${badgeColor}">
-            <div class="property-image-tucasa">
-                <img src="${property.image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'}" 
-                     alt="${property.title}"
-                     onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600'">
-                <div class="property-badge-tucasa ${badgeColor}">${badgeText}</div>
-                <button class="favorite-btn-tucasa" data-id="${property.id}">
-                    <i class="far fa-heart"></i>
-                </button>
-                <div class="property-price-tucasa">${property.price || 'Consultar'}</div>
-            </div>
-            <div class="property-info-tucasa">
-                <h3 class="property-title-tucasa">${property.title}</h3>
-                <p class="property-location-tucasa">
-                    <i class="fas fa-map-marker-alt"></i> ${property.location || 'Ubicación no especificada'}
-                </p>
-                <div class="property-features-tucasa">
-                    ${property.rooms ? `<span><i class="fas fa-bed"></i> ${property.rooms} hab</span>` : ''}
-                    ${property.bathrooms ? `<span><i class="fas fa-bath"></i> ${property.bathrooms} baños</span>` : ''}
-                    ${property.parking ? `<span><i class="fas fa-car"></i> ${property.parking} parq</span>` : ''}
-                    ${property.area ? `<span><i class="fas fa-ruler-combined"></i> ${property.area} m²</span>` : ''}
-                </div>
-                <div class="property-actions-tucasa">
-                    <a href="detalle-propiedad.html?id=${property.id}" class="btn-primary-tucasa">
-                        <i class="fas fa-eye"></i> Ver Detalles
-                    </a>
-                    <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20la%20propiedad%20${encodeURIComponent(property.title)}" 
-                       class="btn-outline-tucasa" target="_blank">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
-                    </a>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// ============================================
-// AGREGAR ESTOS ESTILOS A TU CSS
-// ============================================
-
-// Agrega estos estilos al final de tu styles.css
-const heroFilterStyles = `
-/* Estilos para el filtro en el index */
-.property-badge-tucasa.alquiler {
-    background: var(--secondary-blue) !important;
-}
-
-.property-badge-tucasa.venta {
-    background: var(--accent-orange) !important;
-}
-
-.results-count {
-    animation: fadeIn 0.3s ease;
-}
-
-.search-form-tucasa .search-group select {
-    transition: all 0.3s ease;
-}
-
-.search-form-tucasa .search-group select:focus {
-    border-color: var(--accent-orange);
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
-    transform: translateY(-2px);
-}
-
-.clear-filters-btn {
-    margin-top: 1rem;
-    width: 100%;
-    background: var(--bg-light) !important;
-    color: var(--text-dark) !important;
-    border: 2px solid var(--border-color) !important;
-}
-
-.clear-filters-btn:hover {
-    background: var(--border-color) !important;
-    border-color: var(--text-light) !important;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Estilos para el estado de carga */
-.search-btn-tucasa.loading {
-    position: relative;
-    overflow: hidden;
-}
-
-.search-btn-tucasa.loading::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    animation: loadingShimmer 1.5s infinite;
-}
-
-@keyframes loadingShimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-/* Responsive para el filtro */
-@media (max-width: 768px) {
-    .search-form-tucasa {
-        padding: 1rem !important;
-    }
-    
-    .search-row {
-        grid-template-columns: 1fr !important;
-        gap: 0.8rem !important;
-    }
-    
-    .search-group label {
-        font-size: 0.85rem !important;
-    }
-    
-    .search-group select {
-        font-size: 0.9rem !important;
-        padding: 0.7rem !important;
-    }
-    
-    .results-count {
-        display: block !important;
-        margin: 0.5rem 0 0 0 !important;
-        width: fit-content;
-    }
-}
-`;
-
-// Inject styles into the document
-function injectHeroFilterStyles() {
-    if (!document.querySelector('#hero-filter-styles')) {
-        const styleEl = document.createElement('style');
-        styleEl.id = 'hero-filter-styles';
-        styleEl.textContent = heroFilterStyles;
-        document.head.appendChild(styleEl);
-    }
-}
-
-// Call this function in your DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-    injectHeroFilterStyles();
-});
-
-
-function initFavoriteButtons() {
-    const favoriteBtns = document.querySelectorAll('.favorite-btn-tucasa');
-    favoriteBtns.forEach(btn => {
-        const propertyId = btn.dataset.id;
-        const isFavorite = checkIfFavorite(propertyId);
-        
-        if (isFavorite) {
-            btn.innerHTML = '<i class="fas fa-heart"></i>';
-            btn.classList.add('active');
-        }
-        
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleFavorite(propertyId, btn);
-        });
-    });
-}
-
-function checkIfFavorite(propertyId) {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    return favorites.some(fav => fav.id === propertyId);
-}
-
-function toggleFavorite(propertyId, button) {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const property = getPropertyById(propertyId);
-    
-    if (!property) return;
-    
-    const existingIndex = favorites.findIndex(fav => fav.id === propertyId);
-    
-    if (existingIndex === -1) {
-        favorites.push(property);
-        button.innerHTML = '<i class="fas fa-heart"></i>';
-        button.classList.add('active');
-        showNotification('Propiedad agregada a favoritos', 'success');
-    } else {
-        favorites.splice(existingIndex, 1);
-        button.innerHTML = '<i class="far fa-heart"></i>';
-        button.classList.remove('active');
-        showNotification('Propiedad eliminada de favoritos', 'info');
-    }
-    
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-}
-
-function getPropertyById(propertyId) {
-    const propertyCard = document.querySelector(`.property-card-tucasa[data-id="${propertyId}"]`);
-    if (propertyCard) {
-        return {
-            id: propertyId,
-            title: propertyCard.querySelector('.property-title-tucasa')?.textContent || '',
-            price: propertyCard.querySelector('.property-price-tucasa')?.textContent || '',
-            location: propertyCard.querySelector('.property-location-tucasa')?.textContent?.replace('📍', '').trim() || '',
-            image: propertyCard.querySelector('img')?.src || '',
-            type: propertyCard.querySelector('.property-badge-tucasa')?.textContent || ''
+            lastY = y;
+            ticking = false;
         };
-    }
-    
-    const cached = localStorage.getItem('properties_cache');
-    if (cached) {
-        const cacheData = JSON.parse(cached);
-        return cacheData.data.find(p => p.id === propertyId);
-    }
-    
-    return null;
-}
 
-function initDetailButtons() {
-    const detailBtns = document.querySelectorAll('.btn-primary-tucasa[href*="detalle-propiedad.html"]');
-    detailBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const url = new URL(btn.href);
-            window.location.href = url.toString();
-        });
-    });
-}
-
-// ============================================
-// FAVORITES FUNCTIONALITY
-// ============================================
-
-function initFavorites() {
-    // Initialize favorite buttons on page
-    document.querySelectorAll('.favorite-btn-tucasa').forEach(btn => {
-        if (!btn.dataset.listener) {
-            btn.dataset.listener = 'true';
-            btn.addEventListener('click', handleFavoriteClick);
-        }
-    });
-}
-
-function handleFavoriteClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const button = e.currentTarget;
-    const propertyId = button.dataset.id;
-    const property = getPropertyById(propertyId);
-    
-    if (!property) return;
-    
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const existingIndex = favorites.findIndex(fav => fav.id === propertyId);
-    
-    if (existingIndex === -1) {
-        favorites.push(property);
-        button.innerHTML = '<i class="fas fa-heart"></i>';
-        button.classList.add('active');
-        showNotification('Propiedad agregada a favoritos', 'success');
-    } else {
-        favorites.splice(existingIndex, 1);
-        button.innerHTML = '<i class="far fa-heart"></i>';
-        button.classList.remove('active');
-        showNotification('Propiedad eliminada de favoritos', 'info');
-    }
-    
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-}
-
-// ============================================
-// FEATURED CAROUSEL
-// ============================================
-
-function initFeaturedCarousel() {
-    const carouselTrack = document.querySelector('.carousel-track-tucasa');
-    const slides = document.querySelectorAll('.carousel-slide-tucasa');
-    const dots = document.querySelectorAll('.carousel-dot-tucasa');
-    const prevBtn = document.querySelector('.carousel-prev-tucasa');
-    const nextBtn = document.querySelector('.carousel-next-tucasa');
-    
-    if (!carouselTrack || slides.length === 0) return;
-    
-    let currentIndex = 0;
-    const slideCount = slides.length;
-    
-    function updateCarousel() {
-        const slideWidth = slides[0].offsetWidth;
-        carouselTrack.style.transform = `translateX(-${currentIndex * (slideWidth + 40)}px)`;
-        
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentIndex);
-        });
-    }
-    
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % slideCount;
-        updateCarousel();
-    }
-    
-    function prevSlide() {
-        currentIndex = (currentIndex - 1 + slideCount) % slideCount;
-        updateCarousel();
-    }
-    
-    // Event listeners
-    prevBtn?.addEventListener('click', prevSlide);
-    nextBtn?.addEventListener('click', nextSlide);
-    
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            currentIndex = index;
-            updateCarousel();
-        });
-    });
-    
-    // Auto-play
-    let autoplayInterval = setInterval(nextSlide, 5000);
-    
-    // Pause on hover
-    carouselTrack.addEventListener('mouseenter', () => {
-        clearInterval(autoplayInterval);
-    });
-    
-    carouselTrack.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(nextSlide, 5000);
-    });
-    
-    // Update on resize
-    window.addEventListener('resize', updateCarousel);
-    
-    // Initial update
-    updateCarousel();
-}
-
-// ============================================
-// CONTACT FORM
-// ============================================
-
-function initContactForm() {
-    const contactForm = document.getElementById('contactFormIndex');
-    if (!contactForm) return;
-    
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const submitBtn = contactForm.querySelector('.btn-submit-tucasa');
-        const originalText = submitBtn.innerHTML;
-        
-        try {
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-            submitBtn.disabled = true;
-            
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData.entries());
-            
-            if (!isValidEmail(data.email)) {
-                throw new Error('Por favor ingresa un email válido');
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(update);
+                ticking = true;
             }
-            
-            // Send to EmailJS
-            if (typeof emailjs !== 'undefined') {
-                await emailjs.send("service_f8crp6f", "template_ar49unm", {
-                    from_name: data.name,
-                    from_email: data.email,
-                    phone: data.phone,
-                    message: data.message,
-                    property: data.property || 'General',
-                    date: new Date().toLocaleString()
+        }, { passive: true });
+    }
+}
+
+// Inicialización de la aplicación
+class App {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.themeManager = new ThemeManager();
+        this.navigationManager = new NavigationManager();
+        this.setupHomeSearch();
+        this.setupAutocomplete('home-search-location');
+        this.setupAutocomplete('filter-location');
+        this.setupProjectCTA();
+        this.setupContactPrefill();
+
+        console.log('🚀 TU Casa RD - Aplicación inicializada');
+    }
+
+    setupHomeSearch() {
+        const btn = document.getElementById('home-search-button');
+        if (!btn) return;
+
+        btn.addEventListener('click', () => {
+            const loc = document.getElementById('home-search-location')?.value || '';
+            const tipo = document.getElementById('home-search-type')?.value || '';
+            const rooms = document.getElementById('home-search-rooms')?.value || '';
+            const parq = document.getElementById('home-search-parking')?.value || '';
+            const max = document.getElementById('home-search-price')?.value || '';
+
+            const params = new URLSearchParams();
+            if (loc) params.set('loc', loc);
+            if (tipo) params.set('tipo', tipo);
+            if (rooms) params.set('rooms', rooms);
+            if (parq) params.set('parq', parq);
+            if (max) params.set('max', max);
+            params.set('from', 'home');
+
+            window.location.href = `propiedades.html?${params.toString()}`;
+        });
+    }
+
+    setupAutocomplete(inputId) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        const cities = [
+            'Santo Domingo', 'Santiago', 'Punta Cana', 'La Romana', 'Puerto Plata',
+            'San Cristóbal', 'San Francisco de Macorís', 'Higüey', 'Bávaro', 'Baní',
+            'Bonao', 'Moca', 'Nagua', 'Samaná', 'Jarabacoa', 'Constanza', 'Barahona',
+            'Azua', 'La Vega', 'San Pedro de Macorís', 'Hato Mayor', 'Monte Plata',
+            'Mao', 'Monte Cristi', 'Dajabón', 'Pedernales', 'Neyba', 'Jimaní',
+            'Salcedo', 'Villa Altagracia', 'Bayaguana', 'Cabrera', 'Sosúa', 'Cabarete'
+        ];
+
+        const norm = (s) => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+        const list = document.createElement('div');
+        list.className = 'autocomplete-list';
+        input.parentElement.appendChild(list);
+
+        const render = (matches) => {
+            if (!matches.length) {
+                list.innerHTML = '';
+                list.style.display = 'none';
+                return;
+            }
+            list.innerHTML = matches.map(c => `<div class="autocomplete-item">${c}</div>`).join('');
+            list.style.display = 'block';
+            list.querySelectorAll('.autocomplete-item').forEach(item => {
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    input.value = item.textContent;
+                    list.style.display = 'none';
                 });
-            }
-            
-            showNotification('¡Mensaje enviado correctamente! Te contactaremos pronto.', 'success');
-            contactForm.reset();
-            
-        } catch (error) {
-            console.error('Error sending contact form:', error);
-            showNotification('Hubo un error al enviar el mensaje. Por favor, intenta de nuevo.', 'error');
-            
-        } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }
-    });
-}
+            });
+        };
 
-function isValidEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
+        input.addEventListener('input', () => {
+            const q = input.value.trim();
+            if (q.length < 2) { list.style.display = 'none'; return; }
+            const nq = norm(q);
+            const matches = cities.filter(c => norm(c).includes(nq)).slice(0, 8);
+            render(matches);
+        });
 
-// ============================================
-// LOAD MORE BUTTON
-// ============================================
+        input.addEventListener('blur', () => {
+            setTimeout(() => { list.style.display = 'none'; }, 150);
+        });
 
-function initLoadMore() {
-    const loadMoreBtn = document.getElementById('load-more');
-    if (!loadMoreBtn) return;
-    
-    loadMoreBtn.addEventListener('click', async () => {
-        loadMoreBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
-        loadMoreBtn.disabled = true;
-        
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            showNotification('Funcionalidad de cargar más propiedades activada', 'info');
-        } catch (error) {
-            showNotification('Error al cargar más propiedades', 'error');
-        } finally {
-            loadMoreBtn.innerHTML = '<i class="fas fa-plus"></i> Cargar Más Propiedades';
-            loadMoreBtn.disabled = false;
-        }
-    });
-}
-
-// ============================================
-// WHATSAPP BUTTON
-// ============================================
-
-function initWhatsAppButton() {
-    const whatsappBtn = document.querySelector('.whatsapp-floating');
-    if (!whatsappBtn) return;
-    
-    // Add click animation
-    whatsappBtn.addEventListener('click', () => {
-        whatsappBtn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            whatsappBtn.style.transform = '';
-        }, 200);
-    });
-    
-    // Show/hide based on scroll
-    let lastScrollTop = 0;
-    window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > lastScrollTop && scrollTop > 500) {
-            whatsappBtn.style.opacity = '0.7';
-            whatsappBtn.style.transform = 'scale(0.9)';
-        } else {
-            whatsappBtn.style.opacity = '1';
-            whatsappBtn.style.transform = '';
-        }
-        
-        lastScrollTop = scrollTop;
-    });
-}
-
-// ============================================
-// SMOOTH SCROLL
-// ============================================
-
-function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const target = document.querySelector(targetId);
-            if (target) {
-                e.preventDefault();
-                window.scrollTo({
-                    top: target.offsetTop - 80,
-                    behavior: 'smooth'
-                });
+        input.addEventListener('focus', () => {
+            if (input.value.trim().length >= 2) {
+                const nq = norm(input.value.trim());
+                const matches = cities.filter(c => norm(c).includes(nq)).slice(0, 8);
+                render(matches);
             }
         });
-    });
-}
-
-// ============================================
-// NOTIFICATION SYSTEM
-// ============================================
-
-function showNotification(message, type = 'info', duration = 3000) {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.custom-notification');
-    existingNotifications.forEach(notif => notif.remove());
-    
-    // Create new notification
-    const notification = document.createElement('div');
-    notification.className = `custom-notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-            <span>${message}</span>
-        </div>
-        <button class="notification-close"><i class="fas fa-times"></i></button>
-    `;
-    
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow-lg);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        animation: slideInRight 0.3s ease;
-        max-width: 400px;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Add styles
-    if (!document.querySelector('#notification-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notification-styles';
-        style.textContent = `
-            .notification-content {
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                flex: 1;
-            }
-            
-            .notification-content i {
-                font-size: 1.2rem;
-            }
-            
-            .notification-close {
-                background: none;
-                border: none;
-                color: white;
-                cursor: pointer;
-                padding: 0.25rem;
-                border-radius: 50%;
-                transition: background-color 0.2s;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            
-            .notification-close:hover {
-                background: rgba(255, 255, 255, 0.2);
-            }
-            
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            
-            @keyframes slideOutRight {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-            
-            @keyframes searchProgress {
-                from { width: 0%; }
-                to { width: 100%; }
-            }
-        `;
-        document.head.appendChild(style);
     }
-    
-    // Auto-remove
-    const autoRemove = setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, duration);
-    
-    // Close button
-    notification.querySelector('.notification-close').addEventListener('click', () => {
-        clearTimeout(autoRemove);
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    });
-}
 
-// ============================================
-// WINDOW LOAD EVENT
-// ============================================
+    setupProjectCTA() {
+        const buttons = document.querySelectorAll('.project-action');
+        if (!buttons.length) return;
 
-window.addEventListener('load', () => {
-    // Lazy load images
-    if ('IntersectionObserver' in window) {
-        const lazyImages = document.querySelectorAll('img[data-src]');
-        
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.removeAttribute('data-src');
-                    imageObserver.unobserve(img);
-                }
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.getAttribute('data-action');
+                if (action === 'info') return;
+                const project = btn.getAttribute('data-project') || '';
+                const params = new URLSearchParams({ from: 'proyectos', type: action || 'cita', project });
+                window.location.href = `contacto.html?${params.toString()}`;
             });
         });
-        
-        lazyImages.forEach(img => imageObserver.observe(img));
     }
-    
-    // Check for search parameters
-    checkForSearchParameters();
-});
 
-function checkForSearchParameters() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.toString() && window.location.pathname.includes('propiedades.html')) {
-        // The properties page will handle this
-        return;
-    }
-    
-    // Check for previous search on index page
-    const lastSearch = sessionStorage.getItem('lastSearch');
-    if (lastSearch && document.querySelector('.search-form-tucasa')) {
-        const searchData = JSON.parse(lastSearch);
-        updateSearchFormWithPreviousSearch(searchData);
-    }
-}
+    setupContactPrefill() {
+        const currentPage = window.location.pathname.split('/').pop();
+        if (currentPage !== 'contacto.html') return;
 
-function updateSearchFormWithPreviousSearch(searchData) {
-    const form = document.querySelector('.search-form-tucasa');
-    if (!form) return;
-    
-    // Update tabs
-    if (searchData.type) {
-        const tab = document.querySelector(`.type-tab[data-type="${searchData.type}"]`);
-        if (tab) {
-            document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+        const q = new URLSearchParams(window.location.search);
+        const type = q.get('type');
+        const project = q.get('project');
+
+        const mensajeTab = document.getElementById('tab-mensaje');
+        const citaTab = document.getElementById('tab-cita');
+        if (!mensajeTab || !citaTab) return;
+
+        // Reset active
+        mensajeTab.classList.remove('active');
+        citaTab.classList.remove('active');
+
+        if (type === 'cita') {
+            citaTab.classList.add('active');
+            // Prefill mensaje adicional
+            const citaMsg = document.querySelector('#contact-form-cita textarea[name="mensaje"]');
+            if (citaMsg && project) {
+                citaMsg.value = `Me interesa agendar una visita al proyecto: ${project}`;
+            }
+            // Prefill agente select hint optional (no change)
+            const container = document.querySelector('.contact-page-content');
+            if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            mensajeTab.classList.add('active');
+            // Prefill motivo y mensaje
+            const motivo = document.querySelector('#contact-form-general select[name="motivo"]');
+            if (motivo) motivo.value = 'proyecto';
+            const msg = document.querySelector('#contact-form-general textarea[name="mensaje"]');
+            if (msg && project) {
+                msg.value = `Quiero más información sobre el proyecto: ${project}`;
+            }
+            const container = document.querySelector('.contact-page-content');
+            if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
-    
-    // Update selects
-    const selects = form.querySelectorAll('select');
-    if (searchData.location && selects[0]) selects[0].value = searchData.location;
-    if (searchData.propertyType && selects[1]) selects[1].value = searchData.propertyType;
-    if (searchData.rooms && selects[2]) selects[2].value = searchData.rooms;
-    if (searchData.parking && selects[3]) selects[3].value = searchData.parking;
-    if (searchData.maxPrice && selects[4]) selects[4].value = searchData.maxPrice;
 }
 
-// ============================================
-// EXPORT FOR USE IN OTHER FILES
-// ============================================
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new App();
+});
 
-// Make functions available globally
-window.showNotification = showNotification;
-window.initHeroSearch = initHeroSearch;
-window.initPropertyGrid = initPropertyGrid;
+
+// API de EMAIL
+
+emailjs.init("qHyX0bsqfanDPm8vy"); // Public Key
+
+const formCita = document.getElementById('contact-form-cita');
+if (formCita) {
+    formCita.addEventListener('submit', function (e) {
+        e.preventDefault();
+        emailjs.sendForm("service_f8crp6f", "template_zvwaapq", this)
+            .then(() => {
+                alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+                this.reset();
+            })
+            .catch((err) => {
+                console.error(err);
+                alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+            });
+    });
+}
+
+const formGeneral = document.getElementById('contact-form-general');
+if (formGeneral) {
+    formGeneral.addEventListener('submit', function (e) {
+        e.preventDefault();
+        emailjs.sendForm("service_f8crp6f", "template_ar49unm", this)
+            .then(() => {
+                alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+                this.reset();
+            })
+            .catch((err) => {
+                console.error(err);
+                alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+            });
+    });
+}
+
+const formTuCasa = document.getElementById('contact-form-tucasa');
+if (formTuCasa) {
+    formTuCasa.addEventListener('submit', function (e) {
+        e.preventDefault();
+        emailjs.sendForm("service_f8crp6f", "template_ar49unm", this)
+            .then(() => {
+                alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+                this.reset();
+            })
+            .catch((err) => {
+                console.error(err);
+                alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+            });
+    });
+}
+
+
+
+    // Bloquear fechas anteriores a hoy
+    const hoy = new Date().toISOString().split("T")[0];
+    const dateInput = document.getElementById("date-input");
+    if (dateInput) {
+        dateInput.setAttribute("min", hoy);
+    }
+
+    // Limitar la hora permitida (9:00 AM – 4:00 PM)
+    const timeInput = document.getElementById("time-input");
+    if (timeInput) {
+        timeInput.addEventListener("change", () => {
+            let time = timeInput.value;
+            if (time < "09:00") timeInput.value = "09:00";
+            if (time > "16:00") timeInput.value = "16:00";
+        });
+    }

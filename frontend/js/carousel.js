@@ -5,6 +5,9 @@ class CarouselManagerTucasa {
         this.allProperties = [];
         this.featuredSlides = [];
         this.autoPlayInterval = null;
+        // Inicio: grid con paginación simple
+        this.gridVisible = 9;
+        this.gridPageSize = 9;
         this.init();
     }
 
@@ -102,9 +105,15 @@ class CarouselManagerTucasa {
         
         if (!track) return;
 
-        const slideWidth = document.querySelector('.carousel-slide-tucasa')?.offsetWidth || 0;
-        const gap = 32;
-        const translateX = -this.currentSlide * (slideWidth + gap);
+        const slide = document.querySelector('.carousel-slide-tucasa');
+        const slideWidth = slide?.offsetWidth || 0;
+        const gap = 32; // 2rem en CSS
+        const container = document.querySelector('.carousel-container-tucasa');
+        const containerWidth = container?.offsetWidth || 0;
+        const visibleCount = Math.max(1, Math.floor((containerWidth + gap) / (slideWidth + gap)));
+        const maxIndex = Math.max(0, (this.featuredSlides.length - visibleCount));
+        const translateIndex = Math.min(this.currentSlide, maxIndex);
+        const translateX = -translateIndex * (slideWidth + gap);
         
         track.style.transform = `translateX(${translateX}px)`;
 
@@ -115,12 +124,36 @@ class CarouselManagerTucasa {
     }
 
     nextSlide() {
-        this.currentSlide = (this.currentSlide + 1) % this.featuredSlides.length;
+        const slide = document.querySelector('.carousel-slide-tucasa');
+        const gap = 32;
+        const container = document.querySelector('.carousel-container-tucasa');
+        const slideWidth = slide?.offsetWidth || 0;
+        const containerWidth = container?.offsetWidth || 0;
+        const visibleCount = Math.max(1, Math.floor((containerWidth + gap) / (slideWidth + gap)));
+        const maxIndex = Math.max(0, (this.featuredSlides.length - visibleCount));
+
+        if (this.currentSlide >= maxIndex) {
+            this.currentSlide = 0;
+        } else {
+            this.currentSlide += 1;
+        }
         this.updateCarousel();
     }
 
     prevSlide() {
-        this.currentSlide = this.currentSlide === 0 ? this.featuredSlides.length - 1 : this.currentSlide - 1;
+        const slide = document.querySelector('.carousel-slide-tucasa');
+        const gap = 32;
+        const container = document.querySelector('.carousel-container-tucasa');
+        const slideWidth = slide?.offsetWidth || 0;
+        const containerWidth = container?.offsetWidth || 0;
+        const visibleCount = Math.max(1, Math.floor((containerWidth + gap) / (slideWidth + gap)));
+        const maxIndex = Math.max(0, (this.featuredSlides.length - visibleCount));
+
+        if (this.currentSlide === 0) {
+            this.currentSlide = maxIndex;
+        } else {
+            this.currentSlide -= 1;
+        }
         this.updateCarousel();
     }
 
@@ -214,13 +247,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// Extender el carousel manager para el grid de propiedades
+// Extender el carousel manager para el grid de propiedades (inicio)
     CarouselManagerTucasa.prototype.renderPropertiesGrid = function() {
         const grid = document.getElementById('properties-grid');
         if (!grid) return;
 
-    // Mostrar catálogo completo en el grid
-    grid.innerHTML = this.allProperties.map(property => `
+    // Mostrar solo las primeras N propiedades
+    const list = this.allProperties.slice(0, this.gridVisible);
+    grid.innerHTML = list.map(property => `
         <div class="property-card-tucasa">
             <div class="property-image-tucasa">
                 <img src="${property.imagenes[0] || 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 400\"><rect width=\"600\" height=\"400\" fill=\"%23dbeafe\"/><text x=\"300\" y=\"200\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"%231e3a8a\" font-size=\"24\">Imagen no disponible</text></svg>'}" alt="${property.titulo}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 400\"><rect width=\"600\" height=\"400\" fill=\"%23dbeafe\"/><text x=\"300\" y=\"200\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"%231e3a8a\" font-size=\"24\">Imagen no disponible</text></svg>';">
@@ -246,4 +280,17 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </div>
     `).join('');
+
+    // Mostrar/Ocultar botón "Ver Más Propiedades" del inicio
+    const loadMoreBtn = document.getElementById('load-more');
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = this.gridVisible < this.allProperties.length ? 'inline-flex' : 'none';
+        if (!loadMoreBtn.__bound) {
+            loadMoreBtn.addEventListener('click', () => {
+                this.gridVisible = Math.min(this.allProperties.length, this.gridVisible + this.gridPageSize);
+                this.renderPropertiesGrid();
+            });
+            loadMoreBtn.__bound = true;
+        }
+    }
 };

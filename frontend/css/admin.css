@@ -593,12 +593,12 @@
 
 .stat-card {
     background: var(--admin-card);
-    padding: 28px;
+    padding: 24px;
     border-radius: 16px;
     box-shadow: var(--admin-shadow-sm);
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--admin-border);
     position: relative;
@@ -628,19 +628,24 @@
 }
 
 .stat-icon {
-    font-size: 3rem;
+    display: none;
 }
 
+.stat-info { flex: 1; min-width: 0; }
 .stat-info h3 {
-    margin: 0 0 8px 0;
-    font-size: 2rem;
+    margin: 0 0 6px 0;
+    font-size: 1.6rem;
+    line-height: 1.2;
     color: var(--admin-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .stat-info p {
     margin: 0;
     color: var(--admin-text-light);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 /* ============================================
@@ -1886,6 +1891,14 @@
     .admin-sidebar.mobile-active {
         left: 0 !important;
     }
+
+    body.mobile-menu-open .admin-sidebar {
+        left: 0 !important;
+    }
+    body.mobile-menu-open .mobile-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
     
     .admin-main {
         margin-left: 0;
@@ -1948,10 +1961,8 @@
         border-width: 2px;
     }
     
-    .nav-item span:not(.icon),
     .user-info p,
-    .user-info small,
-    .btn-logout span:not(.icon) {
+    .user-info small {
         display: none;
     }
     
@@ -1959,6 +1970,18 @@
     .btn-logout {
         justify-content: center;
     }
+
+    /* Mostrar títulos cuando el menú está abierto en móvil */
+    .admin-sidebar.mobile-active .nav-item span:not(.icon),
+    body.mobile-menu-open .nav-item span:not(.icon) {
+        display: inline;
+    }
+    .admin-sidebar.mobile-active .nav-item,
+    body.mobile-menu-open .nav-item,
+    body.mobile-menu-open .btn-logout {
+        justify-content: flex-start;
+    }
+}
     
     .nav-item .icon {
         font-size: 1.5rem;
@@ -2463,9 +2486,7 @@
     }
     
     .sidebar-header h2,
-    .nav-item span:not(.icon),
-    .user-info,
-    .btn-logout span:not(.icon) {
+    .user-info {
         display: none;
     }
     
@@ -2473,6 +2494,19 @@
         justify-content: center;
         padding: 8px;
     }
+
+    /* En landscape, si el menú está abierto mostrar títulos y ampliar ancho */
+    body.mobile-menu-open .admin-sidebar {
+        width: 240px;
+    }
+    body.mobile-menu-open .nav-item span:not(.icon),
+    body.mobile-menu-open .btn-logout span:not(.icon) {
+        display: inline;
+    }
+    body.mobile-menu-open .nav-item {
+        justify-content: flex-start;
+    }
+}
     
     .modal-content {
         max-height: 95vh;
