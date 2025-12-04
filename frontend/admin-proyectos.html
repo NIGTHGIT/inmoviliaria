@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Proyectos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <style>
+      .pv-modal{max-height:90vh;overflow:auto}
+      .pv-content{display:grid;gap:16px;padding:16px}
+      .pv-header{display:flex;align-items:center;justify-content:space-between;background:#f6fbff;border:1px solid #e6f3ff;border-radius:12px;padding:16px;margin-bottom:8px}
+      .pv-meta{display:flex;gap:24px;flex-wrap:wrap;color:#334155}
+      .pv-badge{background:#0ea5e9;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px}
+      .pv-location{display:flex;align-items:center;gap:8px;color:#475569}
+      .pv-prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:8px 0}
+      .pv-price-card{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px}
+      .pv-gallery{display:grid;grid-template-columns:1fr;gap:10px;margin:8px 0}
+      @media (min-width: 900px){ .pv-gallery{grid-template-columns:repeat(2, minmax(220px,1fr));} }
+      .pv-gallery img{width:100%;height:180px;object-fit:cover;border-radius:10px}
+      .pv-description{line-height:1.6;color:#334155;margin:8px 0}
+      .pv-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px}
+      .pv-feature{display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
+      .pv-feature i{color:#0ea5e9;margin-top:2px}
+      .amenities-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:8px}
+      .amenity-item{display:flex;align-items:center;gap:8px;border:1px solid #e5e7eb;background:#f8fafc;padding:10px;border-radius:10px}
+      .amenity-item i{color:#0ea5e9}
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Inmobiliaria</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin" class="nav-item">Dashboard</a>
+                <a href="/admin/propiedades" class="nav-item">Propiedades</a>
+                <a href="/admin/proyectos" class="nav-item active">Proyectos</a>
+                <a href="/" class="nav-item" target="_blank">Ver Sitio</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar"></div>
+                    <div class="user-details">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-email">admin@inmobiliaria.com</span>
+                    </div>
+                </div>
+                <button onclick="logout()" class="logout-btn" title="Cerrar Sesión">Salir</button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+            <header class="admin-header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <h1>Gestión de Proyectos</h1>
+                        <p class="header-subtitle">Cree, edite y administre proyectos</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary btn-icon" onclick="showProyectoCreateModal()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Nuevo Proyecto
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div class="filters-card">
+                    <h3>Listado de Proyectos</h3>
+                    <div class="filters-row">
+                        <div class="form-group">
+                            <label for="filterEstadoProyecto">Estado</label>
+                            <select id="filterEstadoProyecto">
+                                <option value="">Todos</option>
+                                <option value="en desarrollo">En desarrollo</option>
+                                <option value="preventa">Preventa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterUbicacionProyecto">Ubicación</label>
+                            <input type="text" id="filterUbicacionProyecto" placeholder="Ej.: Santo Domingo" />
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label for="filterQueryProyecto">Buscar</label>
+                            <input type="text" id="filterQueryProyecto" placeholder="Título o descripción" />
+                        </div>
+                        <div class="form-group">
+                            <button onclick="clearProyectoFilters()" class="btn-secondary">Limpiar</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Ubicación</th>
+                                <th>Estado</th>
+                                <th>Precio Desde</th>
+                                <th>Precio Hasta</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="proyectosTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <div class="modal" id="proyectoModal" style="display:none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="proyectoModalTitle">Nuevo Proyecto</h3>
+                <button class="modal-close" onclick="closeProyectoModal()">✕</button>
+            </div>
+            <form id="proyectoForm">
+                <input type="hidden" id="proyectoId" />
+                <div class="modal-form">
+                    <div class="form-row">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="p_titulo">Título</label>
+                            <input type="text" id="p_titulo" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="p_ubicacion">Ubicación</label>
+                            <input type="text" id="p_ubicacion" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="p_estadoProyecto">Estado</label>
+                            <select id="p_estadoProyecto">
+                                <option value="en desarrollo">En desarrollo</option>
+                                <option value="preventa">Preventa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="p_precioDesde">Precio Desde (USD)</label>
+                            <input type="number" id="p_precioDesde" min="0" step="1" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="p_precioHasta">Precio Hasta (USD)</label>
+                            <input type="number" id="p_precioHasta" min="0" step="1" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="p_descripcion">Descripción</label>
+                            <textarea id="p_descripcion" rows="5" required></textarea>
+                            <small>Describe amenities, ubicación y ventajas del proyecto.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="p_imagenPrincipal">Imagen Principal (URL)</label>
+                            <input type="text" id="p_imagenPrincipal" placeholder="https://..." />
+                            <small>Usada como portada de la tarjeta.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Amenidades</label>
+                            <div class="amenities-grid">
+                                <label class="amenity-item"><input type="checkbox" id="a_piscina"> <i class="fas fa-swimming-pool"></i> Piscina</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_gimnasio"> <i class="fas fa-dumbbell"></i> Gimnasio</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_seguridad"> <i class="fas fa-shield-alt"></i> Seguridad</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_areas_verdes"> <i class="fas fa-tree"></i> Áreas verdes</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_parqueo"> <i class="fas fa-parking"></i> Parqueo</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_parque_infantil"> <i class="fas fa-child"></i> Parque infantil</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_rooftop_bar"> <i class="fas fa-wine-glass-alt"></i> Rooftop bar</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_concierge"> <i class="fas fa-concierge-bell"></i> Concierge</label>
+                                <label class="amenity-item"><input type="checkbox" id="a_frente_mar"> <i class="fas fa-umbrella-beach"></i> Frente al mar</label>
+                            </div>
+                            <small>Selecciona las amenidades disponibles.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="p_imagenes">URLs de Imágenes (una por línea)</label>
+                            <textarea id="p_imagenes" rows="4" placeholder="https://...\nhttps://..."></textarea>
+                            <small>Puedes combinar imágenes subidas y URLs manuales.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="p_features">Características (una por línea)</label>
+                            <textarea id="p_features" rows="4" placeholder="Piscina\nGimnasio\nSeguridad 24/7\nÁreas verdes"></textarea>
+                            <small>Escribe cada característica en una línea. Se mostrará con un check.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Subir imágenes</label>
+                            <input type="file" id="p_imageFiles" class="file-input" multiple accept="image/*" />
+                            <div id="p_imagePreview" class="image-preview"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" id="p_submitBtn" class="btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="proyectoViewModal" style="display:none;">
+        <div class="modal-content modal-large pv-modal">
+            <div class="modal-header">
+                <h3 id="pv_titulo">Proyecto</h3>
+                <button class="modal-close" onclick="closeProyectoViewModal()">✕</button>
+            </div>
+            <div id="pv_content" class="pv-content"></div>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/admin-proyectos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadProyectos();
+        });
+    </script>
+</body>
+</html>

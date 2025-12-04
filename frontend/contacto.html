@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Tropical Living RD</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header-tucasa">
+        <nav class="nav-tucasa">
+            <div class="nav-container-tucasa">
+                <div class="logo-tucasa">
+    <h1>Tropical Living RD</h1>
+    <p>Tu Hogar en el Paraíso Dominicano</p>
+</div>
+                <ul class="nav-menu-tucasa">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="propiedades.html">Propiedades</a></li>
+                    <li><a href="proyectos.html">Proyectos</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="nosotros.html">Nosotros</a></li>
+                    <li><a href="contacto.html" class="active">Contacto</a></li>
+                    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+                </ul>
+                <div class="hamburger-tucasa">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="contact-hero-tucasa">
+        <div class="container-tucasa">
+            <h1>Contáctanos</h1>
+            <p>Estamos aquí para ayudarte en cada paso del proceso</p>
+        </div>
+    </section>
+
+    <section class="contact-page-content">
+        <div class="container-tucasa">
+            <div class="contact-grid-full">
+                <div class="contact-info-full">
+                    <h2>Información de Contacto</h2>
+
+                    <div class="contact-methods-full">
+                        <div class="contact-method-full">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-method-info">
+                                <h3>Oficina Principal</h3>
+                                <p>Av. Abraham Lincoln #123<br>Santo Domingo, República Dominicana</p>
+
+                            </div>
+                        </div>
+
+                        <div class="contact-method-full">
+                            <i class="fas fa-phone"></i>
+                            <div class="contact-method-info">
+                                <h3>Teléfonos</h3>
+                                <p>+1 (809) 123-4567<br>+1 (809) 123-4568</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-method-full">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-method-info">
+                                <h3>Email</h3>
+                                <p>info@tucasard.com<br>ventas@tucasard.com</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-method-full">
+                            <i class="fab fa-whatsapp"></i>
+                            <div class="contact-method-info">
+                                <h3>WhatsApp</h3>
+                                <p>+1 (809) 987-6543<br>Disponible 24/7 para consultas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="office-hours">
+                        <h3>Horario de Atención</h3>
+                        <p><strong>Lunes a Viernes:</strong> 8:00 AM - 6:00 PM</p>
+                        <p><strong>Sábados:</strong> 9:00 AM - 2:00 PM</p>
+                        <p><strong>Domingos:</strong> Cerrado</p>
+                    </div>
+                </div>
+
+                <div class="contact-form-full">
+                    <!-- Aviso de configuración -->
+                    <div class="config-notice">
+                    </div>
+
+                    <!-- TAB 1: Formulario de Contacto General -->
+                    <div class="tab-content-tucasa active" id="tab-mensaje">
+                        <h2>Envíanos un Mensaje</h2>
+
+                        <div id="mensaje-response" class="message-tucasa"></div>
+
+                        <form id="contact-form-general">
+                            <div class="form-row">
+                                <div class="form-group-tucasa">
+                                    <input type="text" name="nombre" placeholder="Nombre completo *" required>
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <input type="email" name="email" placeholder="Correo electrónico *" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group-tucasa">
+                                    <input type="tel" name="telefono" placeholder="Teléfono">
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <select name="motivo" required>
+                                        <option value="">Selecciona un motivo *</option>
+                                        <option value="compra">Quiero comprar una propiedad</option>
+                                        <option value="venta">Quiero vender mi propiedad</option>
+                                        <option value="alquiler">Busco propiedad en alquiler</option>
+                                        <option value="proyecto">Información sobre proyectos</option>
+                                        <option value="general">Consulta general</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group-tucasa">
+                                <textarea name="mensaje" placeholder="Tu mensaje... *" rows="6" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-submit-tucasa" id="btn-mensaje">
+                                <span class="spinner"></span>
+                                <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                            </button>
+                        </form>
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <!-- TAB 2: Formulario de Agendar Cita -->
+                    <div class="tab-content-tucasa" id="tab-cita">
+                        <h2>Agendar Cita con un Agente</h2>
+
+                        <div id="cita-response" class="form-message-tucasa"></div>
+
+                        <form id="contact-form-cita">
+                            <div class="form-row">
+                                <div class="form-group-tucasa">
+                                    <input type="text" name="nombre" placeholder="Nombre completo *" required>
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <input type="email" name="email" placeholder="Correo electrónico *" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group-tucasa">
+                                    <input type="tel" name="telefono" placeholder="Teléfono *" required>
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <select name="agente" required>
+                                        <option value="">Selecciona un agente *</option>
+                                        <option value="Laura García Valdez">Laura García Valdez - Agente Senior</option>
+                                        <option value="Carlos Rodríguez">Carlos Rodríguez - Especialista en Proyectos
+                                        </option>
+                                        <option value="María Fernández">María Fernández - Gerente Comercial</option>
+                                        <option value="Cualquier agente">Cualquier agente disponible</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group-tucasa">
+                                    <input type="date" name="fecha" placeholder="Fecha de la cita *" id="date-input"
+                                        required>
+                                </div>
+                                <div class="form-group-tucasa">
+                                    <input type="time" name="hora" placeholder="Hora *" id="time-input" required
+                                        min="09:00" max="16:00">
+                                </div>
+                            </div>
+
+                            <div class="form-group-tucasa">
+                                <select name="tipo_servicio" required>
+                                    <option value="">Tipo de servicio *</option>
+                                    <option value="Compra de propiedad">Compra de propiedad</option>
+                                    <option value="Venta de propiedad">Venta de propiedad</option>
+                                    <option value="Alquiler">Alquiler</option>
+                                    <option value="Inversión">Asesoría en inversiones</option>
+                                    <option value="Proyecto nuevo">Información sobre proyecto nuevo</option>
+                                    <option value="Valoración">Valoración de propiedad</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group-tucasa">
+                                <textarea name="mensaje" placeholder="Mensaje adicional (opcional)..."
+                                    rows="4"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-submit-tucasa" id="btn-cita">
+                                <span class="spinner"></span>
+                                <i class="fas fa-calendar-check"></i> Agendar Cita
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-section-tucasa">
+        <div class="container-tucasa">
+            <div class="map-container">
+                <iframe id="googleMap" 
+                        src="https://www.google.com/maps?q=Av.+Abraham+Lincoln+%23123,+Santo+Domingo&output=embed"
+                        allowfullscreen 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="map-actions">
+                <a class="btn-outline-tucasa" target="_blank" 
+                   href="https://www.google.com/maps/search/?api=1&query=Av.+Abraham+Lincoln+%23123,+Santo+Domingo">
+                    <i class="fas fa-directions"></i> Cómo Llegar
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+
+    <footer class="footer-tucasa">
+        <div class="container-tucasa">
+            <div class="footer-content-tucasa">
+                <div class="footer-section-tucasa">
+                    <h3>TU Casa RD</h3>
+                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus
+                        sueños.</p>
+                    <div class="social-links-tucasa">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section-tucasa">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="propiedades.html">Propiedades</a></li>
+                        <li><a href="proyectos.html">Proyectos</a></li>
+                        <li><a href="favoritos.html">Favoritos</a></li>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section-tucasa">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
+                    <p><i class="fas fa-phone"></i> +1 (809) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@tucasard.com</p>
+                    <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom-tucasa">
+                <p>&copy; 2024 TU Casa RD. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20una%20propiedad"
+        class="whatsapp-floating" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/favoritos.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+    <script type="text/javascript">
+        emailjs.init('qHyX0bsqfanDPm8vy')
+    </script>
+
+    <script>
+        emailjs.init("qHyX0bsqfanDPm8vy"); // Public Key
+        document.getElementById('contact-form-cita').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            emailjs.sendForm("service_f8crp6f", "template_zvwaapq", this)
+                .then(() => {
+                    alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+                    this.reset();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+                });
+        });
+
+        document.getElementById('contact-form-general').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            emailjs.sendForm("service_f8crp6f", "template_ar49unm", this)
+                .then(() => {
+                    alert('¡Tu mensaje fue enviado correctamente! Te contactaremos pronto.');
+                    this.reset();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    alert('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+                });
+        });
+    </script>
+
+    <script>
+        // Bloquear fechas anteriores a hoy
+        const hoy = new Date().toISOString().split("T")[0];
+        document.getElementById("date-input").setAttribute("min", hoy);
+
+        // Limitar la hora permitida (9:00 AM – 4:00 PM)
+        const timeInput = document.getElementById("time-input");
+
+        timeInput.addEventListener("change", () => {
+            let time = timeInput.value;
+            if (time < "09:00") timeInput.value = "09:00";
+            if (time > "16:00") timeInput.value = "16:00";
+        });
+    </script>
+
+    
+
+    
+
+</body>
+</html>

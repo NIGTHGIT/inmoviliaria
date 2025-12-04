@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos - Tropical Living RD</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Los estilos CSS están ahora en styles.css -->
+</head>
+<body>
+    <header class="header-tucasa">
+        <nav class="nav-tucasa">
+            <div class="nav-container-tucasa">
+                <h1>Tropical Living RD</h1>
+    <p>Tu Hogar en el Paraíso Dominicano</p>
+                <ul class="nav-menu-tucasa">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="propiedades.html">Propiedades</a></li>
+                    <li><a href="proyectos.html">Proyectos</a></li>
+                    <li><a href="favoritos.html" class="active">Favoritos</a></li>
+                    <li><a href="nosotros.html">Nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><button id="theme-toggle" class="theme-btn-tucasa"><i class="fas fa-moon"></i></button></li>
+                </ul>
+                <div class="hamburger-tucasa">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-hero-tucasa">
+        <div class="container-tucasa">
+            <h1>Tus Propiedades Favoritas</h1>
+            <p>Guarda las propiedades que más te gustan</p>
+        </div>
+    </section>
+
+    <section class="favorites-section-tucasa">
+        <div class="container-tucasa">
+            <div class="favorites-header-tucasa">
+                <div class="favorites-count">
+                    <h2><span id="favorites-counter">0</span> Propiedades Guardadas</h2>
+                    <p>Estas son las propiedades que has marcado como favoritas</p>
+                </div>
+                <div class="favorites-actions-header">
+                    <button id="clear-all-favorites" class="btn-outline-tucasa">
+                        <i class="fas fa-trash"></i> Limpiar Todos
+                    </button>
+                    <button id="share-favorites" class="btn-primary-tucasa">
+                        <i class="fas fa-share"></i> Compartir
+                    </button>
+                </div>
+            </div>
+
+            <div id="favorites-empty" class="empty-state-tucasa" style="display: none;">
+                <div class="empty-heart">
+                    <i class="far fa-heart"></i>
+                </div>
+                <h3>No tienes propiedades favoritas</h3>
+                <p>Agrega propiedades a tus favoritos haciendo clic en el corazón ♥ de cualquier propiedad</p>
+                <div class="empty-actions">
+                    <a href="propiedades.html" class="btn-primary-tucasa">
+                        <i class="fas fa-search"></i> Explorar Propiedades
+                    </a>
+                    <a href="proyectos.html" class="btn-outline-tucasa">
+                        <i class="fas fa-building"></i> Ver Proyectos
+                    </a>
+                </div>
+            </div>
+
+            <div class="favorites-grid-tucasa" id="favorites-grid">
+                <!-- Las propiedades favoritas se cargan dinámicamente -->
+            </div>
+
+            <div class="favorites-summary" id="favorites-summary" style="display: none;">
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h4>Rango de Precios</h4>
+                            <p id="price-range">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h4>Tipos de Propiedades</h4>
+                            <p id="property-types">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h4>Ubicaciones</h4>
+                            <p id="locations-count">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="favorites-actions-tucasa" id="favorites-actions" style="display: none;">
+                <button id="export-favorites" class="btn-outline-tucasa">
+                    <i class="fas fa-download"></i> Exportar Lista
+                </button>
+                <button id="compare-favorites" class="btn-primary-tucasa">
+                    <i class="fas fa-balance-scale"></i> Comparar Propiedades
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Comparación -->
+    <div id="compare-modal" class="compare-modal" style="display: none;">
+        <div class="compare-modal-content">
+            <div class="compare-modal-header">
+                <h3>Comparar Propiedades</h3>
+                <button id="close-compare" class="compare-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="compare-grid" id="compare-grid">
+                <!-- Las propiedades para comparar se cargan aquí -->
+            </div>
+            <div class="compare-actions">
+                <button id="clear-comparison" class="btn-outline-tucasa">
+                    <i class="fas fa-times"></i> Limpiar Selección
+                </button>
+                <button id="download-comparison" class="btn-primary-tucasa">
+                    <i class="fas fa-download"></i> Descargar Comparación
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/18497077848?text=Hola%2C%20estoy%20interesado%20en%20una%20propiedad"
+        class="whatsapp-floating" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer class="footer-tucasa">
+        <div class="container-tucasa">
+            <div class="footer-content-tucasa">
+                <div class="footer-section-tucasa">
+                    <h3>TU Casa RD</h3>
+                    <p>Somos la Inmobiliaria de República Dominicana. Te ayudamos a encontrar la propiedad de tus sueños.</p>
+                    <div class="social-links-tucasa">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="propiedades.html">Propiedades</a></li>
+                        <li><a href="proyectos.html">Proyectos</a></li>
+                        <li><a href="favoritos.html">Favoritos</a></li>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section-tucasa">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Abraham Lincoln, Santo Domingo</p>
+                    <p><i class="fas fa-phone"></i> +1 (809) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@tucasard.com</p>
+                    <p><i class="fas fa-clock"></i> Lun-Vie: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom-tucasa">
+                <p>&copy; 2024 TU Casa RD. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/favoritos.js"></script>
+</body>
+</html>
